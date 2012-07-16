@@ -5,6 +5,8 @@ A Community Web App like [V2EX](http://www.v2ex.com).
 
 一个模仿 [V2EX](http://www.v2ex.com) 的 Web 程序，用 [Flask](http://flask.pocoo.org) 这个微框架写成。
 
+<http://feather.im> 的源代码。
+
 第一个 Web App，很简陋，望各位高手指点。
 
 ## 安装插件
