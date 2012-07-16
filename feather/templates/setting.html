@@ -5,16 +5,9 @@
 {% block body %}
 	<div id=mainbar class=span9>
 		<section id=settings class=box>
-			<header>
-				<h3>账户设置</h3>
-			</header>
-			<form accept-charset=UTF-8 action"{{ url_for('account.setting') }}" class=edit_user data-balidate=true id="edit_user_{{ user.id }}" method=post novalidate=novalidate>
-				<div style="margin:0;padding:0;display:inline">
-					<input name=utf8 type=hidden value=✓>
-					<input name=_method type=hidden value=put>
-					<input name=authenticity_token type=hidden value=lg6ky9ag7tqLRInt6HHhm7vPvrAHIjTbD8D9W607CJo=>
-				</div>
-				<fieldset>
+			<form accept-charset=UTF-8 action"{{ url_for('account.setting') }}" class=setting id="edit_user_{{ user.id }}" method=post>
+				<legend>账户设置</legend>
+				<div class=form-horizontal>
 					<div class=control-group>
 						<div class=control-label>
 							<label for=user_name>用户名</label>
@@ -33,7 +26,7 @@
 					</div>
 					<div class=control-group>
 						<div class=control-label>
-							<label for=user_timeswitch>邮箱显示开关（Base64 加密）</label>
+							<label for=user_timeswitch>邮箱显示开关</label>
 						</div>
 						<div class=controls>
 							<select class=span3 data-validate=true id=user_emailswitch name=user[emailswitch]>
@@ -45,6 +38,7 @@
 								<option value=1>开</option>
 							{% endif %}
 							</select>
+							<span class="gray little">（Base64 加密）</span>
 						</div>
 					</div>
 					<div class=control-group>
@@ -92,7 +86,7 @@
 							<label for=user_description>个人简介</label>
 						</div>
 						<div class=controls>
-							<input class=span3 data-validate=true id=user_description name=user[description] size=30 type=text value="{{ user.description }}">
+							<textarea name=user[description] rows=5>{{ user.description }}</textarea>
 						</div>
 					</div>
 					<div class=control-group>
@@ -111,8 +105,10 @@
 							<input class=span3 data-validate=true id=user_current_password name=user[current_password] size=30 type=password>
 						</div>
 					</div>
-					<input class="btn primary" name=commit type=submit value=保存>
-				</fieldset>
+					<div class=form-actions>
+						<input class="btn primary" name=commit type=submit value=保存>
+					</div>
+				</div>
 			</form>
 		</section>
 	</div>
