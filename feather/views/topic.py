@@ -7,7 +7,6 @@ from feather import config
 from feather.extensions import db
 from feather.databases import Bill, Bank, User, Nodeclass, Node, \
 		Topic, Reply
-from sqlalchemy import extract, and_
 
 
 topic = Module(__name__)
