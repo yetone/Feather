@@ -38,26 +38,31 @@
 {% endblock %}
 {% block body %}
 	<div id=mainbar class=span9>
-		<section id=nodes class="box no-padding">
-			<header>节点导航</header>
-				<table class=item-list>
-					<tbody>
-						{% for nodeclass in nodeclasses %}
-							{% if nodeclass.nodes.first() and nodeclass.name != '' %}
-								<tr>
-									<td width=60 style="color:#ccc">{{ nodeclass.name }}</td>
-									<td class=tags>
-										{% for node in nodeclass.nodes.all() %}
-											<a href="{{ url_for('node.index', nodesite=node.site) }}">{{ node.name }}</a>
-										{% endfor %}
-									</td>
-								</tr>
-							{% endif %}
-						{% endfor %}
-					</tbody>
-				</table>
-		</section>
 		<section id=topics class="box no-padding">
+			<header>
+				{% if tabname == 'All' or tabname == 'all' %}
+					<span class=tabs>
+						<a href="{{ url_for('topic.tab_view', tabname='All') }}" style="background-color: #666;">全部</a>
+					</span>
+				{% else %}
+					<span class=tabs>
+						<a href="{{ url_for('topic.tab_view', tabname='All') }}">全部</a>
+					</span>
+				{% endif %}
+				{% for nodeclass in nodeclasses %}
+					{% if nodeclass.nodes.first() and nodeclass.name != '' %}
+						{% if nodeclass.name == tabname %}
+							<span class=tabs>
+								<a href="{{ url_for('topic.tab_view', tabname=nodeclass.name) }}" style="background-color: #666;">{{ nodeclass.name }}</a>
+							</span>
+						{% else %}
+							<span class=tabs>
+								<a href="{{ url_for('topic.tab_view', tabname=nodeclass.name) }}">{{ nodeclass.name }}</a>
+							</span>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			</header>
 			<table class=item-list>
 				<tbody>
 					{% for topic in page_obj.items %}
@@ -107,9 +112,28 @@
 			</table>
 			{% if page_obj.pages > 1 %}
 				<footer>
-					<a href="{{ url_for('topic.index',page=2) }}">» 更多话题</a>
+					<a href="{{ url_for('topic.index', tabname=tabname, page=2) }}">» 更多话题</a>
 				</footer>
 			{% endif %}
+		</section>
+		<section id=nodes class="box no-padding">
+			<header>节点导航</header>
+				<table class=item-list>
+					<tbody>
+						{% for nodeclass in nodeclasses %}
+							{% if nodeclass.nodes.first() and nodeclass.name != '' %}
+								<tr>
+									<td width=60 style="color:#ccc">{{ nodeclass.name }}</td>
+									<td class=tags>
+										{% for node in nodeclass.nodes.all() %}
+											<a href="{{ url_for('node.index', nodesite=node.site) }}">{{ node.name }}</a>
+										{% endfor %}
+									</td>
+								</tr>
+							{% endif %}
+						{% endfor %}
+					</tbody>
+				</table>
 		</section>
 	</div>
 {% endblock %}

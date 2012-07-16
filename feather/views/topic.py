@@ -26,13 +26,16 @@ class Getdate:
 	def day(self):
 		return int(time.strftime('%d', time.localtime(self.time)))
 
-@topic.route('/', defaults={'page': 1})
-@topic.route('/page/<int:page>')
-def index(page):
+
+@topic.route('/<tabname>', defaults={'page': 1})
+@topic.route('/page/<int:page>', defaults={'tabname': 'All'})
+@topic.route('/<tabname>/page/<int:page>')
+def index(page, tabname):
 	usercount = 0
 	topiccount = 0
 	replycount = 0
 	nodeclasses = Nodeclass.query.all()
+	nodeclass = Nodeclass.query.filter_by(name=tabname).first()
 	if User.query.all():
 		usercount = len(User.query.all())
 	if Topic.query.all():
@@ -42,13 +45,44 @@ def index(page):
 	nowtime = int(time.time())
 	agotime = nowtime - 24*60*60
 	hottopics = Topic.query.filter(Topic.date <= nowtime).filter(Topic.date >= agotime).order_by(Topic.reply_count.desc()).limit(10)
-	page_obj = Topic.query.filter_by(report=0).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
-	page_url = lambda page: url_for("topic.index", page=page)
+	if tabname == 'All':
+		page_obj = Topic.query.filter_by(report=0).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
+		page_url = lambda page: url_for("topic.index", page=page, tabname='All')
+	elif nodeclass is None:
+		nodeclass = Nodeclass.query.filter_by(name='Geek').first()
+		page_obj = Topic.query.filter_by(report=0).filter_by(nodeclass=nodeclass).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
+		page_url = lambda page: url_for("topic.index", page=page, tabname='Geek')
+	else:
+		page_obj = Topic.query.filter_by(report=0).filter_by(nodeclass=nodeclass).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
+		page_url = lambda page: url_for("topic.index", page=page, tabname=nodeclass.name)
 	if page == 1:
-		return render_template('index.html', page_obj=page_obj, nodeclasses=nodeclasses, usercount=usercount, topiccount=topiccount, replycount=replycount, hottopics=hottopics)
+		return render_template('index.html', page_obj=page_obj, nodeclasses=nodeclasses, usercount=usercount, topiccount=topiccount, replycount=replycount, hottopics=hottopics, tabname=tabname)
 	if page >1:
-		return render_template('recent.html', page_obj=page_obj, page_url=page_url, usercount=usercount, topiccount=topiccount, replycount=replycount, page=page, hottopics=hottopics)
+		return render_template('recent.html', page_obj=page_obj, page_url=page_url, nodeclasses=nodeclasses, usercount=usercount, topiccount=topiccount, replycount=replycount, page=page, hottopics=hottopics, tabname=tabname)
 
+@topic.route('/', defaults={'tabname': 'index'})
+@topic.route('/tab/<tabname>')
+def tab_view(tabname):
+	if not session.get('user_id'):
+		return redirect(url_for('topic.index', tabname='Geek'))
+	if tabname == 'index' and session.get('user_id'):
+		if g.user.tab_id == 0:
+			return redirect(url_for('topic.index', tabname='All'))
+		elif g.user.tab_id != -1:
+			nodeclass = Nodeclass.query.get(g.user.tab_id)
+			return redirect(url_for('topic.index', tabname=nodeclass.name))
+		else:
+			return redirect(url_for('topic.index', tabname='Geek'))
+	else:
+		nodeclass = Nodeclass.query.filter_by(name=tabname).first()
+		if nodeclass is not None and session.get('user_id'):
+			g.user.tab_id = nodeclass.id
+			db.session.commit()
+			return redirect(url_for('topic.index', tabname=tabname))
+		elif tabname == 'all' or tabname == 'All':
+			g.user.tab_id = 0
+			db.session.commit()
+			return redirect(url_for('topic.index', tabname='All'))
 
 @topic.route('/add/<nodesite>', methods=['GET', 'POST'])
 def topic_add(nodesite):

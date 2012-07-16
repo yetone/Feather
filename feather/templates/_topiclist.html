@@ -1,6 +1,32 @@
 <section id=topics class="box no-padding">
 	<table class=item-list>
 		<tbody>
+			{% if tabname %}
+				<header>
+					{% if tabname == 'All' or tabname == 'all' %}
+						<span class=tabs>
+							<a href="{{ url_for('topic.tab_view', tabname='All') }}" style="background-color: #666;">全部</a>
+						</span>
+					{% else %}
+						<span class=tabs>
+							<a href="{{ url_for('topic.tab_view', tabname='All') }}">全部</a>
+						</span>
+					{% endif %}
+					{% for nodeclass in nodeclasses %}
+						{% if nodeclass.name != '' %}
+							{% if nodeclass.name == tabname %}
+								<span class=tabs>
+									<a href="{{ url_for('topic.tab_view', tabname=nodeclass.name) }}" style="background-color: #666;">{{ nodeclass.name }}</a>
+								</span>
+							{% else %}
+								<span class=tabs>
+									<a href="{{ url_for('topic.tab_view', tabname=nodeclass.name) }}">{{ nodeclass.name }}</a>
+								</span>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+				</header>
+			{% endif %}
 			{% for topic in page_obj.items %}
 				<tr id=topic-{{ topic.id }}>
 					<td class=avatar>

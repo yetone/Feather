@@ -35,7 +35,7 @@ def usercenter(username,page):
 @account.route('/setting/account', methods=['GET', 'POST'])
 def setting():
 	if not g.user:
-		return redirect(url_for('topic.index'))
+		return redirect(url_for('topic.tab_view'))
 	user = g.user
 	if request.method == 'POST':
 		if check_password_hash(g.user.password,request.form['user[current_password]']):
@@ -116,7 +116,7 @@ def times(page):
 @account.route('/login', methods=['GET', 'POST'])
 def login():
 	if session.get('user_id'):
-		return redirect(url_for('topic.index'))
+		return redirect(url_for('topic.tab_view'))
 	error = None
 	if request.method == 'POST':
 		if '@' in request.form['username']:
@@ -128,7 +128,7 @@ def login():
 			else:
 				flash(u'登录成功！')
 				session['user_id'] = user.id
-				return redirect(url_for('topic.index'))
+				return redirect(url_for('topic.tab_view'))
 		else:
 			user = User.query.filter_by(name=request.form['username']).first()
 			if user is None:
@@ -139,7 +139,7 @@ def login():
 				flash(u'登录成功！')
 				session['user_id'] = user.id
 				session.permanent = True
-				return redirect(url_for('topic.index'))
+				return redirect(url_for('topic.tab_view'))
 	return render_template('login.html', error=error)
 
 
@@ -147,7 +147,7 @@ def login():
 @account.route('/register/~<invitername>', methods=['GET', 'POST'])
 def register(invitername):
 	if g.user:
-		return redirect(url_for('topic.index'))
+		return redirect(url_for('topic.tab_view'))
 	error = None
 	if request.method == 'POST':
 		if not request.form['username']:
@@ -201,7 +201,7 @@ def logout():
 		session.pop('user_id', None)
 		session.permanent = False
 		flash(u'你已经成功登出！')
-	return redirect(url_for('topic.index'))
+	return redirect(url_for('topic.tab_view'))
 
 
 

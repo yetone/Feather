@@ -89,6 +89,7 @@ class User(db.Model):
 	description = db.Column(db.Text)
 	website = db.Column(db.Text)
 	date = db.Column(db.Integer)
+	tab_id = db.Column(db.Integer)
 	topics = db.relationship('Topic', backref='author', lazy='dynamic')
 	replys = db.relationship('Reply', backref='author', lazy='dynamic')
 	bills = db.relationship('Bill', backref='author', lazy='dynamic')
@@ -118,6 +119,7 @@ class User(db.Model):
 		self.description = u''
 		self.website = u''
 		self.date = date
+		self.tab_id = -1
 	
 
 	def get_gravatar_url(self, size=80):
@@ -134,6 +136,7 @@ class Nodeclass(db.Model):
 	name = db.Column(db.String(50), unique=True)
 	description = db.Column(db.Text)
 	nodes = db.relationship('Node', backref='nodeclass', lazy='dynamic')
+	topics = db.relationship('Topic', backref='nodeclass', lazy='dynamic')
 	status = db.Column(db.Integer)
 
 	def __init__(self, name):
@@ -176,6 +179,7 @@ class Topic(db.Model):
 	replys = db.relationship('Reply', backref='topic', lazy='dynamic')
 	bills = db.relationship('Bill', backref='topic', uselist=False, lazy='dynamic')
 	node_id = db.Column(db.Integer, db.ForeignKey('node.id'))
+	nodeclass_id = db.Column(db.Integer, db.ForeignKey('nodeclass.id'))
 	vote = db.Column(db.Integer)
 	report = db.Column(db.Integer)
 	date = db.Column(db.Integer)
@@ -187,6 +191,7 @@ class Topic(db.Model):
 		self.title = title
 		self.text = text
 		self.node = node
+		self.nodeclass = node.nodeclass
 		self.vote = 0
 		self.report = 0
 		self.date = int(time.time())

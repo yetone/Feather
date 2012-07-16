@@ -7,6 +7,26 @@
  *
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
+.tabs {
+	margin: 18px 3px 0 3px;
+}
+
+.tabs a {
+  line-height: 22px;
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 2px 6px;
+  background-color: #ddd;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+.tabs a:hover {
+  text-decoration: none;
+  background-color: #666;
+  color: white;
+}
+
 #description img {
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -7111,14 +7131,14 @@ table.clear-table td {
   font-weight: bold;
   font-size: 13px;
   padding: 1px 4px;
-  background-color: #999999;
+  background-color: #999;
   border-radius: 3px;
   -moz-border-radius: 3px;
 }
 /* line 85, ../../app/assets/stylesheets/code_campo.scss */
 .tags a:hover {
   text-decoration: none;
-  background-color: #666666;
+  background-color: #666;
 }
 
 /* line 91, ../../app/assets/stylesheets/code_campo.scss */

@@ -34,7 +34,7 @@ def node_add():
 			db.session.add(node)
 			db.session.commit()
 			flash(u'添加成功！')
-			return redirect(url_for('topic.index'))
+			return redirect(url_for('topic.tab_view'))
 	return render_template('node_add.html')
 
 @node.route('/node/<nodesite>/edit', methods=['GET', 'POST'])
@@ -65,7 +65,7 @@ def node_edit(nodesite):
 			node.nodeclass = nodeclass
 			db.session.commit()
 			flash(u'节点修改成功！')
-			return redirect(url_for('topic.index'))
+			return redirect(url_for('topic.tab_view'))
 	return render_template('node_edit.html',node=node)
 
 @node.route('/node/<nodesite>', defaults={'page': 1})
