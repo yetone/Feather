@@ -28,6 +28,7 @@ class Getdate:
 
 
 @topic.route('/<tabname>', defaults={'page': 1})
+@topic.route('/index', defaults={'page': 1, 'tabname': 'All'})
 @topic.route('/page/<int:page>', defaults={'tabname': 'All'})
 @topic.route('/<tabname>/page/<int:page>')
 def index(page, tabname):
