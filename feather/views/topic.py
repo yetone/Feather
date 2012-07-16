@@ -64,7 +64,10 @@ def index(page, tabname):
 @topic.route('/tab/<tabname>')
 def tab_view(tabname):
 	if not session.get('user_id'):
-		return redirect(url_for('topic.index', tabname='Geek'))
+		if tabname == 'index':
+			return redirect(url_for('topic.index', tabname='Geek'))
+		else:
+			return redirect(url_for('topic.index', tabname=tabname))
 	if tabname == 'index' and session.get('user_id'):
 		if g.user.tab_id == 0:
 			return redirect(url_for('topic.index', tabname='All'))
