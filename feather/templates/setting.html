@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+{% block title %}个人设置{% endblock %}
+{% block sitebar %}{% endblock %}
+{% block bread %}{% endblock %}
+{% block body %}
+	<div id=mainbar class=span9>
+		<section id=settings class=box>
+			<header>
+				<h3>账户设置</h3>
+			</header>
+			<form accept-charset=UTF-8 action"{{ url_for('account.setting') }}" class=edit_user data-balidate=true id="edit_user_{{ user.id }}" method=post novalidate=novalidate>
+				<div style="margin:0;padding:0;display:inline">
+					<input name=utf8 type=hidden value=✓>
+					<input name=_method type=hidden value=put>
+					<input name=authenticity_token type=hidden value=lg6ky9ag7tqLRInt6HHhm7vPvrAHIjTbD8D9W607CJo=>
+				</div>
+				<fieldset>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_name>用户名</label>
+						</div>
+						<div class=controls>
+							<input class=span3 data-validate=true id=user_name name=user[name] size=30 type=text value="{{ user.name }}">
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_email>邮箱</label>
+						</div>
+						<div class=controls>
+							<input class=span3 data-validate=true id=user_email name=user[email] size=30 type=text value="{{ user.email }}">
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_timeswitch>邮箱显示开关（Base64 加密）</label>
+						</div>
+						<div class=controls>
+							<select class=span3 data-validate=true id=user_emailswitch name=user[emailswitch]>
+							{% if g.user.emailswitch == 1 %}
+								<option value=1 selected=selected>开</option>
+								<option value=0>关</option>
+							{% else %}
+								<option value=0 selected=selected>关</option>
+								<option value=1>开</option>
+							{% endif %}
+							</select>
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_timeswitch>时间显示开关</label>
+						</div>
+						<div class=controls>
+							<select class=span3 data-validate=true id=user_timeswitch name=user[timeswitch]>
+							{% if g.user.timeswitch == 1 %}
+								<option value=1 selected=selected>开</option>
+								<option value=0>关</option>
+							{% else %}
+								<option value=0 selected=selected>关</option>
+								<option value=1>开</option>
+							{% endif %}
+							</select>
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_topswitch>是否参与排行</label>
+						</div>
+						<div class=controls>
+							<select class=span3 data-validate=true id=user_timeswitch name=user[topswitch]>
+							{% if g.user.topswitch == 1 %}
+								<option value=1 selected=selected>是</option>
+								<option value=0>否</option>
+							{% else %}
+								<option value=0 selected=selected>否</option>
+								<option value=1>是</option>
+							{% endif %}
+							</select>
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_email>个人主页</label>
+						</div>
+						<div class=controls>
+							<input class=span3 data-validate=true id=user_email name=user[website] size=30 type=text value="{{ user.website }}">
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_description>个人简介</label>
+						</div>
+						<div class=controls>
+							<input class=span3 data-validate=true id=user_description name=user[description] size=30 type=text value="{{ user.description }}">
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_city>城市</label>
+						</div>
+						<div class=controls>
+							<input class=span3 data-validate=true id=user_city name=user[city] size=30 type=text value="{{ user.city.name }}">
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_current_password>当前密码</label>
+						</div>
+						<div class=controls>
+							<input class=span3 data-validate=true id=user_current_password name=user[current_password] size=30 type=password>
+						</div>
+					</div>
+					<input class="btn primary" name=commit type=submit value=保存>
+				</fieldset>
+			</form>
+		</section>
+	</div>
+{% endblock %}

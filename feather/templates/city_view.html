@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block title %}{{ city.name }}{% endblock %}
+{% block script %}
+<style type="text/css">
+	.user_list {
+		margin-left: 0;
+		padding-bottom: 20px;
+	}
+	.user_list h2 {
+		font-size: 14px;
+		margin: 0;
+	}
+	.user_list .span1 {
+		margin-left: 20px;
+		margin-top: 20px;
+		text-align: center;
+		width: 70px;
+	}
+	.user_list .span1 .avatar img {
+		height: 48px;
+		width: 48px;
+	}
+	.clearfix {
+		margin-bottom: 18px;
+	}
+	.clearfix:before, .clearfix:after {
+		content: "";
+		display: table;
+	}
+	.clearfix:after {
+		clear: both;
+	}
+</style>
+{% endblock %}
+{% block usersactive %}<li class=active>{% endblock %}
+{% block sidebar %}{% endblock %}
+{% block breadcrumb %}
+	<li class=active>
+		{{ city.name }}
+	</li>
+{% endblock %}
+{% block main %}
+		<div id=host_users class="user_list box clearfix">
+			{% for user in users %}
+				<div class="item span1">
+					<div class=avatar>
+						<a href="{{ url_for('account.usercenter', username=user.name) }}">
+							<img src="{{ user.email|gravatar }}">
+						</a>
+					</div>
+					<div class=name>
+						<a href="{{ url_for('account.usercenter', username=user.name) }}">
+							{{ user.name }}
+						</a>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+{% endblock %}

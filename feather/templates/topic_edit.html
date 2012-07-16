@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}主题编辑 › {{ topic.node.name }}{% endblock %}
+{% block sidebarin %}{% endblock %}
+{% block breadcrumb %}<li><a href="{{ url_for('node.index', nodesite=topic.node.site) }}">{{ topic.node.name }}</a>{% endblock %}
+{% block body %}
+	{% if session.user_id %}
+		<div id=mainbar class=span9>
+			{% if g.error %}
+				<p class="alert alert-block alert-error">错误：{{ g.error }}</p>
+			{% endif %}
+			<section class=box>
+				<form action="{{ url_for('topic.topic_edit', topic_id=topic.id) }}" method=post class=new_topic>
+					<legend>主题编辑</legend>
+					<div class=form-horizontal>
+						<div class=control-group>
+							<label class=control-label>标题：</label>
+							<div class=controls>
+								<input id=topic_title type=text size=30 name=title value="{{ topic.title }}" style="width: 500px;">
+							</div>
+						</div>
+						<div class=control-group>
+							<label class=control-label>正文：</label>
+							<div class=controls>
+								<textarea id=editor-input rows=20 name=text cols=40 style="width: 500px;">{{ topic.text }}</textarea>
+							</div>
+						</div>
+						<div class=form-actions>
+							<input class="btn btn-primary" type=submit value=果断提交 name=commit>
+						</div>
+					</div>
+				</form>
+			</section>
+		</div>
+	{% endif %}
+{% endblock %}

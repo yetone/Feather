@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>{% block title %}首页{% endblock %} - Feather</title>
+		<link rel=stylesheet type=text/css href="/static/style/feather.css">
+		<link rel="shortcut icon" href="/static/favicon.ico" />
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+		<script src="/static/js/feather.js" type="text/javascript"></script>
+		<script type="text/javascript" src="http://use.typekit.com/ezc0pjj.js"></script>
+		<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+		<meta name="csrf-param" content="authenticity_token">
+		<meta name="csrf-token" content="Jus8fYDt7aB8T3uUgoYNmvgRoG3OKXiahRketHTofP0=">
+		{% block script %}{% endblock %}
+	</head>
+	<body>
+		<div id=topbar class=navbar style="box-shadow: 0 5px 10px rgba(0,0,0,0.6);">
+			<div class=navbar-inner>
+				<div class=container>
+					{% include "_logo.html" %}
+					<div class=nav-collapse>
+						<ul class="nav nav-pills">
+							{% block usersactive %}
+							<li>
+							{% endblock %}
+								<a href="{{ url_for('account.users') }}">会员</a>
+							</li>
+							{% block bankactive %}
+							<li>
+							{% endblock %}
+								<a href="{{ url_for('timesystem.bank') }}">时间规划局</a>
+							</li>
+						</ul>
+						<ul class="nav nav-pills pull-right">
+						{% if not session.user_id %}
+							<li>
+							{% block invite %}
+								<a href="{{ url_for('account.register') }}">注册</a>
+							{% endblock %}
+							</li>
+							<li>
+								<a href="{{ url_for('account.login') }}">登录</a>
+							</li>
+						{% else %}
+							{% if g.notify != 0 %}
+								<li class="notifications unread">
+							{% else %}
+								<li class=notifications>
+							{% endif %}
+									<a href="{{ url_for('account.notify') }}">
+										<span class=count>{{ g.notify }}</span>
+									</a>
+								</li>
+								<li>
+									<a href="/member/{{ session.user_id|getusername }}">个人中心</a>
+								</li>
+								<li>
+									<a href="{{ url_for('account.setting', user_id=session.user_id) }}">设置</a>
+								</li>
+								<li>
+									<a href="/logout" data-method=delete rel=nofollow>登出</a>
+								</li>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id=main>
+			<div class=container>
+				{% block bread %}
+				<div class=row>
+					<div class=span12>
+						<ul class=breadcrumb>
+							<li>
+								<a href="{{ url_for('topic.index') }}">Feather</a>
+								<span class=divider>/</span>
+							</li>
+							{% block breadcrumb %}<li class=active>首页</li>{% endblock %}
+						</ul>
+					</div>
+				</div>
+				{% endblock %}
+				{% block main %}
+				<div class=row>
+					{% for message in get_flashed_messages() %}
+						<p class="alert alert-block alert-success" style="margin-left: 30px;">{{ message }}</p>
+					{% endfor %}
+					{% block body %}{% endblock %}
+					{% block sidebar %}
+						<div id=sidebar class=span3>
+							{% if session.user_id %}
+								<section class="profile box">
+									<div class=clearfix>
+										<div class=avatar>
+											<a href="{{ url_for('account.usercenter', username=session.user_id|getusername) }}">
+												<img src="{{ session.user_id|getuseremail|gravatar }}">
+											</a>
+										</div>
+										<div class=info>
+											<h3>{{ session.user_id|getusername }}</h3>
+											<p style="color: #ccc;">{{ session.user_id|getuserdescription }}</p>
+										</div>
+									</div>
+									{% if session.user_id|getusertimeswitch == 1 %}
+										<hr>
+										<a href="/times">
+										<div class=balance_area style="font-size: 24px; line-height: 24px;">
+											<b>{{ session.user_id|getuserhour }} : {{ session.user_id|getuserminute }}</b>
+										</div>
+										</a>
+									{% endif %}
+								</section>
+							{% else %}
+								<section class=box>
+									<header> 加入讨论？ </header>
+									{% block invite2 %}
+										<a class="btn success" href="{{ url_for('account.register') }}">注册</a>
+									{% endblock %}
+									或者
+									<a class="btn" href="{{ url_for('account.login') }}">登录</a>
+								</section>
+							{% endif %}
+							{% block sidebarin %}{% endblock %}
+							<section class=box>
+								<header>感谢</header>
+								<a href="http://flask.pocoo.org">
+									<img src="http://flask.pocoo.org/static/logo/flask.svg">
+								</a>
+							</section>
+						</div>
+					{% endblock %}
+				</div>
+				{% endblock %}
+			</div>
+		</div>
+		<footer>
+			<div class=container>
+				<div class=pull-left>
+					<p class=copyright> &copy; Feather 社区. </p>
+					<p style="color: #3d3d3d;text-shadow: 0px -1px #bbb,0 1px #fff; color:#e3e1e1;">Lovingly made by <b>Monroe</b>.</p>
+				</div>
+				<div class=pull-right>
+					<p>
+						<a href="#top">Back to top</a>
+					</p>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

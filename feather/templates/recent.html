@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% from "_page.html" import paginate %}
+{% block title %}第 {{ page }} 页-最近的主题{% endblock %}
+{% block bread %}{% endblock %}
+{% block sidebarin %}
+	{% if session.user_id == 1 %}
+		<section class=box>
+			<a class="btn btn-primary" href="{{ url_for('node.node_add') }}">增加节点</a>
+		</section>
+	{% endif %}
+	<section id=hots class=box>
+		<header>热议主题<span class="gray little list_big">within 24 hours<span></header>
+		<table class=item-list>
+			<tbody>
+			{% for hottopic in hottopics %}
+				<tr>
+					<td class=avatar style="width: 24px; height: 24px; padding: 0px; vertical-align: middle;">
+						<a href="{{ url_for('account.usercenter', username=hottopic.author.name) }}"><img src="{{ hottopic.author.email|gravatarmini }} style="border: 0; align: default;"></a>
+					</td>
+					<td width=auto>
+						<a class=dark href="{{ url_for('topic.topic_view', topic_id=hottopic.id) }}" style="font-weight: bold;">{{ hottopic.title }}</a>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</section>
+	<section class=box>
+		<header>目标</header>
+		<p>为了维护宇宙和平！</p>
+	</section>
+	<section class=box>
+		<header>全站统计</header>
+		<ul>
+			<li>用户数 {{ usercount }}</li>
+			<li>话题数 {{ topiccount }}</li>
+			<li>回帖数 {{ replycount }}</li>
+		</ul>
+	</section>
+{% endblock %}
+{% block body %}
+	<div id=mainbar class=span9>
+		{% include "_topiclist.html" %}
+		{{ paginate(page_obj, page_url) }}
+	</div>
+{% endblock %}

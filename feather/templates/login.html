@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block title %}登录{% endblock %}
+{% block bread %}{% endblock %}
+{% block sidebar %}{% endblock %}
+{% block body %}
+	<div class="span4 offset4">
+		<section id="login-form" class="box">
+		{% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+			<form action="{{ url_for('account.login') }}" method=post>
+				<fieldset>
+					<legend>登录</legend>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=login>用户名或邮箱</label>
+						</div>
+						<div class=controls>
+							<div class=full-input-wrap>
+								<input id=login class=span6 type=text tabindex=1 name=username>
+							</div>
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=password>密码</label>
+						</div>
+						<div class=controls>
+							<div class=full-input-wrap>
+								<input id=passwd class=span6 type=password tabindex=2 name=password>
+							</div>
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=controls>
+							<label class=checkbox>
+								<input id=remember_me type=checkbox value=yes tabindex=3 name=remember_me>
+								记住我
+							</label>
+						</div>
+					</div>
+					<div class=form-actions>
+						<input class="btn primary" type=submit value=登录 tabindex=4 name=commit>
+						或者
+						<a href="{{ url_for('account.register') }}">还未注册？</a>
+					</div>
+				</fieldset>
+			</form>
+		</section>
+{% endblock %}

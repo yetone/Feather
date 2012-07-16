@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% from "_page.html" import paginate %}
+{% block title %}回收站{% endblock %}
+{% block breadcrumb %}<li class=active>回收站</li>{% endblock %}
+{% block sidebarin %}
+	<section class=box>
+		<header>目标</header>
+		<p>为了维护宇宙和平！</p>
+	</section>
+{% endblock %}
+{% block body %}
+	<div id=mainbar class=span9>
+		{% include "_topiclist.html" %}
+		{{ paginate(page_obj, page_url) }}
+	</div>
+{% endblock %}

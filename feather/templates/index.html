@@ -1,0 +1,115 @@
+{% extends "layout.html" %}
+{% block bread %}{% endblock %}
+{% block sidebarin %}
+	{% if session.user_id == 1 %}
+		<section class=box>
+			<a class="btn btn-primary" href="{{ url_for('node.node_add') }}">增加节点</a>
+		</section>
+	{% endif %}
+	<section id=hots class=box>
+		<header>热议主题<span class="gray little list_big">within 24 hours<span></header>
+		<table class=item-list>
+			<tbody>
+			{% for hottopic in hottopics %}
+				<tr>
+					<td class=avatar style="width: 24px; height: 24px; padding: 0px; vertical-align: middle;">
+						<a href="{{ url_for('account.usercenter', username=hottopic.author.name) }}"><img src="{{ hottopic.author.email|gravatarmini }} style="border: 0; align: default;"></a>
+					</td>
+					<td width=auto>
+						<a class=dark href="{{ url_for('topic.topic_view', topic_id=hottopic.id) }}" style="font-weight: bold;">{{ hottopic.title }}</a>
+					</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</section>
+	<section class=box>
+		<header>目标</header>
+		<p>为了维护宇宙和平！</p>
+	</section>
+	<section class=box>
+		<header>全站统计</header>
+		<ul>
+			<li>用户数 {{ usercount }}</li>
+			<li>话题数 {{ topiccount }}</li>
+			<li>回帖数 {{ replycount }}</li>
+		</ul>
+	</section>
+{% endblock %}
+{% block body %}
+	<div id=mainbar class=span9>
+		<section id=nodes class="box no-padding">
+			<header>节点导航</header>
+				<table class=item-list>
+					<tbody>
+						{% for nodeclass in nodeclasses %}
+							{% if nodeclass.nodes.first() and nodeclass.name != '' %}
+								<tr>
+									<td width=60 style="color:#ccc">{{ nodeclass.name }}</td>
+									<td class=tags>
+										{% for node in nodeclass.nodes.all() %}
+											<a href="{{ url_for('node.index', nodesite=node.site) }}">{{ node.name }}</a>
+										{% endfor %}
+									</td>
+								</tr>
+							{% endif %}
+						{% endfor %}
+					</tbody>
+				</table>
+		</section>
+		<section id=topics class="box no-padding">
+			<table class=item-list>
+				<tbody>
+					{% for topic in page_obj.items %}
+						<tr>
+							<td class=avatar>
+								<a href="{{ url_for('account.usercenter', username=topic.author.name) }}">
+									<img src="{{ topic.author.email|gravatar(size=48) }}">
+								</a>
+							</td>
+							<td>
+								<h3>
+									<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}">{{ topic.title }}</a>
+								</h3>
+								<div class=info>
+									<span class=tags>
+										<a href="{{ url_for('node.index', nodesite = topic.node.site) }}">{{ topic.node.name }}</a>
+									</span>
+									<span class=author>
+										<a href="{{ url_for('account.usercenter', username=topic.author.name) }}">{{ topic.author.name }}</a>
+									</span>
+									<span class=time>
+										创建于 {{ topic.date|datetimeformat }}
+										{% if topic.replys.first() %}
+											，<a href="{{ url_for('account.usercenter', username=topic.id|gettopiclastreplyid|getreplyauthorid|getusername) }}">{{ topic.id|gettopiclastreplyid|getreplyauthorid|getusername }}</a>
+											回复于 {{ topic.id|gettopiclastreplyid|getreplydate|datetimeformat }}
+										{% endif %}
+									</span>
+								</div>
+							</td>
+							<td class="reply-count last">
+								{% if g.user %}
+									{% if topic in g.user.reads %}
+										<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}" class=read>{{ topic.reply_count }}</a>
+									{% else %}
+										<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}">{{ topic.reply_count }}</a>
+									{% endif %}
+								{% else %}
+									<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}">{{ topic.reply_count }}</a>
+								{% endif %}
+							</td>
+						{% if session.user_id == 1 %}
+							<td><p align="right"><a href="{{ url_for('topic.del_topic', topic_id = topic.id) }}">删除</a></p>
+						{% endif %}
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% if page_obj.pages > 1 %}
+				<footer>
+					<a href="{{ url_for('topic.index',page=2) }}">» 更多话题</a>
+				</footer>
+			{% endif %}
+		</section>
+	</div>
+{% endblock %}

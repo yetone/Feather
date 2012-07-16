@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+{% from "_page.html" import paginate %}
+{% block title %}{{ node.name }}{% endblock %}
+{% block breadcrumb %}<li class=active>{{ node.name }}</li>{% endblock %}
+{% block sidebarin %}
+	{% if session.user_id %}
+		<section class=box>
+			<a class="btn btn-primary" href="{{ url_for('topic.topic_add', nodesite=node.site) }}">创建主题</a>
+		</section>
+	{% endif %}
+	<section class=box>
+		<header>
+		{{ node.name }}
+		</header>
+		{{ node.description|mention|markdown|safe }}
+		{% if session.user_id ==1 %}
+			<hr>
+			<a class=btn href="{{ url_for('node.node_edit', nodesite=node.site) }}" style="margin-top: -15px;">节点编辑</a>
+		{% endif %}
+	</section>
+	<section class="box">
+	</section>
+{% endblock %}
+{% block body %}
+	<div id=mainbar class=span9>
+		{% if page_obj.items != [] %}
+			<section id=topics class="box no-padding">
+				<table class=item-list>
+					<tbody>
+						{% for topic in page_obj.items %}
+							<tr>
+								<td class=avatar>
+									<a href="{{ url_for('account.usercenter', username=topic.author.name) }}">
+										<img src="{{ topic.author.email|gravatar(size=48) }}">
+									</a>
+								</td>
+								<td>
+									<h3>
+										<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}">{{ topic.title }}</a>
+									</h3>
+									<div class=info>
+										<span class=tags>
+										</span>
+										<span class=author>
+											<a href="{{ url_for('account.usercenter', username=topic.author.name) }}">{{ topic.author.name }}</a>
+										</span>
+										<span class=time>
+											创建于 {{ topic.date|datetimeformat }}
+											{% if topic.replys.first() %}
+											，<a href="{{ url_for('account.usercenter', username=topic.id|gettopiclastreplyid|getreplyauthorid|getusername) }}">{{ topic.id|gettopiclastreplyid|getreplyauthorid|getusername }}</a>
+												回复于 {{ topic.id|gettopiclastreplyid|getreplydate|datetimeformat }}
+											{% endif %}
+										</span>
+									</div>
+								</td>
+								<td class="reply-count last">
+									{% if g.user %}
+										{% if topic in g.user.reads %}
+											<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}" class=read>{{ topic.id|gettopicreplycount }}</a>
+										{% else %}
+											<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}">{{ topic.id|gettopicreplycount }}</a>
+										{% endif %}
+									{% else %}
+										<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}">{{ topic.id|gettopicreplycount }}</a>
+									{% endif %}
+								</td>
+							{% if session.user_id == 1 %}
+								<td><p align="right"><a href="{{ url_for('topic.del_topic', topic_id = topic.id) }}">删除</a></p>
+							{% endif %}
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</section>
+		{% else %}
+			<section class=box>
+			暂无相关主题，来
+			{% if session.user_id %}
+				<a class="btn btn-primary" href="{{ url_for('topic.topic_add', nodesite=node.site) }}">创建第一个主题</a>
+			{% else %}
+				创建第一个主题
+			{% endif %}吧^_^
+			</section>
+		{% endif %}
+		{{ paginate(page_obj, page_url) }}
+	</div>
+{% endblock %}

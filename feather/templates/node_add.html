@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block title %}添加节点{% endblock %}
+{% block body %}
+	{% if session.user_id %}
+		<div id=mainbar class=span9>
+			{% if error %}
+				<p class="alert alert-block alert-error">错误：{{ error }}</p>
+			{% endif %}
+			<section class=box>
+				<form action="{{ url_for('node.node_add') }}" method=post class=new_topic>
+					<legend>新建节点</legend>
+					<div class=form-horizontal>
+						<div class=control-group>
+							<label class=control-label>节点名：</label>
+							<div class=controls>
+								<input id=topic_title type=text size=30 name=nodename>
+							</div>
+						</div>
+						<div class=control-group>
+							<label class=control-label>节点地址：</label>
+							<div class=controls>
+								<input id=topic_title type=text size=30 name=nodesite>
+							</div>
+						</div>
+						<div class=control-group>
+							<label class=control-label>节点类别：</label>
+							<div class=controls>
+								<input id=topic_title type=text size=30 name=nodeclass>
+							</div>
+						</div>
+						<div class=control-group>
+							<label class=control-label>节点信息：</label>
+							<div class=controls>
+								<textarea name=description rows=5 cols=5 style="width: 450px;"></textarea>
+							</div>
+						</div>
+						<div class=form-actions>
+							<input class="btn btn-primary" type=submit value=增加节点 name=commit>
+						</div>
+					</div>
+				</form>
+			</section>
+		</div>
+	{% endif %}
+{% endblock %}

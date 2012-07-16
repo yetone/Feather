@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+{% from "_page.html" import paginate %}
+{% block title %}时间账单{% endblock %}
+{% block sidebarin %}
+<section class=box>
+<a href="{{ url_for('account.favorites') }}">主题收藏</a>
+<a href="{{ url_for('account.times') }}">时间账单</a>
+</section>
+{% endblock %}
+{% block bread %}{% endblock %}
+{% block body %}
+	<div id=mainbar class=span9>
+		<section id=profile class=box>
+			<div class=profile-wrap>
+				<div class=profile-inner>
+					<div class=avatar>
+						<img src="{{ g.user.email|gravatar }}">
+					</div>
+					<div class=info>
+						<h1>
+							{{ g.user.name }}
+							<small>@{{ g.user.name }}</small>
+						</h1>
+						{% if g.user.description %}
+							<p>{{ g.user.description }}</p>
+						{% endif %}
+						{% if g.user.website %}
+							<a rel="external nofollow" href="{{ g.user.website }}">{{ g.user.website }}</a>
+						{% endif %}
+						<hr>
+						<div class=balance_area style="font-size: 24px; line-height: 24px;">
+							<b>{{ session.user_id|getuserhour }} : {{ session.user_id|getuserminute }}</b>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		{% if page_obj.items %}
+			<section id=topics class="box no-padding">
+				<table class=item-list>
+					<tbody>
+						<tr>
+							<td width=150>日期</td>
+							<td width=120>类型</td>
+							<td width=90>时间</td>
+							<td width=90>剩余</td>
+							<td width=auto>描述</td>
+						</tr>
+						{% for bill in page_obj.items %}
+							<tr id=bill-{{ bill.id }}>
+								<td width=150>
+									<small>{{ bill.date|datetimeformat }}</small>
+								</td>
+								<td width=120>
+									{% if bill.type == 1 %}
+										注册-贷款
+									{% elif bill.type == 2 %}
+										发表主题-消费
+									{% elif bill.type == 3 %}
+										发表评论-消费
+									{% elif bill.type == 4 %}
+										发出感谢-消费
+									{% elif bill.type == 5 %}
+										收到评论-收益
+									{% elif bill.type == 6 %}
+										收到感谢-收益
+									{% elif bill.type == 7 %}
+										受到邀请-贷款
+									{% elif bill.type == 8 %}
+										发出邀请-收益
+									{% endif %}
+								</td>
+								<td width=90>
+									{% if bill.type == 2 or bill.type == 3 or bill.type == 4 %}
+										<div class=balance_area style="color: red;">-
+									{% else %}
+										<div class=balance_area style="color: green;">+
+									{% endif %}
+											{{ bill.time }}
+										</span>
+									</div>
+								</td>
+								<td width=90>
+									{% if not bill.balance %}
+										数据未记录
+									{% else %}
+										<div class=balance_area>
+											{{ bill.balance|getbalancehour }} : {{ bill.balance|getbalanceminute }}
+										</div>
+									{% endif %}
+								</td>
+								<td width=auto>
+									{% if bill.type == 1 %}
+										注册贷款
+									{% elif bill.type == 2 %}
+										{% if not bill.topic %}
+											数据未记录
+										{% else %}
+											发表主题 > <a href="{{ url_for('topic.topic_view', topic_id=bill.topic.id) }}">{{ bill.topic.title }}</a>
+										{% endif %}
+									{% elif bill.type == 3 %}
+										{% if not bill.reply %}
+											数据未记录
+										{% else %}
+											发表评论 > <a href="{{ url_for('topic.topic_view', topic_id=bill.reply.topic.id) }}">{{ bill.reply.topic.title }}</a>
+										{% endif %}
+									{% elif bill.type == 4 %}
+										{% if not bill.reply or not bill.user_id %}
+											数据未记录
+										{% else %}
+											感谢<a href="{{ url_for('account.usercenter', username=bill.user_id|getusername) }}">{{ bill.user_id|getusername }}</a>的评论 > <a href="{{ url_for('topic.topic_view', topic_id=bill.reply.topic.id) }}">{{ bill.reply.topic.title }}</a>
+										{% endif %}
+									{% elif bill.type == 5 %}
+										{% if not bill.reply or not bill.user_id %}
+											数据未记录
+										{% else %}
+											收到<a href="{{ url_for('account.usercenter', username=bill.user_id|getusername) }}">{{ bill.user_id|getusername }}</a>的评论 > <a href="{{ url_for('topic.topic_view', topic_id=bill.reply.topic.id) }}">{{ bill.reply.topic.title }}</a>
+										{% endif %}
+									{% elif bill.type == 6 %}
+										{% if not bill.reply or not bill.user_id %}
+											数据未记录
+										{% else %}
+											收到<a href="{{ url_for('account.usercenter', username=bill.user_id|getusername) }}">{{ bill.user_id|getusername }}</a>的感谢 > <a href="{{ url_for('topic.topic_view', topic_id=bill.reply.topic.id) }}">{{ bill.reply.topic.title }}</a>
+										{% endif %}
+									{% elif bill.type == 7 %}
+											受<a href="{{ url_for('account.usercenter', username=bill.user_id|getusername) }}">{{ bill.user_id|getusername }}</a>邀请注册
+									{% elif bill.type == 8 %}
+												邀请<a href="{{ url_for('account.usercenter', username=bill.user_id|getusername) }}">{{ bill.user_id|getusername }}</a>注册
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</section>
+		{% endif %}
+		{{ paginate(page_obj, page_url) }}
+	</div>
+{% endblock %}

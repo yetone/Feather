@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block title %}注册{% endblock %}
+{% block bread %}{% endblock %}
+{% block sidebar %}{% endblock %}
+{% block body %}
+	<div class="span4 offset4">
+		<section id="signup-form" class=box>
+			<form id=new_user class=new_user novalidate=novalidate method=post data-validate=true action="{{ url_for('account.register', invitername=invitername) }}" accept-charset=UTF-8>
+				<fieldset>
+					<legend>注册</legend>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_name>用户名</label>
+						</div>
+						<div class=controls>
+							<div class=full-input-wrap>
+								<input id=user_name type=text tabindex=1 size=30 name=username data-validate=true>
+							</div>
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_email>邮箱</label>
+						</div>
+						<div class=controls>
+							<div class=full-input-wrap>
+								<input id=user_email type=text tabindex=2 size=30 name=email data-validate=true>
+							</div>
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_password>密码</label>
+						</div>
+						<div class=controls>
+							<div class=full-input-wrap>
+								<input id=user_password type=password tabindex=3 size=30 name=password data-validate=true>
+							</div>
+						</div>
+					</div>
+					<div class=control-group>
+						<div class=control-label>
+							<label for=user_password_confirmation>密码确认</label>
+						</div>
+						<div class=controls>
+							<div class=full-input-wrap>
+								<input id=user_password_confirmation type=password tabindex=4 size=30 name=password2 data-validate=true>
+							</div>
+						</div>
+					</div>
+					<div class=form-actions>
+						<input class="btn primary" type=submit value=注册 tabindex=5 name=commit>
+						或者
+						<a href="{{ url_for('account.login') }}">已经注册过？</a>
+					</div>
+				</fieldset>
+			</form>
+{% endblock %}

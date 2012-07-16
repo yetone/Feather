@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+{% from "_page.html" import paginate %}
+{% block title %}时间规划局{% endblock %}
+{% block bankactive %}<li class=active>{% endblock %}
+{% block sidebar %}{% endblock %}
+{% block bread %}{% endblock %}
+{% block main %}
+	<section id=timesystem class=box>
+		<table class=item-list>
+			<tbody>
+				<tr>
+					<p style="font-size: 48px; text-align: center; padding: 10px;text-shadow: 1px 1px 3px #000; color:#676767;">
+					时间规划局
+					</p>
+					<hr>
+				</tr>
+				<tr>
+					<div style="text-align: center;">
+						<div class=balance_area style="font-size: 68px; line-height: 68px;text-align: center;text-shadow: -1px -1px 3px #ffb69a,1px 1px 3px #922e09,-1px -1px #ffb69a,1px 1px #922e09; color:#e73f00;">
+							{{ bank.time|getbanktime }}
+						</div>
+					</div>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+	<section id=bills class="box no-padding">
+		<table class=item-list>
+			<tbody>
+				{% for bill in page_obj.items %}
+					<tr id=bill-{{ bill.id }}>
+						<td class=avatar>
+							<a href="{{ url_for('account.usercenter', username=bill.author.name) }}">
+								<img src="{{ bill.author.email|gravatar }}">
+							</a>
+						</td>
+						<td>
+							{% if bill.type == 1 %}
+								<h3>
+									用户注册
+								</h3>
+								<div class=info>
+									<span class=author>
+										<a href="{{ url_for('account.usercenter', username=bill.author.name) }}">{{ bill.author.name }}</a>
+									</span>
+									<span class=time>
+										注册于 {{ bill.date|datetimeformat }},
+										贷款 <div class=balance_area>{{ 2100|getbanktime }}</div>
+									</span>
+								</div>
+							{% endif %}
+							{% if bill.type == 2 %}
+								{% if not bill.topic %}
+									<h3>
+										用户发表主题（已删除）
+									</h3>
+									<div class=info>
+										<span class=author>
+											<a href="{{ url_for('account.usercenter', username=bill.author.name) }}">{{ bill.author.name }}</a>
+										</span>
+										<span class=time>
+											发表于 {{ bill.date|datetimeformat }},
+											消费 <div class=balance_area>{{ 20|getbanktime }}</a>
+										</span>
+									</div>
+								{% else %}
+									<h3>
+										用户发表主题  <a href="{{ url_for('topic.topic_view', topic_id=bill.topic.id) }}">{{ bill.topic.title }}</a>
+									</h3>
+									<div class=info>
+										<span class=author>
+											<a href="{{ url_for('account.usercenter', username=bill.author.name) }}">{{ bill.author.name }}</a>
+										</span>
+										<span class=time>
+											发表于 {{ bill.date|datetimeformat }},
+											消费 <div class=balance_area>{{ 20|getbanktime }}</a>
+										</span>
+									</div>
+								{% endif %}
+							{% endif %}
+							{% if bill.type == 7 %}
+								<h3>
+									用户注册
+								</h3>
+								<div class=info>
+									<span class=author>
+										<a href="{{ url_for('account.usercenter', username=bill.author.name) }}">{{ bill.author.name }}</a>
+									</span>
+									<span class=time>
+										受<a href="{{ url_for('account.usercenter', username=bill.user_id|getusername) }}">{{ bill.user_id|getusername }}</a>邀请，注册于 {{ bill.date|datetimeformat }},
+										贷款 <div class=balance_area>{{ 2160|getbanktime }}</div>
+									</span>
+								</div>
+							{% endif %}
+							{% if bill.type == 8 %}
+								<h3>
+									邀请用户注册
+								</h3>
+								<div class=info>
+									<span class=author>
+										<a href="{{ url_for('account.usercenter', username=bill.author.name) }}">{{ bill.author.name }}</a>
+									</span>
+									<span class=time>
+										邀请<a href="{{ url_for('account.usercenter', username=bill.user_id|getusername) }}">{{ bill.user_id|getusername }}</a>注册,于 {{ bill.date|datetimeformat }},
+										获得 <div class=balance_area>{{ 60|getbanktime }}</div>
+									</span>
+								</div>
+							{% endif %}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</section>
+	{{ paginate(page_obj, page_url) }}
+{% endblock %}

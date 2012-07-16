@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+{% from "_page.html" import paginate %}
+{% block script %}
+	<script type="text/javascript">
+		$(function(){
+			$('tr.reply').hover(
+				function(){
+					$(this).find('span.thank_area').fadeIn(300);
+				},
+				function(){
+					$(this).find('span.thank_area').fadeOut(300,function(){$(this).stop(true);});
+				});
+			$('tr.reply').dblclick(
+				function(){
+				$(this).children('td').children('article').children('.clearbox').children('.right').children('.at').click();
+			});
+		});
+	</script>
+{% endblock %}
+{% block title %}{{ topic.title }}{% endblock %}
+{% block breadcrumb %}<li><a href="{{ url_for('node.index', nodesite=topic.node.site) }}">{{ topic.node.name }}</a></li>{% endblock %}
+{% block invite %}
+	<a href="{{ url_for('account.register', invitername=topic.author.name) }}">注册</a>
+{% endblock %}
+{% block invite2 %}
+	<a class="btn success" href="{{ url_for('account.register', invitername=topic.author.name) }}">注册</a>
+{% endblock %}
+{% block sidebarin %}
+	<section class=box>
+		<header> 相关话题 </header>
+		<div class=content>
+			<ul class=nice-list>
+				{% for liketopic in liketopics %}
+					{% if liketopic.id != topic.id %}
+						<li>
+							<a href="{{ url_for('topic.topic_view', topic_id=liketopic.id) }}">{{ liketopic.title }}</a>
+						</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+		</div>
+	</section>
+{% endblock %}
+{% block body %}
+	<div id=mainbar class=span9>
+		<section id=topic class=box>
+			<article id="{{ topic.id }}">
+				<header>
+					<table>
+						<tbody>
+							<tr>
+								<td>
+									<h1>{{ topic.title }}</h1>
+									<span class=tags>
+										<a href="{{ url_for('node.index', nodesite=topic.node.site) }}">{{ topic.node.name }}</a>
+									</span>
+									<span class="author list">
+										<a class=dark href="{{ url_for('account.usercenter', username=topic.author.name) }}">{{ topic.author.name }}</a>
+									</span>
+									<span class="time gray little list">创建于 {{ topic.date|datetimeformat }}</span>
+									{% if session.user_id == topic.author.id or session.user_id == 1 %}
+										<a class="light list_big" href="{{ url_for('topic.topic_edit', topic_id=topic.id) }}">编辑</a>
+									{% endif %}
+									{% if topic not in g.user.votes %}
+										<a class="light list_big" href="{{ url_for('topic.vote', topic_id=topic.id) }}">举报</a>
+									{% else %}
+										<span class="gray list_big">已举报</span>
+									{% endif %}
+								</td>
+								<td class=avatar>
+									<a href="{{ url_for('account.usercenter', username=topic.author.name) }}">
+										<img src="{{ topic.author.email|gravatar(size=48) }}">
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</header>
+				<p>{{ topic.text|mention|markdown|safe }}</p>
+				<footer>
+					<span class=marks_count>
+						{% if topic in g.user.favorites %}
+							<a class="btn disabled btn_primary" href="#;">已收藏</a>
+						{% else %}
+							<a id=fav class="btn btn_primary" onclick="fav({{ topic.id }});" href="#;"><show>收藏</show></a>
+						{% endif %}
+					</span>
+					{% if session.user_id %}
+						<span class=easy_reply style="float: right;">
+							<a class="btn btn_primary" onclick="replyOne('{{ topic.author.name }}');" href="#;">快速回复</a>
+						</span>
+					{% endif %}
+				</footer>
+			</article>
+		</section>
+		{% include "_replylist.html" %}
+		<span id=replyend></span>
+		{{ paginate(page_obj, page_url) }}
+		{% if session.user_id %}
+			{% if g.error %}
+				<p class="alert alert-block alert-error">错误：{{ g.error }}</p>
+			{% endif %}
+			<section id=editor class=box>
+				<h4> 回复话题 </h4>
+				<form id=new_reply class=new_reply method=post action="{{ url_for('reply.add_reply', topic_id = topic.id) }}">
+					<div class=control-group>
+						<div id=editor-button-bar style="position: absolute;top: -999em;">
+						</div>
+						<div class=full-input-wrap>
+							<textarea id=editor-input rows=10 name="reply[content]" cols=40 onkeydown="if(event.ctrlKey&&event.keyCode==13){document.getElementById('submit').click();return false};" style="height: 124px;"></textarea>
+						</div>
+					</div>
+					<div class=control-group>
+						<input id=submit class="btn primary" type=submit value=提交 name=commit>
+						<span style="color: #ccc;"> ctrl+enter </span>
+					</div>
+				</form>
+			</section>
+		{% else %}
+			<section id=tishi class=box>
+			</section>
+		{% endif %}
+	</div>
+{% endblock %}

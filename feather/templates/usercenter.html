@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% from "_page.html" import paginate %}
+{% block title %}个人中心{% endblock %}
+{% block sidebarin %}
+<section class=box>
+	<a href="{{ url_for('account.favorites') }}">主题收藏</a>
+	<a href="{{ url_for('account.times') }}">时间账单</a>
+</section>
+{% endblock %}
+{% block bread %}{% endblock %}
+{% block body %}
+	<div id=mainbar class=span9>
+		<section id=profile class=box>
+			<div class=profile-wrap>
+				<div class=profile-inner>
+					<div class=avatar>
+						<img src="{{ user.email|gravatarbig }}">
+					</div>
+					<div class=info>
+						<h1>
+							{{ user.name }}
+							<small>@{{ user.name }}</small>
+						</h1>
+						<p style="color: #ccc; font-size: 12px;">Feather 第 {{ user.id }} 号会员，加入于 {{ user.date|datetimeformat2 }}</p>
+						{% if user.emailswitch == 1 %}
+							<p style="color: #ccc; font-size: 12px;">Email: {{ user.email|emailtobase64 }}</p>
+						{% endif %}
+						{% if user.description %}
+							<p>{{ user.description }}</p>
+						{% endif %}
+						{% if user.website %}
+							<a rel="external nofollow" href="{{ user.website }}">{{ user.website }}</a>
+						{% endif %}
+						{% if user.city and user.city.name != '' %}
+							<div class=tags>
+								<a href="{{ url_for('city.city_view', citysite=user.city.site) }}">{{ user.city.name }}</a>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</section>
+		{% if user.topics %}
+			{% include "_topiclist.html" %}
+		{% endif %}
+		{{ paginate(page_obj, page_url) }}
+	</div>
+{% endblock %}
