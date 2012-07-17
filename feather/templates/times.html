@@ -40,18 +40,18 @@
 				<table class=item-list>
 					<tbody>
 						<tr>
-							<td width=150>日期</td>
-							<td width=120>类型</td>
-							<td width=90>时间</td>
-							<td width=90>剩余</td>
+							<td width=120>日期</td>
+							<td width=100>类型</td>
+							<td width=70>时间</td>
+							<td width=70>剩余</td>
 							<td width=auto>描述</td>
 						</tr>
 						{% for bill in page_obj.items %}
 							<tr id=bill-{{ bill.id }}>
-								<td width=150>
+								<td>
 									<small>{{ bill.date|datetimeformat }}</small>
 								</td>
-								<td width=120>
+								<td>
 									{% if bill.type == 1 %}
 										注册-贷款
 									{% elif bill.type == 2 %}
@@ -70,7 +70,7 @@
 										发出邀请-收益
 									{% endif %}
 								</td>
-								<td width=90>
+								<td>
 									{% if bill.type == 2 or bill.type == 3 or bill.type == 4 %}
 										<div class=balance_area style="color: red;">-
 									{% else %}
@@ -80,7 +80,7 @@
 										</span>
 									</div>
 								</td>
-								<td width=90>
+								<td>
 									{% if not bill.balance %}
 										数据未记录
 									{% else %}
@@ -89,7 +89,7 @@
 										</div>
 									{% endif %}
 								</td>
-								<td width=auto>
+								<td>
 									{% if bill.type == 1 %}
 										注册贷款
 									{% elif bill.type == 2 %}

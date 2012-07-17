@@ -34,7 +34,7 @@
 			{% for hottopic in hottopics %}
 				<tr>
 					<td class=avatar style="width: 24px; height: 24px; padding: 0px; vertical-align: middle;">
-						<a href="{{ url_for('account.usercenter', username=hottopic.id|gettopicauthorname) }}"><img src="{{ hottopic.id|gettopicauthoremail|gravatarmini }} style="border: 0; align: default;"></a>
+						<a href="{{ url_for('account.usercenter', username=hottopic.author.name) }}"><img src="{{ hottopic.author.email|gravatarmini }} style="border: 0; align: default;"></a>
 					</td>
 					<td width=auto>
 						<a class=dark href="{{ url_for('topic.topic_view', topic_id=hottopic.id) }}" style="font-weight: bold;">{{ hottopic.title }}</a>

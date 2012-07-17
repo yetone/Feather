@@ -14,6 +14,8 @@ A Community Web App like [V2EX](http://www.v2ex.com).
 - flask-sqlalchemy
 - flask-markdown
 - flask-script
+- flask-cache
+- python-memcached
 
 ## 配置
 

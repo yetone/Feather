@@ -8,7 +8,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 		abort, render_template, flash
 from flaskext.markdown import Markdown
 from feather.views import account, node, topic, reply, timesystem, city
-from feather.extensions import db
+from feather.extensions import db, cache
 from feather import config
 from feather.databases import Bill, Bank, City, User, Nodeclass, Node, \
 		Topic, Reply, Notify
@@ -32,6 +32,7 @@ app.register_module(city)
 app.register_module(timesystem)
 
 db.init_app(app)
+cache.init_app(app)
 
 @app.before_request
 def before_request():
@@ -199,6 +200,13 @@ def get_topic_last_reply_id(topic_id):
 	last_reply = rv[-1]
 	return last_reply.id
 
+@app.template_filter('gettopicauthorname')
+def get_topic_author_name(topic_id):
+	return Topic.query.get(topic_id).author.name
+
+@app.template_filter('gettopicauthoremail')
+def get_topic_author_email(topic_id):
+	return Topic.query.get(topic_id).author.email
 
 @app.template_filter('gettopicreplycount')
 def get_topic_reply_count(topic_id):

@@ -7,6 +7,18 @@ from feather.databases import Nodeclass, Node, Topic
 
 node = Module(__name__)
 
+
+def get_node(nodesite):
+	rv = Node.query.filter_by(site=nodesite).first()
+	return rv
+
+def get_topicscount(node):
+	if node.topics.first():
+		rv = len(node.topics.all())
+	else:
+		rv = 0
+	return rv
+
 @node.route('/add/node', methods=['GET', 'POST'])
 def node_add():
 	if session['user_id'] != 1:
@@ -66,17 +78,14 @@ def node_edit(nodesite):
 			node.nodeclass = nodeclass
 			db.session.commit()
 			flash(u'节点修改成功！')
-			return redirect(url_for('topic.tab_view'))
+			return redirect(url_for('node.index', nodesite=nodesite))
 	return render_template('node_edit.html',node=node)
 
 @node.route('/node/<nodesite>', defaults={'page': 1})
 @node.route('/node/<nodesite>/page/<int:page>')
 def index(nodesite,page):
-	node = Node.query.filter_by(site=nodesite).first()
-	if node.topics.first():
-		topicscount = len(node.topics.all())
-	else:
-		topicscount = 0
+	node = get_node(nodesite)
+	topicscount = get_topicscount(node)
 	page_obj = Topic.query.filter_by(node=node).filter_by(report=0).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
 	page_url = lambda page: url_for("node.index", nodesite=nodesite, page=page)
 	return render_template('node_index.html', page_obj=page_obj, page_url=page_url, node=node, topicscount=topicscount)

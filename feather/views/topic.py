@@ -4,12 +4,55 @@ from flask import Module, request, session, g, redirect, url_for, \
 		abort, render_template, flash
 from flask_sqlalchemy import Pagination
 from feather import config
-from feather.extensions import db
+from feather.extensions import db, cache
 from feather.databases import Bill, Bank, User, Nodeclass, Node, \
 		Topic, Reply
 
 
 topic = Module(__name__)
+
+
+def get_liketopics(topic):
+	liketopics = []
+	i = 0
+	for n in Topic.query.all():
+		if i == 6:
+			break
+		if liketopic(topic.title,n.title) == 0:
+			liketopics += [n]
+			i += 1
+			continue
+		elif liketopic(topic.title,n.title) == 1:
+			liketopics += [n]
+			i += 1
+			continue
+		elif liketopic(topic.title,n.title) == 2:
+			liketopics += [n]
+			i += 1
+			continue
+		rv = liketopics
+		return rv
+
+@cache.cached(600, key_prefix='sitestatus')
+def get_sitestatus():
+	usercount = 0
+	topiccount = 0
+	replycount = 0
+	if User.query.all():
+		usercount = len(User.query.all())
+	if Topic.query.all():
+		topiccount = len(Topic.query.all())
+	if Reply.query.all():
+		replycount = len(Reply.query.all())
+	rv = (usercount, topiccount, replycount)
+	return rv
+
+@cache.cached(1200, key_prefix='hottopics')
+def get_hottopics():
+	nowtime = int(time.time())
+	agotime = nowtime - 24*60*60
+	rv = Topic.query.filter(Topic.date <= nowtime).filter(Topic.date >= agotime).order_by(Topic.reply_count.desc()).limit(10).all()
+	return rv
 
 
 def liketopic(a,b):
@@ -31,26 +74,17 @@ class Getdate:
 @topic.route('/index', defaults={'page': 1, 'tabname': 'All'})
 @topic.route('/page/<int:page>', defaults={'tabname': 'All'})
 @topic.route('/<tabname>/page/<int:page>')
+@cache.cached(25)
 def index(page, tabname):
-	usercount = 0
-	topiccount = 0
-	replycount = 0
+	(usercount, topiccount, replycount) = get_sitestatus()
+	hottopics = get_hottopics()
 	nodeclasses = Nodeclass.query.all()
 	nodeclass = Nodeclass.query.filter_by(name=tabname).first()
-	if User.query.all():
-		usercount = len(User.query.all())
-	if Topic.query.all():
-		topiccount = len(Topic.query.all())
-	if Reply.query.all():
-		replycount = len(Reply.query.all())
-	nowtime = int(time.time())
-	agotime = nowtime - 24*60*60
-	hottopics = Topic.query.filter(Topic.date <= nowtime).filter(Topic.date >= agotime).order_by(Topic.reply_count.desc()).limit(10)
 	if tabname == 'All':
 		page_obj = Topic.query.filter_by(report=0).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
 		page_url = lambda page: url_for("topic.index", page=page, tabname='All')
 	elif nodeclass is None:
-		nodeclass = Nodeclass.query.filter_by(name='Geek').first()
+		nodeclass = get_nodeclass('Geek')
 		tabname = 'All'
 		page_obj = Topic.query.filter_by(report=0).filter_by(nodeclass=nodeclass).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
 		page_url = lambda page: url_for("topic.index", page=page, tabname='Geek')
@@ -161,23 +195,7 @@ def topic_edit(topic_id):
 @topic.route('/topic/<int:topic_id>/page/<int:page>')
 def topic_view(topic_id, page):
 	topic = Topic.query.get(topic_id)
-	liketopics = []
-	i = 0
-	for n in Topic.query.all():
-		if i == 6:
-			break
-		if liketopic(topic.title,n.title) == 0:
-			liketopics += [n]
-			i += 1
-			continue
-		elif liketopic(topic.title,n.title) == 1:
-			liketopics += [n]
-			i += 1
-			continue
-		elif liketopic(topic.title,n.title) == 2:
-			liketopics += [n]
-			i += 1
-			continue
+	liketopics = get_liketopics(topic)
 	page_obj = topic.replys.order_by(Reply.date.asc()).paginate(page, per_page=config.RE_PER_PAGE)
 	page_url = lambda page: url_for("topic.topic_view", topic_id=topic_id, page=page)
 	if g.user:
