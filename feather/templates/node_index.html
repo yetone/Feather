@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% from "_page.html" import paginate %}
 {% block title %}{{ node.name }}{% endblock %}
-{% block breadcrumb %}<li class=active>{{ node.name }}</li>{% endblock %}
+{% block bread %}{% endblock %}
 {% block sidebarin %}
 	{% if session.user_id %}
 		<section class=box>
@@ -25,6 +25,22 @@
 	<div id=mainbar class=span9>
 		{% if page_obj.items != [] %}
 			<section id=topics class="box no-padding">
+				<header class=node>
+					<span class=fl style="font-weight: normal;">
+						<a href="/">Feather</a>
+						<span class="gray list chevron">›</span>
+						<span class=list style="color: #aaa;">
+							{{ node.name }}
+						</span>
+					</span>
+					<span class=fr>
+						<span class=snow>主题总数</span>
+						<strong class="gray list">{{ topicscount }}</strong>
+					</span>
+					<span class=header>
+						{{ node.header|markdown|safe }}
+					</span>
+				</header>
 				<table class=item-list>
 					<tbody>
 						{% for topic in page_obj.items %}

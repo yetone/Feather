@@ -153,6 +153,7 @@ class Node(db.Model):
 	name = db.Column(db.String(50), unique=True)
 	site = db.Column(db.String(50), unique=True)
 	description = db.Column(db.Text)
+	header = db.Column(db.Text)
 	nodeclass_id = db.Column(db.Integer, db.ForeignKey('nodeclass.id'))
 	topics = db.relationship('Topic', backref='node', lazy='dynamic')
 	status = db.Column(db.Integer)
@@ -162,6 +163,7 @@ class Node(db.Model):
 		self.name = name
 		self.site = site
 		self.description = description
+		self.header = u''
 		self.status = 1
 		self.date = int(time.time())
 		self.nodeclass = nodeclass
