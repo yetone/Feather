@@ -1,6 +1,16 @@
 {% extends "layout.html" %}
 {% from "_page.html" import paginate %}
-{% block title %}个人中心{% endblock %}
+{% block title %}
+	{% if g.user %}
+		{% if g.user.name == user.name %}
+			个人中心
+		{% else %}
+			{{ user.name }}
+		{% endif %}
+	{% else %}
+		{{ user.name }}
+	{% endif %}
+{% endblock %}
 {% block sidebarin %}
 <section class=box>
 	<a href="{{ url_for('account.favorites') }}">主题收藏</a>

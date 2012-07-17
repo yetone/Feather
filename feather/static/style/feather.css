@@ -50,7 +50,8 @@
 .list_big {
 	padding-left: 5px;
 }
-/* DARK LINK */
+
+/* LINK */
 a.dark:link, a.dark:visited, a.dark:active {
 	color: gray;
 	text-decoration: none;
@@ -60,7 +61,7 @@ a.dark:hover {
 	color: #385F8A;
 	text-decoration: none;
 }
-/* LIGHT LINK */
+
 a.light:link, a.light:visited, a.light:active {
 	color: #ababab;
 	text-decoration: none;
@@ -70,7 +71,7 @@ a.light:hover {
 	color: gray;
 	text-decoration: none;
 }
-/* REPLY LINK */
+
 a.at:link, a.at:visited, a.at:active {
 	opacity: 0.7;
 	text-decoration: none;
@@ -105,7 +106,6 @@ a.at:hover {
 /* BALANCE */
 
 a.balance_area:link, a.balance_area:visited, .balance_area {
-    color: #000;
     font-size: 11px;
     line-height: 16px;
     padding: 5px 10px 5px 10px;
@@ -145,8 +145,7 @@ a.balance_area:active {
 
 a.balance_area:hover {
     text-decoration: none;
-    color: #333;
-    color: #000;
+    color: #666;
     
     background: #f9f9f9;
     background: -moz-linear-gradient(top, #f9f9f9 0%, #f0f0f0 100%);

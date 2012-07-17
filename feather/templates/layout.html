@@ -101,10 +101,10 @@
 									</div>
 									{% if session.user_id|getusertimeswitch == 1 %}
 										<hr>
-										<a href="/times">
-										<div class=balance_area style="font-size: 24px; line-height: 24px;">
+										<a href="/times" class=balance_area>
+										<span style="font-size: 24px; line-height: 24px;">
 											<b>{{ session.user_id|getuserhour }} : {{ session.user_id|getuserminute }}</b>
-										</div>
+										</span>
 										</a>
 									{% endif %}
 								</section>

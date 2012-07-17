@@ -17,14 +17,14 @@
 					{% for unread in unreads %}
 						<tr id=notification-{{ unread.reply.id }}>
 							<td class=avatar>
-								<a href="">
+								<a href="{{ url_for('account.usercenter', username=unread.reply.author.name) }}">
 									<img src="{{ unread.reply.author.email|gravatar(size=48) }}">
 								</a>
 							</td>
 							{% if session.user_id == unread.reply.topic.author.id %}
 								<td>
 									<h3>
-										<a href="">{{ unread.reply.author.name }}</a>
+										<a href="{{ url_for('account.usercenter', username=unread.reply.author.name) }}">{{ unread.reply.author.name }}</a>
 										回复了你的主题
 										<a href="{{ url_for('topic.topic_view', topic_id=unread.reply.topic.id) }}">{{ unread.reply.topic.title }}</a>
 										{{ unread.reply.date|datetimeformat }}
@@ -35,7 +35,7 @@
 							{% else %}
 								<td>
 									<h3>
-										<a href="">{{ unread.reply.author.name }}</a>
+										<a href="{{ url_for('account.usercenter', username=unread.reply.author.name) }}">{{ unread.reply.author.name }}</a>
 										在主题
 										<a href="{{ url_for('topic.topic_view', topic_id=unread.reply.topic.id) }}">{{ unread.reply.topic.title }}</a>
 										提及了你
@@ -56,14 +56,14 @@
 						{% if readed.reply %}
 							<tr id=notification-{{ readed.reply.id }}>
 								<td class=avatar>
-									<a href="">
+									<a href="{{ url_for('account.usercenter', username=readed.reply.author.name) }}">
 										<img src="{{ readed.reply.author.email|gravatar(size=48) }}">
 									</a>
 								</td>
 								{% if session.user_id != readed.reply.topic.author.id %}
 									<td>
 										<h3>
-											<a href="">{{ readed.reply.author.name }}</a>
+											<a href="{{ url_for('account.usercenter', username=readed.reply.author.name) }}">{{ readed.reply.author.name }}</a>
 											在主题
 											<a href="{{ url_for('topic.topic_view', topic_id=readed.reply.topic.id) }}">{{ readed.reply.topic.title }}</a>
 											提及了你
@@ -74,7 +74,7 @@
 								{% else %}
 									<td>
 										<h3>
-											<a href="">{{ readed.reply.author.name }}</a>
+											<a href="{{ url_for('account.usercenter', username=readed.reply.author.name) }}">{{ readed.reply.author.name }}</a>
 											回复了你的主题
 											<a href="{{ url_for('topic.topic_view', topic_id=readed.reply.topic.id) }}">{{ readed.reply.topic.title }}</a>
 											{{ readed.reply.date|datetimeformat }}
