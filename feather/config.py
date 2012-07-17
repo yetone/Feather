@@ -21,6 +21,7 @@ class Config(object):
 	DEBUG = False
 	TESTING = False
 	SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % _DB_SQLITE_PATH
+	CACHE_TYPE = 'memcached'
 
 
 class ProConfig(Config):
