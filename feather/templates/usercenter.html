@@ -27,10 +27,10 @@
 						<img src="{{ user.email|gravatarbig }}">
 					</div>
 					<div class=info>
-						<h1>
+						<h2>
 							{{ user.name }}
 							<small>@{{ user.name }}</small>
-						</h1>
+						</h2>
 						<p style="color: #ccc; font-size: 12px;">Feather 第 {{ user.id }} 号会员，加入于 {{ user.date|datetimeformat2 }}</p>
 						{% if user.emailswitch == 1 %}
 							<p style="color: #ccc; font-size: 12px;">Email: {{ user.email|emailtobase64 }}</p>
