@@ -72,4 +72,9 @@
 			{% endfor %}
 		</tbody>
 	</table>
+	{% if tabname and page_obj.page == 1 and page_obj.pages > 1 %}
+		<footer>
+			<a href="{{ url_for('topic.index', tabname=tabname, page=2) }}">» 更多话题</a>
+		</footer>
+	{% endif %}
 </section>

@@ -12,9 +12,11 @@
 							<div class=left>
 								<a class=dark href="{{ url_for('account.usercenter', username=reply.author.name) }}" style="font-size: 14px;">{{ reply.author.name }}</a>
 								<span class="gray little list_big">{{ reply.date|datetimeformat }}</span>
+								<span class=gray id="thankview-{{ reply.id }}">
 								{% if reply.thankers.all() != [] %}
-								<span class=list style="color: #ccc; font-size: 16px;">♥</span><span style="color: #ccc; font-weight: normal;">{{ reply.id|getreplythankerscount }}</span>
+										<span id=heart class=list>♥</span><span id="thankcount-{{ reply.id }}" class=thankcount>{{ reply.id|getreplythankerscount }}</span>
 								{% endif %}
+								</span>
 							</div>
 							<div class=right>
 								{% if session.user_id != reply.author.id and session.user_id %}

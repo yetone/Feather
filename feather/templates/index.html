@@ -1,9 +1,30 @@
 {% extends "layout.html" %}
+{% from "_page.html" import paginate %}
+{% block title %}
+	{% if page_obj.page !=1 %}
+		第 {{ page_obj.page }} 页-最近的主题
+	{% else %}
+		首页
+	{% endif %}
+{% endblock %}
 {% block bread %}{% endblock %}
+{{ titlenate(page_obj) }}
 {% block sidebarin %}
 	{% if session.user_id == 1 %}
 		<section class=box>
 			<a class="btn btn-primary" href="{{ url_for('node.node_add') }}">增加节点</a>
+		</section>
+	{% endif %}
+	{% if nodeclass %}
+		<section id=hots class=box>
+			<header>包含节点</header>
+				{% for node in nodeclass.nodes %}
+					<span class=tags>
+						<a href="{{ url_for('node.index', nodesite=node.site) }}">{{ node.name }}</a>
+					</span>
+				{% endfor %}
+				</tbody>
+			</table>
 		</section>
 	{% endif %}
 	<section id=hots class=box>
@@ -38,102 +59,12 @@
 {% endblock %}
 {% block body %}
 	<div id=mainbar class=span9>
-		<section id=topics class="box no-padding">
-			<header>
-				{% if tabname == 'All' or tabname == 'all' %}
-					<span class=tabs>
-						<a href="{{ url_for('topic.tab_view', tabname='All') }}" style="background-color: #666;">全部</a>
-					</span>
-				{% else %}
-					<span class=tabs>
-						<a href="{{ url_for('topic.tab_view', tabname='All') }}">全部</a>
-					</span>
-				{% endif %}
-				{% for nodeclass in nodeclasses %}
-					{% if nodeclass.nodes.first() and nodeclass.name != '' %}
-						{% if nodeclass.name == tabname %}
-							<span class=tabs>
-								<a href="{{ url_for('topic.tab_view', tabname=nodeclass.name) }}" style="background-color: #666;">{{ nodeclass.name }}</a>
-							</span>
-						{% else %}
-							<span class=tabs>
-								<a href="{{ url_for('topic.tab_view', tabname=nodeclass.name) }}">{{ nodeclass.name }}</a>
-							</span>
-						{% endif %}
-					{% endif %}
-				{% endfor %}
-			</header>
-			<table class=item-list>
-				<tbody>
-					{% for topic in page_obj.items %}
-						<tr>
-							<td class=avatar>
-								<a href="{{ url_for('account.usercenter', username=topic.author.name) }}">
-									<img src="{{ topic.author.email|gravatar(size=48) }}">
-								</a>
-							</td>
-							<td>
-								<h3>
-									<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}">{{ topic.title }}</a>
-								</h3>
-								<div class=info>
-									<span class=tags>
-										<a href="{{ url_for('node.index', nodesite = topic.node.site) }}">{{ topic.node.name }}</a>
-									</span>
-									<span class=author>
-										<a href="{{ url_for('account.usercenter', username=topic.author.name) }}">{{ topic.author.name }}</a>
-									</span>
-									<span class=time>
-										创建于 {{ topic.date|datetimeformat }}
-										{% if topic.replys.first() %}
-											，<a href="{{ url_for('account.usercenter', username=topic.id|gettopiclastreplyid|getreplyauthorid|getusername) }}">{{ topic.id|gettopiclastreplyid|getreplyauthorid|getusername }}</a>
-											回复于 {{ topic.id|gettopiclastreplyid|getreplydate|datetimeformat }}
-										{% endif %}
-									</span>
-								</div>
-							</td>
-							<td class="reply-count last">
-								{% if g.user %}
-									{% if topic in g.user.reads %}
-										<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}" class=read>{{ topic.reply_count }}</a>
-									{% else %}
-										<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}">{{ topic.reply_count }}</a>
-									{% endif %}
-								{% else %}
-									<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}">{{ topic.reply_count }}</a>
-								{% endif %}
-							</td>
-						{% if session.user_id == 1 %}
-							<td><p align="right"><a href="{{ url_for('topic.del_topic', topic_id = topic.id) }}">删除</a></p>
-						{% endif %}
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-			{% if page_obj.pages > 1 %}
-				<footer>
-					<a href="{{ url_for('topic.index', tabname=tabname, page=2) }}">» 更多话题</a>
-				</footer>
-			{% endif %}
-		</section>
-		<section id=nodes class="box no-padding">
-			<header>节点导航</header>
-				<table class=item-list>
-					<tbody>
-						{% for nodeclass in nodeclasses %}
-							{% if nodeclass.nodes.first() and nodeclass.name != '' %}
-								<tr>
-									<td width=60 style="color:#ccc">{{ nodeclass.name }}</td>
-									<td class=tags>
-										{% for node in nodeclass.nodes.all() %}
-											<a href="{{ url_for('node.index', nodesite=node.site) }}">{{ node.name }}</a>
-										{% endfor %}
-									</td>
-								</tr>
-							{% endif %}
-						{% endfor %}
-					</tbody>
-				</table>
-		</section>
+		{% include "_pagetop.html" %}
+		{% include "_topiclist.html" %}
+		{% if page_obj.page != 1 %}
+			{{ paginate(page_obj, page_url) }}
+		{% else %}
+			{% include "_pagebottom.html" %}
+		{% endif %}
 	</div>
 {% endblock %}

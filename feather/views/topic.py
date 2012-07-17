@@ -51,15 +51,13 @@ def index(page, tabname):
 		page_url = lambda page: url_for("topic.index", page=page, tabname='All')
 	elif nodeclass is None:
 		nodeclass = Nodeclass.query.filter_by(name='Geek').first()
+		tabname = 'All'
 		page_obj = Topic.query.filter_by(report=0).filter_by(nodeclass=nodeclass).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
 		page_url = lambda page: url_for("topic.index", page=page, tabname='Geek')
 	else:
 		page_obj = Topic.query.filter_by(report=0).filter_by(nodeclass=nodeclass).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
 		page_url = lambda page: url_for("topic.index", page=page, tabname=nodeclass.name)
-	if page == 1:
-		return render_template('index.html', page_obj=page_obj, nodeclasses=nodeclasses, usercount=usercount, topiccount=topiccount, replycount=replycount, hottopics=hottopics, tabname=tabname)
-	if page >1:
-		return render_template('recent.html', page_obj=page_obj, page_url=page_url, nodeclasses=nodeclasses, usercount=usercount, topiccount=topiccount, replycount=replycount, page=page, hottopics=hottopics, tabname=tabname)
+	return render_template('index.html', page_obj=page_obj, page_url=page_url, nodeclasses=nodeclasses, nodeclass=nodeclass, usercount=usercount, topiccount=topiccount, replycount=replycount, hottopics=hottopics, tabname=tabname)
 
 @topic.route('/', defaults={'tabname': 'index'})
 @topic.route('/tab/<tabname>')

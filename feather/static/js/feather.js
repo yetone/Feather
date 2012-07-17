@@ -18,6 +18,12 @@ function replyOne(username){
 
 function thankReply(replyid){
 	$.get('/reply/' + replyid + '/thank');
+	if($('#thankcount-' + replyid).length){
+		thankcount = Number($('#thankcount-' + replyid).html()) + 1;
+		$('#thankcount-' + replyid).html(thankcount);
+	} else {
+		$('#thankview-' + replyid).html("♥ 1")
+	}
 	$('#thank_area_' + replyid).addClass("thanked_area").removeClass("thank_area").html("♥");
 }
 

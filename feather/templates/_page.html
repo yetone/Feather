@@ -1,86 +1,21 @@
 {% macro paginate(page_obj, page_url) %}
-{% if page_obj.pages >1 %}
-	<nav class=pagination>
-		<ul>
-			{% if page_obj.page > 4 %}
-				{% if page_obj.page + 2 < page_obj.pages %}
-					{% if page_obj.page != 1 %}
-						<li class=prev>
-							<a rel=prev href="{{ page_url(page_obj.page - 1) }}">上一页</a>
-						</li>
-					{% endif %}
-					<li>
-						<a href="{{ page_url(1) }}">1</a>
-					</li>
-					<li class=disabled>
-						<a href="#">...</a>
-					</li>
-					{% for i in range(page_obj.page - 3,page_obj.page + 2) %}
-						{% if i + 1 == page_obj.page %}
-							<li class=active>
-						{% else %}
-							<li>
-						{% endif %}
-								<a href="{{ page_url(i + 1) }}">{{ i + 1 }}</a>
-							</li>
-					{% endfor %}
-					<li class=disabled>
-						<a href="#">...</a>
-					</li>
-					<li>
-						<a href="{{ page_url(page_obj.pages) }}">{{ page_obj.pages }}</a>
-					</li>
-					{% if page_obj.page != page_obj.pages %}
-						<li class=next>
-							<a rel=next href="{{ page_url(page_obj.page + 1) }}">下一页</a>
-						</li>
-					{% endif %}
-				{% else %}
-					{% if page_obj.page != 1 %}
-						<li class=prev>
-							<a rel=prev href="{{ page_url(page_obj.page - 1) }}">上一页</a>
-						</li>
-					{% endif %}
-					<li>
-						<a href="{{ page_url(1) }}">1</a>
-					</li>
-					<li class=disabled>
-						<a href="#">...</a>
-					</li>
-					{% for i in range(page_obj.page-3,page_obj.pages) %}
-						{% if i + 1 == page_obj.page %}
-							<li class=active>
-						{% else %}
-							<li>
-						{% endif %}
-								<a href="{{ page_url(i + 1) }}">{{ i + 1 }}</a>
-							</li>
-					{% endfor %}
-					{% if page_obj.page != page_obj.pages %}
-						<li class=next>
-							<a rel=next href="{{ page_url(page_obj.page + 1) }}">下一页</a>
-						</li>
-					{% endif %}
-				{% endif %}
-			{% else %}
-				{% if page_obj.pages <= 4 %}
-					{% for i in range(page_obj.pages) %}
-						{% if i + 1 == page_obj.page %}
-							<li class=active>
-						{% else %}
-							<li>
-						{% endif %}
-								<a href="{{ page_url(i + 1) }}">{{ i + 1 }}</a>
-							</li>
-					{% endfor %}
-				{% else %}
-					{% if page_obj.page+2 < page_obj.pages %}
+	{% if page_obj.pages >1 %}
+		<nav class=pagination>
+			<ul>
+				{% if page_obj.page > 4 %}
+					{% if page_obj.page + 2 < page_obj.pages %}
 						{% if page_obj.page != 1 %}
 							<li class=prev>
 								<a rel=prev href="{{ page_url(page_obj.page - 1) }}">上一页</a>
 							</li>
 						{% endif %}
-						{% for i in range(0,page_obj.page+2) %}
+						<li>
+							<a href="{{ page_url(1) }}">1</a>
+						</li>
+						<li class=disabled>
+							<a href="#">...</a>
+						</li>
+						{% for i in range(page_obj.page - 3,page_obj.page + 2) %}
 							{% if i + 1 == page_obj.page %}
 								<li class=active>
 							{% else %}
@@ -89,17 +24,17 @@
 									<a href="{{ page_url(i + 1) }}">{{ i + 1 }}</a>
 								</li>
 						{% endfor %}
-								<li class=disabled>
-									<a href="#">...</a>
-								</li>
-								<li>
-									<a href="{{ page_url(page_obj.pages) }}">{{ page_obj.pages }}</a>
-								</li>
-								{% if page_obj.page != page_obj.pages %}
-									<li class=next>
-										<a rel=next href="{{ page_url(page_obj.page + 1) }}">下一页</a>
-									</li>
-								{% endif %}
+						<li class=disabled>
+							<a href="#">...</a>
+						</li>
+						<li>
+							<a href="{{ page_url(page_obj.pages) }}">{{ page_obj.pages }}</a>
+						</li>
+						{% if page_obj.page != page_obj.pages %}
+							<li class=next>
+								<a rel=next href="{{ page_url(page_obj.page + 1) }}">下一页</a>
+							</li>
+						{% endif %}
 					{% else %}
 						{% if page_obj.page != 1 %}
 							<li class=prev>
@@ -112,7 +47,7 @@
 						<li class=disabled>
 							<a href="#">...</a>
 						</li>
-						{% for i in range(page_obj.page-2,page_obj.pages) %}
+						{% for i in range(page_obj.page-3,page_obj.pages) %}
 							{% if i + 1 == page_obj.page %}
 								<li class=active>
 							{% else %}
@@ -127,9 +62,74 @@
 							</li>
 						{% endif %}
 					{% endif %}
+				{% else %}
+					{% if page_obj.pages <= 4 %}
+						{% for i in range(page_obj.pages) %}
+							{% if i + 1 == page_obj.page %}
+								<li class=active>
+							{% else %}
+								<li>
+							{% endif %}
+									<a href="{{ page_url(i + 1) }}">{{ i + 1 }}</a>
+								</li>
+						{% endfor %}
+					{% else %}
+						{% if page_obj.page+2 < page_obj.pages %}
+							{% if page_obj.page != 1 %}
+								<li class=prev>
+									<a rel=prev href="{{ page_url(page_obj.page - 1) }}">上一页</a>
+								</li>
+							{% endif %}
+							{% for i in range(0,page_obj.page+2) %}
+								{% if i + 1 == page_obj.page %}
+									<li class=active>
+								{% else %}
+									<li>
+								{% endif %}
+										<a href="{{ page_url(i + 1) }}">{{ i + 1 }}</a>
+									</li>
+							{% endfor %}
+									<li class=disabled>
+										<a href="#">...</a>
+									</li>
+									<li>
+										<a href="{{ page_url(page_obj.pages) }}">{{ page_obj.pages }}</a>
+									</li>
+									{% if page_obj.page != page_obj.pages %}
+										<li class=next>
+											<a rel=next href="{{ page_url(page_obj.page + 1) }}">下一页</a>
+										</li>
+									{% endif %}
+						{% else %}
+							{% if page_obj.page != 1 %}
+								<li class=prev>
+									<a rel=prev href="{{ page_url(page_obj.page - 1) }}">上一页</a>
+								</li>
+							{% endif %}
+							<li>
+								<a href="{{ page_url(1) }}">1</a>
+							</li>
+							<li class=disabled>
+								<a href="#">...</a>
+							</li>
+							{% for i in range(page_obj.page-2,page_obj.pages) %}
+								{% if i + 1 == page_obj.page %}
+									<li class=active>
+								{% else %}
+									<li>
+								{% endif %}
+										<a href="{{ page_url(i + 1) }}">{{ i + 1 }}</a>
+									</li>
+							{% endfor %}
+							{% if page_obj.page != page_obj.pages %}
+								<li class=next>
+									<a rel=next href="{{ page_url(page_obj.page + 1) }}">下一页</a>
+								</li>
+							{% endif %}
+						{% endif %}
+					{% endif %}
 				{% endif %}
-			{% endif %}
-		</ul>
-	</nav>
-{% endif %}
+			</ul>
+		</nav>
+	{% endif %}
 {% endmacro %}

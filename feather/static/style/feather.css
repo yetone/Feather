@@ -1,12 +1,12 @@
-/*!
- * Bootstrap v2.0.1
- *
- * Copyright 2012 Twitter, Inc
- * Licensed under the Apache License v2.0
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Designed and built with all the love in the world @twitter by @mdo and @fat.
- */
+#heart {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.thankcount {
+	font-weight: normal;
+}
+
 .tabs {
 	margin: 18px 3px 0 3px;
 }
@@ -35,6 +35,7 @@
 .gray {
 	color: #ccc;
 }
+
 .little {
 	font-size: 12px;
 	font-weight: normal;
