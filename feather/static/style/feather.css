@@ -6546,7 +6546,8 @@ a.thumbnail:hover {
   }
   .span9 {
     width: 870px;
-    width: 870px;
+    width: 680px;
+	float: left;
   }
   .span10 {
     width: 970px;
@@ -6559,7 +6560,7 @@ a.thumbnail:hover {
   .span12,
   .container {
     width: 1170px;
-    width: 1170px;
+    width: 980px;
   }
   .offset1 {
     margin-left: 130px;

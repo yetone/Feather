@@ -13,7 +13,7 @@
 						</span>
 					{% endif %}
 					{% for nodeclass in nodeclasses %}
-						{% if nodeclass.name != '' %}
+						{% if nodeclass.nodes.first() and nodeclass.name != '' %}
 							{% if nodeclass.name == tabname %}
 								<span class=tabs>
 									<a href="{{ url_for('topic.tab_view', tabname=nodeclass.name) }}" style="background-color: #666;">{{ nodeclass.name }}</a>
