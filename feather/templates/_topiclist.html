@@ -4,22 +4,22 @@
 			{% if tabname %}
 				<header>
 					{% if tabname == 'All' or tabname == 'all' %}
-						<span class=tabs>
-							<a href="{{ url_for('topic.tab_view', tabname='All') }}" style="background-color: #666;">全部</a>
+						<span class="tags tabs current">
+							<a href="{{ url_for('topic.tab_view', tabname='All') }}">全部</a>
 						</span>
 					{% else %}
-						<span class=tabs>
+						<span class="tags tabs">
 							<a href="{{ url_for('topic.tab_view', tabname='All') }}">全部</a>
 						</span>
 					{% endif %}
 					{% for nodeclass in nodeclasses %}
 						{% if nodeclass.nodes.first() and nodeclass.name != '' %}
 							{% if nodeclass.name == tabname %}
-								<span class=tabs>
-									<a href="{{ url_for('topic.tab_view', tabname=nodeclass.name) }}" style="background-color: #666;">{{ nodeclass.name }}</a>
+								<span class="tags tabs current">
+									<a href="{{ url_for('topic.tab_view', tabname=nodeclass.name) }}">{{ nodeclass.name }}</a>
 								</span>
 							{% else %}
-								<span class=tabs>
+								<span class="tags tabs">
 									<a href="{{ url_for('topic.tab_view', tabname=nodeclass.name) }}">{{ nodeclass.name }}</a>
 								</span>
 							{% endif %}
