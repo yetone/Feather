@@ -176,19 +176,28 @@ def gravatarmini_url(email):
 @app.template_filter('mention')
 def mentionfilter(text):
 	text = text.replace('\n','<br />')
-	regex_url = r'http:\/\/([\w.]+\/?)\S*'
-	for match in re.finditer(regex_url, text):
+	text = re.sub(ur'<a.+?href="(.+?)".*?>(.+?)<\/a>',ur'<a href="\1" target="_blank">\2</a>',text)
+	text = re.sub(ur'<(http(s|):\/\/[\w.]+\/?\S*)>',ur'<a href="\1" target="_blank">\1</a>',text)
+	topic_url = ur'http:\/\/(www\.|)feather\.im\/topic\/?(\S*)'
+	for match in re.finditer(topic_url, text):
 		url = match.group(0)
-		aurl = '<a href="%s" target="_blank">%s</a>' % (url, url)
+		topic_id = match.group(2)
+		topic = Topic.query.get(topic_id)
+		if topic is None:
+			continue
+		else:
+			topic_title = topic.title
+		aurl = '<a href="%s" target="_blank">/%s</a>' % (url, topic_title)
 		text = text.replace(url, aurl)
-	regex_url = r'https:\/\/([\w.]+\/?)\S*'
+	text = re.sub(ur'http:\/\/(www\.|)feather\.im\/(node\/?\S*)',ur'<a href="\2" target="_blank">\2</a>',text)
+	regex_url = r'(^|\s)http(s|):\/\/([\w.]+\/?)\S*'
 	for match in re.finditer(regex_url, text):
 		url = match.group(0)
 		aurl = '<a href="%s" target="_blank">%s</a>' % (url, url)
 		text = text.replace(url, aurl)
 	usernames = list(set(mentions(text)))
 	for username in usernames:
-		url = '<a href="/member/%s">%s</a>' % (username, username)
+		url = '<a href="/member/%s" target="_blank">%s</a>' % (username, username)
 		text = text.replace(username, url)
 	return text
 
