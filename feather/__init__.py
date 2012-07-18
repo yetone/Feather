@@ -51,6 +51,75 @@ def before_request():
 			g.notify = len(g.notify_unread)
 
 
+def mention(text):
+	usernames = []
+	if text.find('@') == -1:
+		begin = -1
+		usernames = usernames
+	elif text.find(' ') != -1:
+		begin = text.find('@') + 1
+		if text.find('\n') != -1:
+			end = text.find(' ') < text.find('\n') and text.find(' ') or text.find('\n')
+		else:
+			end = len(text)
+	elif text.find('\n') != -1:
+		begin = text.find('@') + 1
+		end = text.find('\n')
+	else:
+		begin = text.find('@') +1
+		end = len(text)
+	if begin != -1:
+		value = text[begin:end]
+		n = len(value)
+		for i in range(0,n):
+			rv = User.query.filter_by(name=value).first()
+			if not rv:
+				value = list(value)
+				value.pop()
+				value = ''.join(value)
+			else:
+				text = text[text.find('@') + len(value):]
+				usernames = usernames + [value]
+				break
+	return usernames
+
+def mentions(text):
+	usernames = []
+	if text.find('@') == -1:
+		begin = -1
+		usernames = usernames
+	elif text.find(' ') != -1:
+		begin = text.find('@') + 1
+		if text.find('\n') != -1:
+			end = text.find(' ') < text.find('\n') and text.find(' ') or text.find('\n')
+		else:
+			end = len(text)
+	elif text.find('\n') != -1:
+		begin = text.find('@') + 1
+		end = text.find('\n')
+	else:
+		begin = text.find('@') +1
+		end = len(text)
+	if begin != -1:
+		value = text[begin:end]
+		n = len(value)
+		for i in range(0,n):
+			rv = User.query.filter_by(name=value).first()
+			if not rv:
+				value = list(value)
+				value.pop()
+				value = ''.join(value)
+			else:
+				text = text[text.find('@') + len(value):]
+				usernames = usernames + [value]
+				while True:
+					if mention(text) == []:
+						break
+					usernames = usernames + mention(text)
+					text = text[text.find('@') + len(value):]
+				break
+	return usernames
+
 # filters
 @app.template_filter('datetimeformat')
 def format_datetime(timestamp):
@@ -107,7 +176,10 @@ def gravatarmini_url(email):
 @app.template_filter('mention')
 def mentionfilter(text):
 	text = text.replace('\n','<br />')
-	text = re.sub(ur'(\A|\s|[\u4e00-\u9fa5])@(\w+)', ur'\1@<a href="/member/\2">\2</a>', text)
+	usernames = list(set(mentions(text)))
+	for username in usernames:
+		url = '<a href="/member/%s">%s</a>' % (username, username)
+		text = text.replace(username, url)
 	return text
 
 @app.template_filter('emailtobase64')

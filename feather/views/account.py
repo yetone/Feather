@@ -17,10 +17,19 @@ def get_user_id_from_email(email):
 	rv = User.query.filter_by(email=email).first()
 	return rv.id if rv else None
 
+@cache.cached(60 * 60, key_prefix='topusers')
+def get_top_users():
+	rv = User.query.filter_by(topswitch=1).order_by(User.time.desc()).limit(26).all()
+	return rv
+
+@cache.cached(60 * 5, key_prefix='users')
+def get_users():
+	rv = User.query.order_by(User.id.asc()).all()
+	return rv
+
 @account.route('/users')
-@cache.cached(60 * 5)
 def users():
-	users = User.query.order_by(User.id.asc()).all()
+	users = get_users()
 	return render_template('users.html',users=users)
 
 
@@ -81,10 +90,9 @@ def notify(page):
 
 
 @account.route('/top')
-@cache.cached(60 * 60)
 def top():
-	users = User.query.filter_by(topswitch=1).order_by(User.time.desc()).limit(26)
-	return render_template('top.html',users=users.all())
+	users = get_top_users()
+	return render_template('top.html',users=users)
 
 
 

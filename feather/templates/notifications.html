@@ -21,7 +21,7 @@
 									<img src="{{ unread.reply.author.email|gravatar(size=48) }}">
 								</a>
 							</td>
-							{% if session.user_id == unread.reply.topic.author.id %}
+							{% if unread.type == 1 %}
 								<td>
 									<h3>
 										<a href="{{ url_for('account.usercenter', username=unread.reply.author.name) }}">{{ unread.reply.author.name }}</a>
@@ -60,7 +60,7 @@
 										<img src="{{ readed.reply.author.email|gravatar(size=48) }}">
 									</a>
 								</td>
-								{% if session.user_id != readed.reply.topic.author.id %}
+								{% if readed.type == 2 %}
 									<td>
 										<h3>
 											<a href="{{ url_for('account.usercenter', username=readed.reply.author.name) }}">{{ readed.reply.author.name }}</a>
