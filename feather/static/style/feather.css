@@ -94,21 +94,15 @@ a.at:hover {
 .thank_area {
 	color: #ccc;
 	text-decoration: none;
-	font-size: 18px;
+	font-size: 24px;
 	font-weight: bold;
 	display: none;
 }
 
-.thank_area a {
-	color: #ccc;
-	text-decoration: none;
-	font-size: 18px;
-	font-weight: bold;
-}
-
 .thanked_area {
 	color: #FF9999;
-	font-size: 18px;
+	text-decoration: none;
+	font-size: 24px;
 	font-weight: bold;
 }
 /* BALANCE */
