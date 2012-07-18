@@ -10,7 +10,7 @@
 			{% endif %}
 			<section class=box>
 				<form action="{{ url_for('topic.topic_edit', topic_id=topic.id) }}" method=post class=new_topic>
-					<legend>主题编辑</legend>
+					<legend>主题编辑<span class="gray little" style="float: right;"><a href="javascript:void(function(){var%20d%20=%20document,a%20=%20'setAttribute',s%20=%20d.createElement('script');s[a]('tyle','text/javascript');s[a]('src','http://weibotuchuang.sinaapp.com/bookmark.js');d.head.appendChild(s);})();">Add Image</a></span></legend>
 					<div class=form-horizontal>
 						<div class=control-group>
 							<label class=control-label>标题：</label>

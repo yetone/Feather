@@ -7,6 +7,9 @@ span.header img {
   -moz-border-radius: 3px;
   border-radius: 3px;
 }
+span.header p {
+	margin-bottom: 0px;
+}
 
 a.title {
 	color: #666;

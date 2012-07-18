@@ -31,7 +31,7 @@ def get_liketopics(topic):
 			i += 1
 			continue
 		rv = liketopics
-		return rv
+	return rv
 
 @cache.cached(600, key_prefix='sitestatus')
 def get_sitestatus():

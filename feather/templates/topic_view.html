@@ -102,7 +102,7 @@
 				<p class="alert alert-block alert-error">错误：{{ g.error }}</p>
 			{% endif %}
 			<section id=editor class=box>
-				<h4> 回复话题 </h4>
+			<h4 style="padding-bottom: 10px;"> 回复话题 <span class="gray little" style="float: right;padding-right: 5px;"><a href="javascript:void(function(){var%20d%20=%20document,a%20=%20'setAttribute',s%20=%20d.createElement('script');s[a]('tyle','text/javascript');s[a]('src','http://weibotuchuang.sinaapp.com/bookmark.js');d.head.appendChild(s);})();">Add Image</a></span></h4>
 				<form id=new_reply class=new_reply method=post action="{{ url_for('reply.add_reply', topic_id = topic.id) }}">
 					<div class=control-group>
 						<div id=editor-button-bar style="position: absolute;top: -999em;">
