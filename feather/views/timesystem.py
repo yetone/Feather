@@ -1,7 +1,7 @@
 # coding: utf-8
 from flask import Module, abort, render_template, url_for
 from feather import config
-from feather.extensions import db
+from feather.extensions import db, cache
 from feather.databases import Bill, Bank
 from sqlalchemy import or_
 
@@ -9,6 +9,7 @@ timesystem = Module(__name__)
 
 @timesystem.route('/bank', defaults={'page': 1})
 @timesystem.route('/bank/page/<int:page>')
+@cache.cached(60 * 5)
 def bank(page):
 	bank = Bank.query.get(1)
 	if not bank:

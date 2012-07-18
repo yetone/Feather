@@ -3,7 +3,7 @@ import time
 from flask import Module, request, session, g, redirect, url_for, \
 		abort, render_template, flash
 from werkzeug import check_password_hash, generate_password_hash
-from feather.extensions import db
+from feather.extensions import db, cache
 from feather import config
 from feather.databases import Bill, Bank, City, User, Topic, Notify
 
@@ -18,6 +18,7 @@ def get_user_id_from_email(email):
 	return rv.id if rv else None
 
 @account.route('/users')
+@cache.cached(60 * 5)
 def users():
 	users = User.query.order_by(User.id.asc()).all()
 	return render_template('users.html',users=users)
@@ -80,6 +81,7 @@ def notify(page):
 
 
 @account.route('/top')
+@cache.cached(60 * 60)
 def top():
 	users = User.query.filter_by(topswitch=1).order_by(User.time.desc()).limit(26)
 	return render_template('top.html',users=users.all())
