@@ -55,10 +55,13 @@ def get_hottopics():
 	rv = Topic.query.filter(Topic.date <= nowtime).filter(Topic.date >= agotime).order_by(Topic.reply_count.desc()).limit(10).all()
 	return rv
 
-@cache.cached(600, key_prefix='view/%s')
 def get_nodeclass(tabname):
 	return Nodeclass.query.filter_by(name=tabname).first()
 
+@cache.cached(60 * 60, key_prefix='includes/%s')
+def get_includes(tabname):
+	nodeclass = get_nodeclass(tabname)
+	return nodeclass.nodes.all() if nodeclass is not None else None
 
 def liketopic(a,b):
 	import difflib
@@ -79,24 +82,25 @@ class Getdate:
 @topic.route('/index', defaults={'page': 1, 'tabname': 'All'})
 @topic.route('/page/<int:page>', defaults={'tabname': 'All'})
 @topic.route('/<tabname>/page/<int:page>')
-@cache.cached(timeout=60 * 5, unless= lambda: g.user is not None)
 def index(page, tabname):
 	(usercount, topiccount, replycount) = get_sitestatus()
 	hottopics = get_hottopics()
 	nodeclasses = Nodeclass.query.all()
 	nodeclass = get_nodeclass(tabname)
+	includenodes = get_includes(tabname)
 	if tabname == 'All':
 		page_obj = Topic.query.filter_by(report=0).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
 		page_url = lambda page: url_for("topic.index", page=page, tabname='All')
 	elif nodeclass is None:
 		tabname = 'Geek'
 		nodeclass = get_nodeclass(tabname)
+		includenodes = get_includes(tabname)
 		page_obj = Topic.query.filter_by(report=0).filter_by(nodeclass=nodeclass).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
 		page_url = lambda page: url_for("topic.index", page=page, tabname='Geek')
 	else:
 		page_obj = Topic.query.filter_by(report=0).filter_by(nodeclass=nodeclass).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
 		page_url = lambda page: url_for("topic.index", page=page, tabname=nodeclass.name)
-	return render_template('index.html', page_obj=page_obj, page_url=page_url, nodeclasses=nodeclasses, nodeclass=nodeclass, usercount=usercount, topiccount=topiccount, replycount=replycount, hottopics=hottopics, tabname=tabname)
+	return render_template('index.html', page_obj=page_obj, page_url=page_url, nodeclasses=nodeclasses, nodeclass=nodeclass, usercount=usercount, topiccount=topiccount, replycount=replycount, hottopics=hottopics, tabname=tabname, includenodes=includenodes)
 
 @topic.route('/', defaults={'tabname': 'index'})
 @topic.route('/tab/<tabname>')

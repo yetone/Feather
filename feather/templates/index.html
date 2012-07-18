@@ -18,7 +18,7 @@
 	{% if nodeclass %}
 		<section id=tabnodes class=box>
 			<header>包含节点</header>
-				{% for node in nodeclass.nodes %}
+				{% for node in includenodes %}
 					<span class=tags>
 						<a href="{{ url_for('node.index', nodesite=node.site) }}">{{ node.name }}</a>
 					</span>
