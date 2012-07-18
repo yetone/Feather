@@ -123,7 +123,7 @@ def add_reply(topic_id):
 				author = User.query.filter_by(name=username).first()
 				if author.id != topic.author.id:
 					if author.id != g.user.id:
-						notify = Notify(author, topic, reply, type=2)
+						notify = Notify(author, topic, reply=reply, type=2)
 						db.session.add(notify)
 						db.session.commit()
 	return redirect(url_for('topic.topic_view', topic_id=topic_id, page=page) + "#replyend")

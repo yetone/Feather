@@ -175,7 +175,7 @@ def register(invitername):
 			error = u'此邮箱已存在哦！'
 		else:
 			if invitername:
-				user = User(name=request.form['username'], email=request.form['email'], password=generate_password_hash(request.form['password']), time=2160)
+				user = User(name=request.form['username'], email=request.form['email'], password=generate_password_hash(request.form['password']), time=2160, date=int(time.time()))
 			else:
 				user = User(name=request.form['username'], email=request.form['email'], password=generate_password_hash(request.form['password']), time=2100, date=int(time.time()))
 			db.session.add(user)

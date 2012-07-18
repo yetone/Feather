@@ -176,6 +176,16 @@ def gravatarmini_url(email):
 @app.template_filter('mention')
 def mentionfilter(text):
 	text = text.replace('\n','<br />')
+	regex_url = r'http:\/\/([\w.]+\/?)\S*'
+	for match in re.finditer(regex_url, text):
+		url = match.group(0)
+		aurl = '<a href="%s" target="_blank">%s</a>' % (url, url)
+		text = text.replace(url, aurl)
+	regex_url = r'https:\/\/([\w.]+\/?)\S*'
+	for match in re.finditer(regex_url, text):
+		url = match.group(0)
+		aurl = '<a href="%s" target="_blank">%s</a>' % (url, url)
+		text = text.replace(url, aurl)
 	usernames = list(set(mentions(text)))
 	for username in usernames:
 		url = '<a href="/member/%s">%s</a>' % (username, username)
