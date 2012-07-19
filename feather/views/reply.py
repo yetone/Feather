@@ -116,16 +116,14 @@ def add_reply(topic_id):
 		notify = Notify(author=topic.author, topic=topic, reply=reply, type=1)
 		db.session.add(notify)
 		db.session.commit()
-	usernames = list(set(mentions(request.form['reply[content]'])))
+	content = request.form['reply[content]'].replace('\n','')
+	usernames = list(set(mentions(content)))
 	for username in usernames:
-		if username:
-			if username != topic.author.name:
-				author = User.query.filter_by(name=username).first()
-				if author.id != topic.author.id:
-					if author.id != g.user.id:
-						notify = Notify(author, topic, reply=reply, type=2)
-						db.session.add(notify)
-						db.session.commit()
+		author = User.query.filter_by(name=username).first()
+		if author.id != topic.author.id and author.id != g.user.id:
+			notify = Notify(author, topic, reply=reply, type=2)
+			db.session.add(notify)
+			db.session.commit()
 	return redirect(url_for('topic.topic_view', topic_id=topic_id, page=page) + "#replyend")
 
 

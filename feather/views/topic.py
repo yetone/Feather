@@ -222,19 +222,21 @@ def topic_add(nodesite):
 			bank.time +=20
 			db.session.add(topic)
 			db.session.commit()
-			topic = Topic.query.filter_by(title=unicode(request.form['title'])).first()
+			topic = Topic.query.filter_by(author=g.user).all()[-1]
 			bill = Bill(author=g.user,time=20,type=2,date=int(time.time()),topic=topic,balance=g.user.time)
 			db.session.add(bill)
 			db.session.commit()
 			flash(u'发布成功！')
-			usernames = list(set(mentions(request.form['title'])))
+			title = request.form['title'].replace('\n','')
+			usernames = list(set(mentions(title)))
 			for username in usernames:
 				author = User.query.filter_by(name=username).first()
 				if author.id != g.user.id:
 					notify = Notify(author, topic, reply=None, type=3)
 					db.session.add(notify)
 					db.session.commit()
-			usernames = list(set(mentions(request.form['text'])))
+			text = request.form['text'].replace('\n','')
+			usernames = list(set(mentions(text)))
 			for username in usernames:
 				author = User.query.filter_by(name=username).first()
 				if author.id != g.user.id:
@@ -299,14 +301,15 @@ def topic_view(topic_id, page):
 
 
 
-@topic.route('/topic/<int:topic_id>/fav')
-def fav(topic_id):
+@topic.route('/topic/<int:topic_id>/fav', defaults={'page': 1})
+def fav(topic_id, page):
 	if not session.get('user_id'):
 		abort(401)
 	topic = Topic.query.get(topic_id)
 	user = g.user
 	if topic in user.favorites:
-		return redirect(url_for('topic.topic_view', topic_id=topic.id) + "#fav")
+		flash(u'抱歉，暂不支持这个功能 T-T')
+		return redirect(url_for('account.favorites', page=page))
 	else:
 		user.favorites += [topic]
 		db.session.commit()

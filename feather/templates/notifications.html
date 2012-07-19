@@ -15,41 +15,27 @@
 				<tbody>
 				{% if un == 1 %}
 					{% for unread in unreads %}
-						<tr id=notification-{{ unread.reply.id }}>
-							{% if unread.type == 3 %}
-								<td class=avatar>
-									<a href="{{ url_for('account.usercenter', username=unread.topic.author.name) }}">
-										<img src="{{ unread.topic.author.email|gravatar(size=48) }}">
-									</a>
-								</td>
-							{% else %}
-								<td class=avatar>
-									<a href="{{ url_for('account.usercenter', username=unread.reply.author.name) }}">
-										<img src="{{ unread.reply.author.email|gravatar(size=48) }}">
-									</a>
-								</td>
-							{% endif %}
-							{% if unread.type == 1 %}
-								<td>
-									<h3>
-										<a href="{{ url_for('account.usercenter', username=unread.reply.author.name) }}">{{ unread.reply.author.name }}</a>
-										回复了你的主题
-										<a href="{{ url_for('topic.topic_view', topic_id=unread.reply.topic.id) }}">{{ unread.reply.topic.title }}</a>
-										<span class="gray little list">
-										{{ unread.reply.date|datetimeformat }}
-										</span>
-										<span class="new label label-warning">New</span>
-									</h3>
-									<p>{{ unread.reply.text|mention|markdown|safe }}</p>
-								</td>
-							{% else %}
-								{% if unread.type == 2 %}
+						{% if unread.topic %}
+							<tr id=notification-{{ unread.reply.id }}>
+								{% if unread.type == 3 %}
+									<td class=avatar>
+										<a href="{{ url_for('account.usercenter', username=unread.topic.author.name) }}">
+											<img src="{{ unread.topic.author.email|gravatar(size=48) }}">
+										</a>
+									</td>
+								{% else %}
+									<td class=avatar>
+										<a href="{{ url_for('account.usercenter', username=unread.reply.author.name) }}">
+											<img src="{{ unread.reply.author.email|gravatar(size=48) }}">
+										</a>
+									</td>
+								{% endif %}
+								{% if unread.type == 1 %}
 									<td>
 										<h3>
 											<a href="{{ url_for('account.usercenter', username=unread.reply.author.name) }}">{{ unread.reply.author.name }}</a>
-											在主题
+											回复了你的主题
 											<a href="{{ url_for('topic.topic_view', topic_id=unread.reply.topic.id) }}">{{ unread.reply.topic.title }}</a>
-											提及了你
 											<span class="gray little list">
 											{{ unread.reply.date|datetimeformat }}
 											</span>
@@ -58,25 +44,41 @@
 										<p>{{ unread.reply.text|mention|markdown|safe }}</p>
 									</td>
 								{% else %}
-									<td>
-										<h3>
-											<a href="{{ url_for('account.usercenter', username=unread.topic.author.name) }}">{{ unread.topic.author.name }}</a>
-											在主题
-											<a href="{{ url_for('topic.topic_view', topic_id=unread.topic.id) }}">{{ unread.topic.title }}</a>
-											提及了你
-											<span class="gray little list">
-											{{ unread.topic.date|datetimeformat }}
-											</span>
-											<span class="new label label-warning">New</span>
-										</h3>
-										<p>{{ unread.topic.text|mention|markdown|safe }}</p>
-									</td>
+									{% if unread.type == 2 %}
+										<td>
+											<h3>
+												<a href="{{ url_for('account.usercenter', username=unread.reply.author.name) }}">{{ unread.reply.author.name }}</a>
+												在主题
+												<a href="{{ url_for('topic.topic_view', topic_id=unread.reply.topic.id) }}">{{ unread.reply.topic.title }}</a>
+												提及了你
+												<span class="gray little list">
+												{{ unread.reply.date|datetimeformat }}
+												</span>
+												<span class="new label label-warning">New</span>
+											</h3>
+											<p>{{ unread.reply.text|mention|markdown|safe }}</p>
+										</td>
+									{% else %}
+										<td>
+											<h3>
+												<a href="{{ url_for('account.usercenter', username=unread.topic.author.name) }}">{{ unread.topic.author.name }}</a>
+												在主题
+												<a href="{{ url_for('topic.topic_view', topic_id=unread.topic.id) }}">{{ unread.topic.title }}</a>
+												提及了你
+												<span class="gray little list">
+												{{ unread.topic.date|datetimeformat }}
+												</span>
+												<span class="new label label-warning">New</span>
+											</h3>
+											<p>{{ unread.topic.text|mention|markdown|safe }}</p>
+										</td>
+									{% endif %}
 								{% endif %}
-							{% endif %}
-							<td class=last>
-								<a class=close rel=nofollow data-remote=true data-method=delete href="/notifications/123">×</a>
-							</td>
-						</tr>
+								<td class=last>
+									<a class=close rel=nofollow data-remote=true data-method=delete href="{{ url_for('account.del_notifacations', notify_id=unread.id, page=page_obj.page) }}">×</a>
+								</td>
+							</tr>
+						{% endif %}
 					{% endfor %}
 				{% endif %}
 				{% if page_obj != [] %}
@@ -142,7 +144,7 @@
 									{% endif %}
 								{% endif %}
 									<td class=last>
-										<a class=close rel=nofollow data-remote=true data-method=delete href="/notifications/123">×</a>
+										<a class=close rel=nofollow data-remote=true data-method=delete href="{{ url_for('account.del_notifacations', notify_id=readed.id, page=page_obj.page) }}">×</a>
 									</td>
 								</tr>
 						{% endif %}

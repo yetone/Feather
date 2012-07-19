@@ -50,6 +50,9 @@
 										<a href="{{ url_for('topic.topic_view', topic_id = topic.id) }}">{{ topic.reply_count }}</a>
 									{% endif %}
 								</td>
+								<td class=last>
+									<a class=close rel=nofollow data-remote=true data-method=delete href="{{ url_for('topic.fav', topic_id=topic.id, page=page) }}">×</a>
+								</td>
 							</tr>
 						{% endfor %}
 					</tbody>

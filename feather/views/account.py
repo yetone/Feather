@@ -88,6 +88,13 @@ def notify(page):
 	return render_template('notifications.html', page_obj=page_obj, page_url=page_url, unreads=g.notify_unread, un=g.un)
 
 
+@account.route('/notifacations/del/<int:notify_id>', defaults={'page': 1})
+@account.route('/notifacations/del/<int:notify_id>?page=<int:page>')
+def del_notifacations(notify_id, page):
+	notify = Notify.query.get(notify_id)
+	db.session.delete(notify)
+	db.session.commit()
+	return redirect(url_for('account.notify', page=page))
 
 @account.route('/top')
 def top():
@@ -101,7 +108,7 @@ def top():
 def favorites(page):
 	if not session.get('user_id'):
 		abort(401)
-	topics = User.query.get(session['user_id']).favorites[::-1]
+	topics = User.query.get(session['user_id']).favorites
 	n = len(topics)
 	PER_PAGE = config.PER_PAGE
 	if n < PER_PAGE:
@@ -111,6 +118,8 @@ def favorites(page):
 		if n % PER_PAGE != 0:
 			pages += 1
 	return render_template('favorites.html',topics=topics[(page-1)*PER_PAGE:(page-1)*PER_PAGE+PER_PAGE],pages=pages,page=page)
+
+
 
 @account.route('/times', defaults={'page': 1})
 @account.route('/times/page/<int:page>')
