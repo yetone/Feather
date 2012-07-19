@@ -63,7 +63,7 @@
 										<a class="light list_big" href="{{ url_for('topic.topic_edit', topic_id=topic.id) }}">编辑</a>
 									{% endif %}
 									{% if topic not in g.user.votes %}
-										<a class="light list_big" href="{{ url_for('topic.vote', topic_id=topic.id) }}">举报</a>
+										<a class="light little list_big op" href="{{ url_for('topic.vote', topic_id=topic.id) }}">举报</a>
 									{% else %}
 										<span class="gray list_big">已举报</span>
 									{% endif %}
@@ -81,11 +81,20 @@
 				<footer>
 					<span class=marks_count>
 						{% if topic in g.user.favorites %}
-							<a class="btn disabled btn_primary" href="#;">已收藏</a>
+							<a class="op btn disabled" href="#;">已收藏</a>
 						{% else %}
-							<a id=fav class="btn btn_primary" onclick="fav({{ topic.id }});" href="#;"><show>收藏</show></a>
+							<a id=fav class=op onclick="fav({{ topic.id }});" href="#;"><show>收藏</show></a>
 						{% endif %}
 					</span>
+					{% if session.user_id %}
+						<span class=twitter>
+							<a href="#;" onclick="window.open('https://twitter.com/share?url=http://www.feather.im/topic/{{ topic.id }}?r\u003D{{ g.user.name }}&related=Feather&hashtags={{ topic.node.name }}&text={{ topic.title }}', '_blank', 'width=550,height=370'); recordOutboundLink(this, 'Share', 'twitter.com');" class=op>Tweet</a>
+						</span>
+						<span class=weibo>
+							<a href="#;" onclick="window.open('http://service.weibo.com/share/share.php?url=http://www.feather.im/topic/{{ topic.id }}?r\u003D{{ g.user.name }}&title=Feather%20-%20{{ topic.title }}', '_blank', 'width=550,height=370'); recordOutboundLink(this, 'Share', 'weibo.com');" class=op>Weibo</a>
+						</span>
+					{% endif %}
+					<span class=twitter>
 					{% if session.user_id %}
 						<span class=easy_reply style="float: right;">
 							<a class="btn btn_primary" onclick="replyOne('{{ topic.author.name }}');" href="#;">快速回复</a>
