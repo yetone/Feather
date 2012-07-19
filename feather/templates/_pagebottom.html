@@ -6,9 +6,11 @@
 					{% if nodeclass.nodes.first() and nodeclass.name != '' %}
 						<tr>
 							<td width=60 style="color:#ccc">{{ nodeclass.name }}</td>
-							<td class=tags>
+							<td class=viewtags>
 								{% for node in nodeclass.nodes.all() %}
-									<a href="{{ url_for('node.index', nodesite=node.site) }}">{{ node.name }}</a>
+									<span class="tags enu">
+										<a href="{{ url_for('node.index', nodesite=node.site) }}">{{ node.name }}</a>
+									</span>
 								{% endfor %}
 							</td>
 						</tr>

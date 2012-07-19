@@ -132,6 +132,7 @@ def get_includes(tabname):
 	nodeclass = get_nodeclass(tabname)
 	return nodeclass.nodes.all() if nodeclass is not None else None
 
+
 def liketopic(a,b):
 	import difflib
 	return len(filter(lambda i: i.startswith('+'), difflib.ndiff(a,b)))
@@ -176,7 +177,7 @@ def index(page, tabname):
 def tab_view(tabname):
 	if not session.get('user_id'):
 		if tabname == 'index':
-			return redirect(url_for('topic.index', tabname='Geek'))
+			return redirect(url_for('topic.index', tabname='All'))
 		else:
 			return redirect(url_for('topic.index', tabname=tabname))
 	if tabname == 'index' and session.get('user_id'):

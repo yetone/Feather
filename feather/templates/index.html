@@ -15,11 +15,16 @@
 			<a class="btn btn-primary" href="{{ url_for('node.node_add') }}">增加节点</a>
 		</section>
 	{% endif %}
+	{% if tabname == 'Reader' or tabname =='reader' %}
+		<section class=box>
+			<a class="btn btn-primary" href="{{ url_for('topic.topic_add', nodesite='read') }}">推荐文章</a>
+		</section>
+	{% endif %}
 	{% if nodeclass %}
 		<section id=tabnodes class=box>
 			<header>包含节点</header>
 				{% for node in includenodes %}
-					<span class=tags>
+					<span class="tags enu">
 						<a href="{{ url_for('node.index', nodesite=node.site) }}">{{ node.name }}</a>
 					</span>
 				{% endfor %}

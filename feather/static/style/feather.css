@@ -7119,22 +7119,25 @@ table.clear-table td {
 
 .tags a {
   line-height: 22px;
-  color: white;
-  font-weight: bold;
+  font-weight: normal;
   font-size: 13px;
   padding: 1px 4px;
-  background-color: #999;
+  background-color: #f5f5f5;
   border-radius: 3px;
   -moz-border-radius: 3px;
 }
 
 .tags a:hover {
   text-decoration: none;
-  background-color: #666;
+  background-color: #e2e2e2;
 }
 
 .tabs {
   margin: 18px 3px 0 3px;
+}
+
+.enu {
+  margin: 18px 3px 10px 3px;
 }
 
 .tabs a {
