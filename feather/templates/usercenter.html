@@ -39,7 +39,7 @@
 							<p>{{ user.description }}</p>
 						{% endif %}
 						{% if user.website %}
-							<a rel="external nofollow" href="{{ user.website }}">{{ user.website }}</a>
+							<a rel="external nofollow" href="{{ user.website }}" target="_blank">{{ user.website }}</a>
 						{% endif %}
 						{% if user.city and user.city.name != '' %}
 							<div class=tags>
