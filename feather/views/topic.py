@@ -100,8 +100,7 @@ def get_liketopics(topicid):
 			liketopics += [n]
 			i += 1
 			continue
-		rv = liketopics
-	return rv
+	return liketopics
 
 @cache.cached(600, key_prefix='sitestatus')
 def get_sitestatus():
