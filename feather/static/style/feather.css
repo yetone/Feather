@@ -29,7 +29,7 @@ span.header p {
 }
 
 a.title {
-	color: #666;
+	color: #575D60;
 }
 a.title:hover {
 	color: #333;
@@ -7232,7 +7232,8 @@ video {
 		background-color: #AAA;
 	}
 	table.item-list h3 {
-		font-size: 100%;
+		font-weight: normal;
+		font-size: 16px;
 		padding-bottom: 10px;
 		line-height: 18px;
 	}
