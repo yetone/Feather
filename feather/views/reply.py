@@ -89,6 +89,10 @@ def add_reply(topic_id):
 		g.error = u'抱歉，您的时间不足5分钟！'
 		return redirect(url_for('topic.topic_view', topic_id=topic_id) + "#replyend")
 	topic = Topic.query.get(topic_id)
+	if topic.replys is not None:
+		numbered = len(topic.replys.all())
+	else:
+		numbered = 0
 	page_obj = topic.replys.paginate(1, per_page=config.RE_PER_PAGE)
 	if page_obj.pages == 0:
 		page = 1
@@ -96,7 +100,7 @@ def add_reply(topic_id):
 		page = page_obj.pages + 1
 	else:
 		page = page_obj.pages
-	reply = Reply(topic, g.user, request.form['reply[content]'])
+	reply = Reply(topic, g.user, request.form['reply[content]'], number=numbered + 1)
 	g.user.time -= 5
 	topic.author.time += 5
 	topic.last_reply_date = int(time.time())

@@ -194,10 +194,20 @@ def mentionfilter(text):
 		url = match.group(0)
 		aurl = '<a href="%s" target="_blank">%s</a>' % (url, url)
 		text = text.replace(url, aurl)
+	number = ur'#(\d+)楼\s'
+	for match in re.finditer(number, text):
+		url = match.group(1)
+		number = match.group(0)
+		tonumber = int(url) - 1
+		if tonumber != 0:
+			nurl = '<a onclick="toReply(%s);" href="#%d" style="color: #376B43;">#<span id=nu>%s</span>楼 </a>' % (url, tonumber, url)
+		else:
+			nurl = '<a onclick="toReply(1);" href="#topicend" style="color: #376B43;">#<span id=nu>1</span>楼 </a>'
+		text = text.replace(number, nurl)
 	content = text.replace('\n','')
 	usernames = list(set(mentions(content)))
 	for username in usernames:
-		url = '<a href="/member/%s" target="_blank">%s</a>' % (username, username)
+		url = '<a class=at_user href="/member/%s" target="_blank">%s</a>' % (username, username)
 		text = text.replace(username, url)
 	return text
 

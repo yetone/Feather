@@ -1,11 +1,11 @@
-function replyOne(username){
+function replyOne(username,number){
 	replyContent = $("#editor-input");
 	oldContent = replyContent.val();
-	prefix = "@" + username + " ";
+	prefix = "#" + number + "楼" + " " + "@" + username + " ";
 	newContent = '';
 	if(oldContent.length > 0){
 		if (oldContent != prefix) {
-			newContent = oldContent + prefix;
+			newContent = oldContent + " " + prefix;
 		}
 	} else {
 		newContent = prefix
@@ -27,6 +27,10 @@ function thankReply(replyid){
 	$('#thank_area_' + replyid).addClass("thanked_area").removeClass("thank_area").html("♥");
 }
 
+function toReply(replyid){
+	$('.isit').removeClass('isit');
+	$('#' + replyid).parent('.left').parent('.clearbox').parent('article').parent('td').parent('tr').addClass('isit');
+}
 
 function fav(topicid){
 	$.get('/topic/' + topicid + '/fav');

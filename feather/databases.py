@@ -215,12 +215,14 @@ class Reply(db.Model):
 	text = db.Column(db.Text)
 	bills = db.relationship('Bill', backref='reply', uselist=False, lazy='dynamic')
 	date = db.Column(db.Integer)
+	number = db.Column(db.Integer)
 
-	def __init__(self, topic, author, text):
+	def __init__(self, topic, author, text, number):
 		self.topic = topic
 		self.author = author
 		self.text = text
 		self.date = int(time.time())
+		self.number = number
 
 	def __repr__(self):
 		return '<Reply %r>' % self.text

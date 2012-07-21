@@ -11,7 +11,8 @@
 						<header class=clearbox>
 							<div class=left>
 								<a class=dark href="{{ url_for('account.usercenter', username=reply.author.name) }}" style="font-size: 14px;">{{ reply.author.name }}</a>
-								<span class="gray little list_big">{{ reply.date|datetimeformat }}</span>
+								<span id={{ reply.number }} class="innumber gray little list_big">{{ reply.number }}</span><span class="gray little"> 楼,</span>
+								<span class="gray little list">{{ reply.date|datetimeformat }}</span>
 								<span class=gray id="thankview-{{ reply.id }}">
 								{% if reply.thankers.all() != [] %}
 										<span id=heart class=list>♥</span><span id="thankcount-{{ reply.id }}" class=thankcount>{{ reply.id|getreplythankerscount }}</span>
@@ -31,10 +32,10 @@
 								{% if session.user_id == reply.author.id or session.user_id == 1 %}
 									<a class="light list" href="{{ url_for('reply.reply_edit', reply_id=reply.id, page=page) }}">编辑</a>
 								{% endif %}
-									<a class="at list" onclick="replyOne('{{ reply.author.name }}');" href="#;"><img align=absmiddle border=0 alt=Reply src="/static/img/reply.png"></a>
+								<a class="at list" onclick="replyOne('{{ reply.author.name }}','{{ reply.number }}');" href="#;"><img align=absmiddle border=0 alt=Reply src="/static/img/reply.png"></a>
 							</div>
 						</header>
-						<p>{{ reply.text|mention|markdown|safe }}</p>
+						<div class=reply_content>{{ reply.text|mention|markdown|safe }}</div>
 					</article>
 				</td>
 			</tr>
@@ -42,3 +43,18 @@
 		</tbody>
 	</table>
 </section>
+<script type="text/javascript">
+	$(function(){
+		$('tr.reply').hover(
+			function(){
+				$(this).find('span.thank_area').fadeIn(300);
+			},
+			function(){
+				$(this).find('span.thank_area').fadeOut(300,function(){$(this).stop(true);});
+			});
+		$('tr.reply').dblclick(
+			function(){
+			$(this).children('td').children('article').children('.clearbox').children('.right').children('.at').click();
+			});
+	});
+</script>

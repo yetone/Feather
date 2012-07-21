@@ -1,22 +1,7 @@
 {% extends "layout.html" %}
 {% from "_page.html" import paginate %}
 {% block script %}
-		<script src="/static/js/feather.js" type="text/javascript"></script>
-	<script type="text/javascript">
-		$(function(){
-			$('tr.reply').hover(
-				function(){
-					$(this).find('span.thank_area').fadeIn(300);
-				},
-				function(){
-					$(this).find('span.thank_area').fadeOut(300,function(){$(this).stop(true);});
-				});
-			$('tr.reply').dblclick(
-				function(){
-				$(this).children('td').children('article').children('.clearbox').children('.right').children('.at').click();
-			});
-		});
-	</script>
+	<script src="/static/js/feather.js" type="text/javascript"></script>
 {% endblock %}
 {% block title %}{{ topic.title }}{% endblock %}
 {% block breadcrumb %}<li><a href="{{ url_for('node.index', nodesite=topic.node.site) }}">{{ topic.node.name }}</a></li>{% endblock %}
@@ -45,7 +30,7 @@
 {% block body %}
 	<div id=mainbar class=span9>
 		<section id=topic class=box>
-			<article id="{{ topic.id }}">
+			<article id="topic_{{ topic.id }}">
 				<header>
 					<table>
 						<tbody>
@@ -78,7 +63,7 @@
 					</table>
 				</header>
 				<p>{{ topic.text|mention|markdown|safe }}</p>
-				<footer>
+				<footer id=topicend>
 					<span class=marks_count>
 						{% if topic in g.user.favorites %}
 							<a class="op btn disabled" href="#;">已收藏</a>
