@@ -12,7 +12,7 @@
 		<header>
 		{{ node.name }}
 		</header>
-		{{ node.description|markdown|safe }}
+		{{ node.description|formattext|markdown|safe }}
 		{% if session.user_id ==1 %}
 			<hr>
 			<a class=btn href="{{ url_for('node.node_edit', nodesite=node.site) }}" style="margin-top: -15px;">节点编辑</a>
@@ -81,7 +81,7 @@
 									{% endif %}
 								</td>
 							{% if session.user_id == 1 %}
-								<td><p align="right"><a href="{{ url_for('topic.del_topic', topic_id = topic.id) }}">删除</a></p>
+								<td><p align="right"><a class=close href="{{ url_for('topic.del_topic', topic_id = topic.id) }}">×</a></p>
 							{% endif %}
 							</tr>
 						{% endfor %}

@@ -32,7 +32,10 @@ def add_reply(topic_id):
 		page = page_obj.pages + 1
 	else:
 		page = page_obj.pages
-	reply_content = mentionfilter(request.form['reply[content]'])
+	if '@' in request.form['reply[content]']:
+		reply_content = mentionfilter(request.form['reply[content]'])
+	else:
+		reply_content = request.form['reply[content]']
 	reply = Reply(topic, g.user, reply_content, number=numbered + 1)
 	g.user.time -= 5
 	topic.author.time += 5
@@ -53,14 +56,15 @@ def add_reply(topic_id):
 		notify = Notify(author=topic.author, topic=topic, reply=reply, type=1)
 		db.session.add(notify)
 		db.session.commit()
-	content = request.form['reply[content]'].replace('\n','')
-	usernames = list(set(mentions(content)))
-	for username in usernames:
-		author = User.query.filter_by(name=username).first()
-		if author.id != topic.author.id and author.id != g.user.id:
-			notify = Notify(author, topic, reply=reply, type=2)
-			db.session.add(notify)
-			db.session.commit()
+	if '@' in request.form['reply[content]']:
+		content = request.form['reply[content]'].replace('\n','')
+		usernames = list(set(mentions(content)))
+		for username in usernames:
+			author = User.query.filter_by(name=username).first()
+			if author.id != topic.author.id and author.id != g.user.id:
+				notify = Notify(author, topic, reply=reply, type=2)
+				db.session.add(notify)
+				db.session.commit()
 	return redirect(url_for('topic.topic_view', topic_id=topic_id, page=page) + "#replyend")
 
 

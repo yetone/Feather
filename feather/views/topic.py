@@ -147,7 +147,10 @@ def topic_add(nodesite):
 			g.error = u'请输入主题内容！'
 			render_template('topic_add.html', node=node)
 		else:
-			text = mentionfilter(request.form['text'])
+			if '@' in request.form['text']:
+				text = mentionfilter(request.form['text'])
+			else:
+				text = request.form['text']
 			topic = Topic(author=g.user, title=request.form['title'], text=text, node=node, reply_count=0)
 			bank = Bank.query.get(1)
 			g.user.time -= 20
@@ -159,22 +162,24 @@ def topic_add(nodesite):
 			db.session.add(bill)
 			db.session.commit()
 			flash(u'发布成功！')
-			title = request.form['title'].replace('\n','')
-			usernames = list(set(mentions(title)))
-			for username in usernames:
-				author = User.query.filter_by(name=username).first()
-				if author.id != g.user.id:
-					notify = Notify(author, topic, reply=None, type=3)
-					db.session.add(notify)
-					db.session.commit()
-			text = request.form['text'].replace('\n','')
-			usernames = list(set(mentions(text)))
-			for username in usernames:
-				author = User.query.filter_by(name=username).first()
-				if author.id != g.user.id:
-					notify = Notify(author, topic, reply=None, type=3)
-					db.session.add(notify)
-					db.session.commit()
+			if '@' in request.form['title']:
+				title = request.form['title'].replace('\n','')
+				usernames = list(set(mentions(title)))
+				for username in usernames:
+					author = User.query.filter_by(name=username).first()
+					if author.id != g.user.id:
+						notify = Notify(author, topic, reply=None, type=3)
+						db.session.add(notify)
+						db.session.commit()
+			if '@' in request.form['text']:
+				text = request.form['text'].replace('\n','')
+				usernames = list(set(mentions(text)))
+				for username in usernames:
+					author = User.query.filter_by(name=username).first()
+					if author.id != g.user.id:
+						notify = Notify(author, topic, reply=None, type=3)
+						db.session.add(notify)
+						db.session.commit()
 			return redirect(url_for('topic.topic_view', topic_id=topic.id))
 	return render_template('topic_add.html', node=node)
 
