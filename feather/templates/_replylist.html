@@ -35,7 +35,7 @@
 								<a class="at list" onclick="replyOne('{{ reply.author.name }}','{{ reply.number }}');" href="#;"><img align=absmiddle border=0 alt=Reply src="/static/img/reply.png"></a>
 							</div>
 						</header>
-						<div class=reply_content>{{ reply.text|mention|markdown|safe }}</div>
+						<div class=reply_content>{{ reply.text|formattext|markdown|safe }}</div>
 					</article>
 				</td>
 			</tr>

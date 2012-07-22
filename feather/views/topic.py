@@ -5,80 +5,12 @@ from flask import Module, request, session, g, redirect, url_for, \
 from flask_sqlalchemy import Pagination
 from feather import config
 from feather.extensions import db, cache
+from feather.helpers import mentions, mentionfilter
 from feather.databases import Bill, Bank, User, Nodeclass, Node, \
 		Topic, Reply, Notify
 
 
 topic = Module(__name__)
-
-def mention(text):
-	usernames = []
-	if text.find('@') == -1:
-		begin = -1
-		usernames = usernames
-	elif text.find(' ') != -1:
-		begin = text.find('@') + 1
-		if text.find('\n') != -1:
-			end = text.find(' ') < text.find('\n') and text.find(' ') or text.find('\n')
-		else:
-			end = len(text)
-	elif text.find('\n') != -1:
-		begin = text.find('@') + 1
-		end = text.find('\n')
-	else:
-		begin = text.find('@') +1
-		end = len(text)
-	if begin != -1:
-		value = text[begin:end]
-		n = len(value)
-		for i in range(0,n):
-			rv = User.query.filter_by(name=value).first()
-			if not rv:
-				value = list(value)
-				value.pop()
-				value = ''.join(value)
-			else:
-				text = text[text.find('@') + len(value):]
-				usernames = usernames + [value]
-				break
-	return usernames
-
-def mentions(text):
-	usernames = []
-	if text.find('@') == -1:
-		begin = -1
-		usernames = usernames
-	elif text.find(' ') != -1:
-		begin = text.find('@') + 1
-		if text.find('\n') != -1:
-			end = text.find(' ') < text.find('\n') and text.find(' ') or text.find('\n')
-		else:
-			end = len(text)
-	elif text.find('\n') != -1:
-		begin = text.find('@') + 1
-		end = text.find('\n')
-	else:
-		begin = text.find('@') +1
-		end = len(text)
-	if begin != -1:
-		value = text[begin:end]
-		n = len(value)
-		for i in range(0,n):
-			rv = User.query.filter_by(name=value).first()
-			if not rv:
-				value = list(value)
-				value.pop()
-				value = ''.join(value)
-			else:
-				text = text[text.find('@') + len(value):]
-				usernames = usernames + [value]
-				while True:
-					if mention(text) == []:
-						break
-					usernames = usernames + mention(text)
-					text = text[text.find('@') + len(value):]
-				break
-	return usernames
 
 @cache.cached(60 * 60, key_prefix='liketopics/%d')
 def get_liketopics(topicid):
@@ -215,7 +147,8 @@ def topic_add(nodesite):
 			g.error = u'请输入主题内容！'
 			render_template('topic_add.html', node=node)
 		else:
-			topic = Topic(author=g.user, title=request.form['title'], text=request.form['text'], node=node, reply_count=0)
+			text = mentionfilter(request.form['text'])
+			topic = Topic(author=g.user, title=request.form['title'], text=text, node=node, reply_count=0)
 			bank = Bank.query.get(1)
 			g.user.time -= 20
 			bank.time +=20

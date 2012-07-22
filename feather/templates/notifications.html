@@ -41,7 +41,7 @@
 											</span>
 											<span class="new label label-warning">New</span>
 										</h3>
-										<p>{{ unread.reply.text|mention|markdown|safe }}</p>
+										<p>{{ unread.reply.text|markdown|safe }}</p>
 									</td>
 								{% else %}
 									{% if unread.type == 2 %}
@@ -56,7 +56,7 @@
 												</span>
 												<span class="new label label-warning">New</span>
 											</h3>
-											<p>{{ unread.reply.text|mention|markdown|safe }}</p>
+											<p>{{ unread.reply.text|markdown|safe }}</p>
 										</td>
 									{% else %}
 										<td>
@@ -70,7 +70,7 @@
 												</span>
 												<span class="new label label-warning">New</span>
 											</h3>
-											<p>{{ unread.topic.text|mention|markdown|safe }}</p>
+											<p>{{ unread.topic.text|markdown|safe }}</p>
 										</td>
 									{% endif %}
 								{% endif %}
@@ -112,7 +112,7 @@
 											{{ readed.reply.date|datetimeformat }}
 											</span>
 										</h3>
-										<p>{{ readed.reply.text|mention|markdown|safe }}</p>
+										<p>{{ readed.reply.text|markdown|safe }}</p>
 									</td>
 								{% else %}
 									{% if readed.type == 2 %}
@@ -126,7 +126,7 @@
 												{{ readed.reply.date|datetimeformat }}
 												</span>
 											</h3>
-											<p>{{ readed.reply.text|mention|markdown|safe }}</p>
+											<p>{{ readed.reply.text|markdown|safe }}</p>
 										</td>
 									{% else %}
 										<td>
@@ -139,7 +139,7 @@
 												{{ readed.topic.date|datetimeformat }}
 												</span>
 											</h3>
-											<p>{{ readed.topic.text|mention|markdown|safe }}</p>
+											<p>{{ readed.topic.text|markdown|safe }}</p>
 										</td>
 									{% endif %}
 								{% endif %}

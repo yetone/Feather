@@ -9,6 +9,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 from flaskext.markdown import Markdown
 from feather.views import account, node, topic, reply, timesystem, city
 from feather.extensions import db, cache
+from feather.helpers import mentions
 from feather import config
 from feather.databases import Bill, Bank, City, User, Nodeclass, Node, \
 		Topic, Reply, Notify
@@ -51,76 +52,22 @@ def before_request():
 			g.notify = len(g.notify_unread)
 
 
-def mention(text):
-	usernames = []
-	if text.find('@') == -1:
-		begin = -1
-		usernames = usernames
-	elif text.find(' ') != -1:
-		begin = text.find('@') + 1
-		if text.find('\n') != -1:
-			end = text.find(' ') < text.find('\n') and text.find(' ') or text.find('\n')
-		else:
-			end = len(text)
-	elif text.find('\n') != -1:
-		begin = text.find('@') + 1
-		end = text.find('\n')
-	else:
-		begin = text.find('@') +1
-		end = len(text)
-	if begin != -1:
-		value = text[begin:end]
-		n = len(value)
-		for i in range(0,n):
-			rv = User.query.filter_by(name=value).first()
-			if not rv:
-				value = list(value)
-				value.pop()
-				value = ''.join(value)
-			else:
-				text = text[text.find('@') + len(value):]
-				usernames = usernames + [value]
-				break
-	return usernames
-
-def mentions(text):
-	usernames = []
-	if text.find('@') == -1:
-		begin = -1
-		usernames = usernames
-	elif text.find(' ') != -1:
-		begin = text.find('@') + 1
-		if text.find('\n') != -1:
-			end = text.find(' ') < text.find('\n') and text.find(' ') or text.find('\n')
-		else:
-			end = len(text)
-	elif text.find('\n') != -1:
-		begin = text.find('@') + 1
-		end = text.find('\n')
-	else:
-		begin = text.find('@') +1
-		end = len(text)
-	if begin != -1:
-		value = text[begin:end]
-		n = len(value)
-		for i in range(0,n):
-			rv = User.query.filter_by(name=value).first()
-			if not rv:
-				value = list(value)
-				value.pop()
-				value = ''.join(value)
-			else:
-				text = text[text.find('@') + len(value):]
-				usernames = usernames + [value]
-				while True:
-					if mention(text) == []:
-						break
-					usernames = usernames + mention(text)
-					text = text[text.find('@') + len(value):]
-				break
-	return usernames
-
 # filters
+@app.template_filter('formattext')
+def format_text(text):
+	number = ur'#(\d+)楼\s'
+	for match in re.finditer(number, text):
+		url = match.group(1)
+		number = match.group(0)
+		tonumber = int(url) - 1
+		if tonumber != 0:
+			nurl = '<a id=lou onclick="toReply(%s);" href="#%d" style="color: #376B43;">#<span id=nu>%s</span>楼 </a>' % (url, tonumber, url)
+		else:
+			nurl = '<a id=lou onclick="toReply(1);" href="#topicend" style="color: #376B43;">#<span id=nu>1</span>楼 </a>'
+		text = text.replace(number, nurl)
+	return text
+
+
 @app.template_filter('datetimeformat')
 def format_datetime(timestamp):
 	FORY = '%Y-%m-%d @ %H:%M'
@@ -173,43 +120,6 @@ def gravatarmini_url(email):
 	return 'http://ruby-china.org/avatar/%s?d=identicon&s=%d' % \
 			(md5(email.strip().lower().encode('utf-8')).hexdigest(), 24)
 
-@app.template_filter('mention')
-def mentionfilter(text):
-	text = re.sub(ur'<a.+?href="(.+?)".*?>(.+?)<\/a>',ur'<a href="\1" target="_blank">\2</a>',text)
-	text = re.sub(ur'<(http(s|):\/\/[\w.]+\/?\S*)>',ur'<a href="\1" target="_blank">\1</a>',text)
-	topic_url = ur'http:\/\/(www\.|)feather\.im\/topic\/?(\S*)'
-	for match in re.finditer(topic_url, text):
-		url = match.group(0)
-		topic_id = match.group(2)
-		topic = Topic.query.get(topic_id)
-		if topic is None:
-			continue
-		else:
-			topic_title = topic.title
-		aurl = '<a href="%s" target="_blank">/%s</a>' % (url, topic_title)
-		text = text.replace(url, aurl)
-	text = re.sub(ur'http:\/\/(www\.|)feather\.im\/(node\/?\S*)',ur'<a href="\2" target="_blank">\2</a>',text)
-	regex_url = r'(^|\s)http(s|):\/\/([\w.]+\/?)\S*'
-	for match in re.finditer(regex_url, text):
-		url = match.group(0)
-		aurl = '<a href="%s" target="_blank">%s</a>' % (url, url)
-		text = text.replace(url, aurl)
-	number = ur'#(\d+)楼\s'
-	for match in re.finditer(number, text):
-		url = match.group(1)
-		number = match.group(0)
-		tonumber = int(url) - 1
-		if tonumber != 0:
-			nurl = '<a onclick="toReply(%s);" href="#%d" style="color: #376B43;">#<span id=nu>%s</span>楼 </a>' % (url, tonumber, url)
-		else:
-			nurl = '<a onclick="toReply(1);" href="#topicend" style="color: #376B43;">#<span id=nu>1</span>楼 </a>'
-		text = text.replace(number, nurl)
-	content = text.replace('\n','')
-	usernames = list(set(mentions(content)))
-	for username in usernames:
-		url = '<a class=at_user href="/member/%s" target="_blank">%s</a>' % (username, username)
-		text = text.replace(username, url)
-	return text
 
 @app.template_filter('emailtobase64')
 def email_to_base64(email):

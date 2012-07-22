@@ -4,78 +4,10 @@ from flask import Module, request, session, g, redirect, url_for, \
 		abort, render_template, flash
 from feather import config
 from feather.extensions import db
+from feather.helpers import mentions, mentionfilter
 from feather.databases import Bill, User, Topic, Reply, Notify
 
 reply = Module(__name__)
-
-def mention(text):
-	usernames = []
-	if text.find('@') == -1:
-		begin = -1
-		usernames = usernames
-	elif text.find(' ') != -1:
-		begin = text.find('@') + 1
-		if text.find('\n') != -1:
-			end = text.find(' ') < text.find('\n') and text.find(' ') or text.find('\n')
-		else:
-			end = len(text)
-	elif text.find('\n') != -1:
-		begin = text.find('@') + 1
-		end = text.find('\n')
-	else:
-		begin = text.find('@') +1
-		end = len(text)
-	if begin != -1:
-		value = text[begin:end]
-		n = len(value)
-		for i in range(0,n):
-			rv = User.query.filter_by(name=value).first()
-			if not rv:
-				value = list(value)
-				value.pop()
-				value = ''.join(value)
-			else:
-				text = text[text.find('@') + len(value):]
-				usernames = usernames + [value]
-				break
-	return usernames
-
-def mentions(text):
-	usernames = []
-	if text.find('@') == -1:
-		begin = -1
-		usernames = usernames
-	elif text.find(' ') != -1:
-		begin = text.find('@') + 1
-		if text.find('\n') != -1:
-			end = text.find(' ') < text.find('\n') and text.find(' ') or text.find('\n')
-		else:
-			end = len(text)
-	elif text.find('\n') != -1:
-		begin = text.find('@') + 1
-		end = text.find('\n')
-	else:
-		begin = text.find('@') +1
-		end = len(text)
-	if begin != -1:
-		value = text[begin:end]
-		n = len(value)
-		for i in range(0,n):
-			rv = User.query.filter_by(name=value).first()
-			if not rv:
-				value = list(value)
-				value.pop()
-				value = ''.join(value)
-			else:
-				text = text[text.find('@') + len(value):]
-				usernames = usernames + [value]
-				while True:
-					if mention(text) == []:
-						break
-					usernames = usernames + mention(text)
-					text = text[text.find('@') + len(value):]
-				break
-	return usernames
 
 
 @reply.route('/topic/<int:topic_id>/reply',methods=['POST'])
@@ -100,7 +32,8 @@ def add_reply(topic_id):
 		page = page_obj.pages + 1
 	else:
 		page = page_obj.pages
-	reply = Reply(topic, g.user, request.form['reply[content]'], number=numbered + 1)
+	reply_content = mentionfilter(request.form['reply[content]'])
+	reply = Reply(topic, g.user, reply_content, number=numbered + 1)
 	g.user.time -= 5
 	topic.author.time += 5
 	topic.last_reply_date = int(time.time())
@@ -109,7 +42,7 @@ def add_reply(topic_id):
 		topic.readers.remove(reader)
 	db.session.add(reply)
 	db.session.commit()
-	reply = Reply.query.filter_by(topic=topic).filter_by(author=g.user).filter_by(text=request.form['reply[content]']).first()
+	reply = Reply.query.filter_by(author=g.user).all()[-1]
 	t = int(time.time())
 	if session['user_id'] != topic.author.id:
 		bill = Bill(author=g.user,time=5,type=3,date=t,reply=reply,user_id=topic.author.id,balance=g.user.time)
