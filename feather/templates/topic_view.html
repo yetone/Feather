@@ -4,7 +4,7 @@
 	<script src="/static/js/feather.js" type="text/javascript"></script>
 {% endblock %}
 {% block title %}{{ topic.title }}{% endblock %}
-{% block breadcrumb %}<li><a href="{{ url_for('node.index', nodesite=topic.node.site) }}">{{ topic.node.name }}</a></li>{% endblock %}
+{% block bread %}{% endblock %}
 {% block invite %}
 	<a href="{{ url_for('account.register', invitername=topic.author.name) }}">注册</a>
 {% endblock %}
@@ -32,20 +32,24 @@
 		<section id=topic class=box>
 			<article id="topic_{{ topic.id }}">
 				<header>
-					<table>
+					<span style="font-weight: normal;position:relative;bottom:4px;">
+						<a href="/">Feather</a>
+						<span class="gray list chevron">›</span>
+						<span class=list>
+							<a href="{{ url_for('node.index', nodesite=topic.node.site) }}">{{ topic.node.name }}</a>
+						</span>
+					</span>
+					<table style="position:relative;top:3px;">
 						<tbody>
 							<tr>
 								<td>
 									<h2>{{ topic.title }}</h2>
-									<span class=tags>
-										<a href="{{ url_for('node.index', nodesite=topic.node.site) }}">{{ topic.node.name }}</a>
-									</span>
-									<span class="author list">
-										<a class=dark href="{{ url_for('account.usercenter', username=topic.author.name) }}">{{ topic.author.name }}</a>
+									<span class="author little list">
+										<a class="gray topicauthor" href="{{ url_for('account.usercenter', username=topic.author.name) }}" style="color:#aaa;font-weight:bolder;">{{ topic.author.name }}</a>
 									</span>
 									<span class="time gray little list">创建于 {{ topic.date|datetimeformat }}</span>
 									{% if session.user_id == topic.author.id or session.user_id == 1 %}
-										<a class="light list_big" href="{{ url_for('topic.topic_edit', topic_id=topic.id) }}">编辑</a>
+										<a class="gray little list_big" href="{{ url_for('topic.topic_edit', topic_id=topic.id) }}">编辑</a>
 									{% endif %}
 									{% if topic not in g.user.votes %}
 										<a class="light little list_big op" href="{{ url_for('topic.vote', topic_id=topic.id) }}">举报</a>

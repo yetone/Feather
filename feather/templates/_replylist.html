@@ -30,7 +30,7 @@
 									{% endif %}
 								{% endif %}
 								{% if session.user_id == reply.author.id or session.user_id == 1 %}
-									<a class="light list" href="{{ url_for('reply.reply_edit', reply_id=reply.id, page=page) }}">编辑</a>
+									<a class="light little list" href="{{ url_for('reply.reply_edit', reply_id=reply.id, page=page) }}">编辑</a>
 								{% endif %}
 								<a class="at list" onclick="replyOne('{{ reply.author.name }}','{{ reply.number }}');" href="#;"><img align=absmiddle border=0 alt=Reply src="/static/img/reply.png"></a>
 							</div>

@@ -42,7 +42,7 @@
 						<a href="{{ url_for('account.usercenter', username=hottopic.id|gettopicauthorname) }}"><img src="{{ hottopic.id|gettopicauthoremail|gravatarmini }} style="border: 0; align: default;"></a>
 					</td>
 					<td width=auto>
-						<a class=dark href="{{ url_for('topic.topic_view', topic_id=hottopic.id) }}" style="font-weight: bold;">{{ hottopic.title }}</a>
+						<a class=title href="{{ url_for('topic.topic_view', topic_id=hottopic.id) }}">{{ hottopic.title }}</a>
 					</td>
 				</tr>
 			{% endfor %}

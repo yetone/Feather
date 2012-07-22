@@ -1,3 +1,6 @@
+#topic header h2 {
+	margin-bottom: 14px;
+}
 .isit {
 	background: #F7F2FC;
 }
@@ -112,9 +115,11 @@ a.at:hover {
 
 /* THANK AREA */
 .thank_area {
+	position: relative;
+	left: 2px;
 	color: #ccc;
 	text-decoration: none;
-	font-size: 24px;
+	font-size: 22px;
 	font-weight: bold;
 	display: none;
 }
@@ -122,7 +127,7 @@ a.at:hover {
 .thanked_area {
 	color: #FF9999;
 	text-decoration: none;
-	font-size: 24px;
+	font-size: 22px;
 	font-weight: bold;
 }
 /* BALANCE */
@@ -296,7 +301,7 @@ video {
 			 background-color: #ffffff;
 		 }
 		 a {
-			 color: #778087;
+			 color: #666;
 			 text-decoration: none;
 		 }
 		 a:hover {
@@ -7138,18 +7143,20 @@ video {
 	}
 
 	.tags a {
+		color: #777;
 		line-height: 22px;
 		font-weight: normal;
 		font-size: 13px;
 		padding: 1px 4px;
-		background-color: #f5f5f5;
+		background-color: #f0f0f0;
 		border-radius: 3px;
 		-moz-border-radius: 3px;
 	}
 
 	.tags a:hover {
+		color: whiteSmoke;
 		text-decoration: none;
-		background-color: #e2e2e2;
+		background-color: #838AA7;
 	}
 
 	.tabs {

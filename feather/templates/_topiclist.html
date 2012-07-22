@@ -40,15 +40,15 @@
 						</h3>
 						<div class=info>
 							<span class=tags>
-								<a href="{{ url_for('node.index', nodesite = topic.node.site) }}">{{ topic.node.name }}</a>
+								<a class=gray href="{{ url_for('node.index', nodesite = topic.node.site) }}">{{ topic.node.name }}</a>
 							</span>
-							<span class=author>
-								<a class=title href="{{ url_for('account.usercenter', username=topic.author.name) }}">{{ topic.author.name }}</a>
+							<span class="author list_big little">
+								<a class=title href="{{ url_for('account.usercenter', username=topic.author.name) }}" style="color: #aaa;font-weight:bolder;">{{ topic.author.name }}</a>
 							</span>
-							<span class=time>
+							<span class="time gray little">
 								创建于 {{ topic.date|datetimeformat }}
 								{% if topic.replys.first() %}
-									，<a class=title href="{{ url_for('account.usercenter', username=topic.id|gettopiclastreplyid|getreplyauthorid|getusername) }}">{{ topic.id|gettopiclastreplyid|getreplyauthorid|getusername }}</a>
+									，<a class=title href="{{ url_for('account.usercenter', username=topic.id|gettopiclastreplyid|getreplyauthorid|getusername) }}" style="color: #aaa;font-weight:bolder;">{{ topic.id|gettopiclastreplyid|getreplyauthorid|getusername }}</a>
 									回复于 {{ topic.id|gettopiclastreplyid|getreplydate|datetimeformat }}
 								{% endif %}
 							</span>
