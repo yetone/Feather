@@ -2,6 +2,8 @@
 	background-image: url("/static/img/topic_bg.png");
 	background-position: 0 bottom;
 	background-repeat: repeat-x;
+	-webkit-transition: background-color .5s ease-in-out;
+	-moz-transition: background-color .5s ease-in-out;
 }
 .item:hover {
 	background-color: #F9F9F9;
