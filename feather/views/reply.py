@@ -45,7 +45,6 @@ def add_reply(topic_id):
 		topic.readers.remove(reader)
 	db.session.add(reply)
 	db.session.commit()
-	reply = Reply.query.filter_by(author=g.user).all()[-1]
 	t = int(time.time())
 	if session['user_id'] != topic.author.id:
 		bill = Bill(author=g.user,time=5,type=3,date=t,reply=reply,user_id=topic.author.id,balance=g.user.time)

@@ -151,7 +151,6 @@ def topic_add(nodesite):
 			bank.time +=20
 			db.session.add(topic)
 			db.session.commit()
-			topic = Topic.query.filter_by(author=g.user).all()[-1]
 			bill = Bill(author=g.user,time=20,type=2,date=int(time.time()),topic=topic,balance=g.user.time)
 			db.session.add(bill)
 			db.session.commit()
