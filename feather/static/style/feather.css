@@ -1,3 +1,7 @@
+.navbar-inner a {
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+}
 .item {
 	background-image: url("/static/img/topic_bg.png");
 	background-position: 0 bottom;
@@ -4476,6 +4480,7 @@ video {
 																			   background-color: transparent;
 																			   color: #ffffff;
 																			   text-decoration: none;
+																			   text-shadow: 0px 0px 4px white;
 																		   }
 																		   .navbar .nav .active > a,
 																		   .navbar .nav .active > a:hover {
