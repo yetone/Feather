@@ -67,7 +67,7 @@
 					</table>
 				</header>
 				<p>{{ topic.text|formattext|markdown|safe }}</p>
-				<footer id=topicend>
+				<footer id=0>
 					<span class=marks_count>
 						{% if topic in g.user.favorites %}
 							<a class="op btn disabled" href="#;">已收藏</a>

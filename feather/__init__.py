@@ -177,10 +177,7 @@ def format_text(text):
 		url = match.group(1)
 		number = match.group(0)
 		tonumber = int(url) - 1
-		if tonumber != 0:
-			nurl = '<a id=lou onclick="toReply(%s);" href="#%d" style="color: #376B43;">#<span id=nu>%s</span>楼 </a>' % (url, tonumber, url)
-		else:
-			nurl = '<a id=lou onclick="toReply(1);" href="#topicend" style="color: #376B43;">#<span id=nu>1</span>楼 </a>'
+		nurl = '<a id=lou onclick="toReply(%s);" href="#;" style="color: #376B43;">#<span id=nu>%s</span>楼 </a>' % (url, url)
 		text = text.replace(number, nurl)
 	text = _emoji(text)
 	return text

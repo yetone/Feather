@@ -44,7 +44,7 @@
 				<table class=item-list>
 					<tbody>
 						{% for topic in page_obj.items %}
-							<tr>
+							<tr class=item>
 								<td class=avatar>
 									<a href="{{ url_for('account.usercenter', username=topic.author.name) }}">
 										<img src="{{ topic.author.email|gravatar(size=48) }}">

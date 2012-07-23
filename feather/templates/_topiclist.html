@@ -28,7 +28,7 @@
 				</header>
 			{% endif %}
 			{% for topic in page_obj.items %}
-				<tr id=topic-{{ topic.id }}>
+				<tr class=item id=topic-{{ topic.id }}>
 					<td class=avatar>
 						<a href="{{ url_for('account.usercenter', username=topic.author.name) }}">
 							<img src="{{ topic.author.email|gravatar(size=48) }}">

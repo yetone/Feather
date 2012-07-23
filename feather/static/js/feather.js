@@ -30,6 +30,8 @@ function thankReply(replyid){
 function toReply(replyid){
 	$('.isit').removeClass('isit');
 	$('#' + replyid).parent('.left').parent('.clearbox').parent('article').parent('td').parent('tr').addClass('isit');
+	id = parseInt(replyid) - 1;
+	$.scrollTo('#' + id,500);
 }
 
 function fav(topicid){
