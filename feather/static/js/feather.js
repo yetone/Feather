@@ -11,7 +11,9 @@ function replyOne(username,number){
 		newContent = prefix
 	}
 	replyContent.focus();
-	replyContent.val(newContent);
+	if(number){
+		replyContent.val(newContent);
+	}
 	moveEnd($("#editor-input"));
 }
 
