@@ -34,17 +34,11 @@ def get_liketopics(topicid):
 			continue
 	return liketopics
 
-@cache.cached(600, key_prefix='sitestatus')
+@cache.cached(60 * 15, key_prefix='sitestatus')
 def get_sitestatus():
-	usercount = 0
-	topiccount = 0
-	replycount = 0
-	if User.query.all():
-		usercount = len(User.query.all())
-	if Topic.query.all():
-		topiccount = len(Topic.query.all())
-	if Reply.query.all():
-		replycount = len(Reply.query.all())
+	usercount = User.query.count()
+	topiccount = Topic.query.count()
+	replycount = Reply.query.count()
 	rv = (usercount, topiccount, replycount)
 	return rv
 

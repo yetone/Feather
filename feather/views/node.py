@@ -13,11 +13,7 @@ def get_node(nodesite):
 	return rv
 
 def get_topicscount(node):
-	if node.topics.first():
-		rv = len(node.topics.all())
-	else:
-		rv = 0
-	return rv
+	return node.topics.count()
 
 @node.route('/add/node', methods=['GET', 'POST'])
 def node_add():
