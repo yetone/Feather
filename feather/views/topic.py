@@ -1,7 +1,7 @@
 # coding: utf-8
 import time
 from flask import Module, request, session, g, redirect, url_for, \
-		abort, render_template, flash
+		abort, render_template, flash, jsonify
 from flask_sqlalchemy import Pagination
 from feather import config
 from feather.extensions import db, cache
@@ -270,3 +270,7 @@ def trash(page):
 	page_url = lambda page: url_for("topic.trash", page=page)
 	return render_template('trash.html', page_obj=page_obj, page_url=page_url)
 
+@topic.route('/allusers')
+def allusers():
+	users = User.query.all()
+	return jsonify(names=[x.name for x in users])

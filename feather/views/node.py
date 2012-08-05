@@ -71,6 +71,7 @@ def node_edit(nodesite):
 			node.site = request.form['nodesite']
 			node.description = request.form['description']
 			node.header = request.form['header']
+			node.style = request.form['style']
 			node.nodeclass = nodeclass
 			db.session.commit()
 			flash(u'节点修改成功！')

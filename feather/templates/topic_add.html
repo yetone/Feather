@@ -1,6 +1,17 @@
 {% extends "layout.html" %}
 {% block title %}创建主题 › {{ node.name }}{% endblock %}
-{% block sidebarin %}{% endblock %}
+{% block sidebarin %}
+	<section id=description class=box>
+		<header>
+		{{ node.name }}
+		</header>
+		{{ node.description|formattext|markdown|safe }}
+		{% if session.user_id ==1 %}
+			<hr>
+			<a class=btn href="{{ url_for('node.node_edit', nodesite=node.site) }}" style="margin-top: -15px;">节点编辑</a>
+		{% endif %}
+	</section>
+{% endblock %}
 {% block breadcrumb %}<li><a href="{{ url_for('node.index', nodesite=node.site) }}">{{ node.name }}</a>{% endblock %}
 {% block body %}
 	{% if session.user_id %}

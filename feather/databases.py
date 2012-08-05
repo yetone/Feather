@@ -158,8 +158,9 @@ class Node(db.Model):
 	topics = db.relationship('Topic', backref='node', lazy='dynamic')
 	status = db.Column(db.Integer)
 	date = db.Column(db.Integer)
+	style = db.Column(db.Text)
 
-	def __init__(self, name, site, description, nodeclass):
+	def __init__(self, name, site, description, nodeclass, style=None):
 		self.name = name
 		self.site = site
 		self.description = description

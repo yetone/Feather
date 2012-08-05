@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 {% block title %}节点编辑{% endblock %}
+{% block breadcrumb %}
+	<li>
+		<a href="{{ url_for('node.index', nodesite=node.site) }}">{{ node.name }}</a>
+	</li>
+{% endblock %}
 {% block body %}
 	{% if session.user_id %}
 		<div id=mainbar class=span9>
@@ -38,6 +43,12 @@
 							<label class=control-label>头部样式：</label>
 							<div class=controls>
 								<textarea name=header rows=5 cols=5 style="width: 450px;">{{ node.header }}</textarea>
+							</div>
+						</div>
+						<div class=control-group>
+							<label class=control-label>自定义样式：</label>
+							<div class=controls>
+								<textarea name=style rows=5 cols=5 style="width: 450px;">{{ node.style }}</textarea>
 							</div>
 						</div>
 						<div class=form-actions>

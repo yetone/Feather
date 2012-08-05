@@ -1,6 +1,18 @@
+.btn-holder {
+	display: none !important;
+}
+.typekit-badge {
+	display: none !important;
+}
+.wuyila {
+	display: none !important;
+}
 .navbar-inner a {
 	-webkit-transition:all 0.5s ease-in-out;
 	-moz-transition:all 0.5s ease-in-out;
+	-ms-transition:all 0.5s ease-in-out;
+	-o-transition:all 0.5s ease-in-out;
+	transition:all 0.5s ease-in-out;
 }
 .item {
 	background-image:url("/static/img/topic_bg.png");
@@ -8,6 +20,7 @@
 	background-repeat:repeat-x;
 	-webkit-transition:background-color .5s ease-in-out;
 	-moz-transition:background-color .5s ease-in-out;
+	transition:background-color .5s ease-in-out;
 }
 .item:hover {
 	background-color:#F9F9F9;
@@ -118,15 +131,19 @@ a.at:hover {
 	left:2px;
 	color:#ccc;
 	text-decoration:none;
-	font-size:22px;
+	font-size:16px;
 	font-weight:bold;
+	font-family:"DejaVu Sans";
 	display:none;
 }
 .thanked_area {
-	color:#FF9999;
+	position:relative;
+	right:1px;
+	color:#F99;
 	text-decoration:none;
-	font-size:22px;
+	font-size:16px;
 	font-weight:bold;
+	font-family:"DejaVu Sans";
 }
 a.balance_area:link,a.balance_area:visited,.balance_area {
 	font-size:11px;

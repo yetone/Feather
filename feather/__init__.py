@@ -4,8 +4,7 @@ import os
 import time
 import re
 from hashlib import md5
-from flask import Flask, request, session, g, redirect, url_for, \
-		abort, render_template, flash
+from flask import Flask, session, g
 from flaskext.markdown import Markdown
 from feather.views import account, node, topic, reply, timesystem, city
 from feather.extensions import db, cache

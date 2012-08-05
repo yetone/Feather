@@ -1,6 +1,11 @@
 {% extends "layout.html" %}
 {% from "_page.html" import paginate %}
 {% block title %}{{ node.name }}{% endblock %}
+{% if node.style and node.style != '' and node.style != 'None' %}
+	{% block script %}
+		<style type="text/css">{{ node.style }}</style>
+	{% endblock %}
+{% endif %}
 {% block bread %}{% endblock %}
 {% block sidebarin %}
 	{% if session.user_id %}
@@ -99,5 +104,25 @@
 			</section>
 		{% endif %}
 		{{ paginate(page_obj, page_url) }}
+		{% if session.user_id %}
+			<section class=box id=editor>
+				<form action="{{ url_for('topic.topic_add',nodesite=node.site) }}" method=post class=new_topic>
+						<div class=control-group>
+							<div class=full-input-wrap>
+								<input id=topic_title type=text size=30 name=title>
+							</div>
+						</div>
+						<div class=control-group>
+							<div class=full-input-wrap>
+								<textarea id=editor-input name=text rows=7 cols=40 onkeydown="if(event.ctrlKey&&event.keyCode==13){document.getElementById('submit').click();return false};"></textarea>
+							</div>
+						</div>
+						<div class=control-group>
+							<input id=submit class="btn btn-primary" type=submit value=果断提交 name=commit>
+							<span style="color: #ccc;"> ctrl+enter </span>
+						</div>
+				</form>
+			</section>
+		{% endif %}
 	</div>
 {% endblock %}

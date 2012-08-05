@@ -100,14 +100,16 @@
 				<p class="alert alert-block alert-error">错误：{{ g.error }}</p>
 			{% endif %}
 			<section id=editor class=box>
-			<h4 style="padding-bottom: 10px;"> 回复话题 <span class="gray little" style="float: right;padding-right: 5px;"><a href="javascript:void(function(){var%20d%20=%20document,a%20=%20'setAttribute',s%20=%20d.createElement('script');s[a]('tyle','text/javascript');s[a]('src','http://weibotuchuang.sinaapp.com/bookmark.js');d.head.appendChild(s);})();">Add Image</a></span></h4>
+			<h4 style="padding-bottom: 10px;"><span style="font-weight: normal;font-size: 12px;color: #000;"> 添加一条新回复 <span class="gray little" style="float: right;padding-right: 5px;"><a href="javascript:void(function(){var%20d%20=%20document,a%20=%20'setAttribute',s%20=%20d.createElement('script');s[a]('tyle','text/javascript');s[a]('src','http://weibotuchuang.sinaapp.com/bookmark.js');d.head.appendChild(s);})();">Add Image</a></span></span></h4>
 				<form id=new_reply class=new_reply method=post action="{{ url_for('reply.add_reply', topic_id = topic.id) }}">
 					<div class=control-group>
-						<div id=editor-button-bar style="position: absolute;top: -999em;">
-						</div>
 						<div class=full-input-wrap>
-							<textarea id=editor-input rows=10 name="reply[content]" cols=40 onkeydown="if(event.ctrlKey&&event.keyCode==13){document.getElementById('submit').click();return false};" style="height: 124px;"></textarea>
+							<textarea id=editor-input name="reply[content]" rows=10 cols=40 onkeydown="if(event.ctrlKey&&event.keyCode==13){document.getElementById('submit').click();return false};" style="height: 124px;"></textarea>
 						</div>
+						<link rel="stylesheet" type="text/css" href="http://ichord.github.com/At.js/lib/css/jquery.atwho.css"/>
+						<script type="text/javascript" src="http://ichord.github.com/At.js/lib/js/jquery.caret.js"></script>
+						<script type="text/javascript" src="http://ichord.github.com/At.js/lib/js/jquery.atwho.js"></script>
+						<script type="text/javascript" src="http://www.feather.im/static/js/at.js"></script>
 					</div>
 					<div class=control-group>
 						<input id=submit class="btn primary" type=submit value=提交 name=commit>

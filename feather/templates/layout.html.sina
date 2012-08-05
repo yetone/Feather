@@ -4,9 +4,9 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>{% block title %}首页{% endblock %} - Feather</title>
-		<link rel=stylesheet type=text/css href="{{ url_for('.static', filename='style/feather.css') }}">
-		<link rel="shortcut icon" href="{{ url_for('.static', filename='favicon.ico') }}" />
-		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+		<link rel=stylesheet type=text/css href="http://monroe.sinaapp.com/css/feather.css">
+		<link rel="shortcut icon" href="/static/favicon.ico" />
+		<script type="text/javascript" src="http://monroe.sinaapp.com/js/jquery.min.js"></script>
 		{% block script %}{% endblock %}
 	</head>
 	<body>
@@ -142,9 +142,9 @@
 				</div>
 			</div>
 		</footer>
-		<script type="text/javascript" src="http://use.typekit.com/ezc0pjj.js"></script>
+		<script type="text/javascript" src="http://monroe.sinaapp.com/js/ezc0pjj.js"></script>
 		<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-		<script type="text/javascript" src="http://www.helloweba.com/demo/scrollto/jquery.scrollTo.js"></script>
+		<script type="text/javascript" src="http://monroe.sinaapp.com/js/jquery.scrollTo.js"></script>
 		<div class=wuyila>
 			<script language="javascript" type="text/javascript" src="http://js.users.51.la/14649465.js"></script>
 			<noscript><a href="http://www.51.la/?14649465" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/14649465.asp" style="border:none" /></a></noscript>
