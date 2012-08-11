@@ -17,7 +17,7 @@
 		<header>
 		{{ node.name }}
 		</header>
-		{{ node.description|formattext|markdown|safe }}
+		{{ node.description|safe }}
 		{% if session.user_id ==1 %}
 			<hr>
 			<a class=btn href="{{ url_for('node.node_edit', nodesite=node.site) }}" style="margin-top: -15px;">节点编辑</a>
@@ -43,7 +43,7 @@
 						<strong class="gray list">{{ topicscount }}</strong>
 					</span>
 					<span class=header>
-						{{ node.header|markdown|safe }}
+						{{ node.header|safe }}
 					</span>
 				</header>
 				<table class=item-list>

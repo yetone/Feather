@@ -4,7 +4,7 @@ from flask import Module, request, session, g, redirect, url_for, \
 		abort, render_template, flash
 from feather import config
 from feather.extensions import db
-from feather.helpers import mentions, mentionfilter
+from feather.helpers import mentions, mentionfilter, textformat, markdown
 from feather.databases import Bill, User, Topic, Reply, Notify
 
 reply = Module(__name__)
@@ -36,7 +36,9 @@ def add_reply(topic_id):
 		reply_content = mentionfilter(request.form['reply[content]'])
 	else:
 		reply_content = request.form['reply[content]']
-	reply = Reply(topic, g.user, reply_content, number=numbered + 1)
+	reply_content = textformat(reply_content)
+	reply_content = markdown(reply_content)
+	reply = Reply(topic=topic, author=g.user, text=reply_content, text_origin=request.form['reply[content]'], number=numbered + 1)
 	g.user.time -= 5
 	topic.author.time += 5
 	topic.last_reply_date = int(time.time())
@@ -85,8 +87,15 @@ def reply_edit(reply_id, page):
 		if request.method == 'POST':
 			if not session.get('user_id'):
 				abort(401)
+			if '@' in request.form['reply[content]']:
+				reply_content = mentionfilter(request.form['reply[content]'])
+			else:
+				reply_content = request.form['reply[content]']
+			reply_content = textformat(reply_content)
+			reply_content = markdown(reply_content)
 			reply = Reply.query.get(reply_id)
-			reply.text = request.form['reply[content]']
+			reply.text = reply_content
+			reply.text_origin = request.form['reply[content]']
 			db.session.commit()
 			return redirect(url_for('topic.topic_view', topic_id=reply.topic.id, page=page) + '#replys')
 		return render_template('reply_edit.html', reply=reply, topic=reply.topic, page=page)

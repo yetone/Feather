@@ -154,17 +154,21 @@ class Node(db.Model):
 	site = db.Column(db.String(50), unique=True)
 	description = db.Column(db.Text)
 	header = db.Column(db.Text)
+	description_origin = db.Column(db.Text)
+	header_origin = db.Column(db.Text)
 	nodeclass_id = db.Column(db.Integer, db.ForeignKey('nodeclass.id'))
 	topics = db.relationship('Topic', backref='node', lazy='dynamic')
 	status = db.Column(db.Integer)
 	date = db.Column(db.Integer)
 	style = db.Column(db.Text)
 
-	def __init__(self, name, site, description, nodeclass, style=None):
+	def __init__(self, name, site, description, description_origin, nodeclass, style=None):
 		self.name = name
 		self.site = site
 		self.description = description
+		self.description_origin = description_origin
 		self.header = u''
+		self.header_origin = u''
 		self.status = 1
 		self.date = int(time.time())
 		self.nodeclass = nodeclass
@@ -179,6 +183,7 @@ class Topic(db.Model):
 	notify = db.relationship('Notify', backref='topic', lazy='dynamic', uselist=False)
 	title = db.Column(db.String(80))
 	text = db.Column(db.Text)
+	text_origin = db.Column(db.Text)
 	replys = db.relationship('Reply', backref='topic', lazy='dynamic')
 	bills = db.relationship('Bill', backref='topic', uselist=False, lazy='dynamic')
 	node_id = db.Column(db.Integer, db.ForeignKey('node.id'))
@@ -189,14 +194,15 @@ class Topic(db.Model):
 	last_reply_date = db.Column(db.Integer)
 	reply_count = db.Column(db.Integer)
 
-	def __init__(self, author, title, text, node, reply_count):
+	def __init__(self, author, title, text, text_origin, node, reply_count, report=0):
 		self.author = author
 		self.title = title
 		self.text = text
+		self.text_origin = text_origin
 		self.node = node
 		self.nodeclass = node.nodeclass
 		self.vote = 0
-		self.report = 0
+		self.report = report
 		self.date = int(time.time())
 		self.last_reply_date = int(time.time())
 		self.reply_count = reply_count
@@ -214,16 +220,20 @@ class Reply(db.Model):
 	author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	notify = db.relationship('Notify', backref='reply', lazy='dynamic')
 	text = db.Column(db.Text)
+	text_origin = db.Column(db.Text)
 	bills = db.relationship('Bill', backref='reply', uselist=False, lazy='dynamic')
 	date = db.Column(db.Integer)
 	number = db.Column(db.Integer)
+	type = db.Column(db.Integer)
 
-	def __init__(self, topic, author, text, number):
+	def __init__(self, topic, author, text, text_origin, number=1, type=0):
 		self.topic = topic
 		self.author = author
 		self.text = text
+		self.text_origin = text_origin
 		self.date = int(time.time())
 		self.number = number
+		self.type = type
 
 	def __repr__(self):
 		return '<Reply %r>' % self.text

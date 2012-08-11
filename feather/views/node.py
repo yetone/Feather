@@ -2,6 +2,7 @@
 from flask import Module, request, session, g, redirect, url_for, \
 		abort, render_template, flash
 from feather import config
+from feather.helpers import textformat, markdown
 from feather.extensions import db
 from feather.databases import Nodeclass, Node, Topic
 
@@ -38,7 +39,9 @@ def node_add():
 			error = u'节点地址已存在！'
 			return render_template('node_add.html', error=error)
 		else:
-			node = Node(request.form['nodename'], request.form['nodesite'], request.form['description'], nodeclass)
+			description = textformat(request.form['description'])
+			description = markdown(description)
+			node = Node(name=request.form['nodename'], site=request.form['nodesite'], description=description, description_origin=request.form['description'], nodeclass=nodeclass)
 			db.session.add(node)
 			db.session.commit()
 			flash(u'添加成功！')
@@ -67,10 +70,15 @@ def node_edit(nodesite):
 				db.session.add(nodeclass)
 				db.session.commit()
 			nodeclass = Nodeclass.query.filter_by(name=request.form['nodeclass']).first()
+			description = textformat(request.form['description'])
+			description = markdown(description)
+			header = markdown(request.form['header'])
 			node.name = request.form['nodename']
 			node.site = request.form['nodesite']
-			node.description = request.form['description']
-			node.header = request.form['header']
+			node.description = description
+			node.header = header
+			node.description_origin = request.form['description']
+			node.header_origin = request.form['header']
 			node.style = request.form['style']
 			node.nodeclass = nodeclass
 			db.session.commit()

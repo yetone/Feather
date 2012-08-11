@@ -5,7 +5,7 @@
 		<header>
 		{{ node.name }}
 		</header>
-		{{ node.description|safe }}
+		{{ node.description|formattext|markdown|safe }}
 		{% if session.user_id ==1 %}
 			<hr>
 			<a class=btn href="{{ url_for('node.node_edit', nodesite=node.site) }}" style="margin-top: -15px;">节点编辑</a>
@@ -20,8 +20,8 @@
 				<p class="alert alert-block alert-error">错误：{{ g.error }}</p>
 			{% endif %}
 			<section class=box>
-				<form action="{{ url_for('topic.topic_add',nodesite=node.site) }}" method=post class=new_topic>
-					<legend>创建主题<span class="gray little" style="float: right;"><a href="javascript:void(function(){var%20d%20=%20document,a%20=%20'setAttribute',s%20=%20d.createElement('script');s[a]('tyle','text/javascript');s[a]('src','http://weibotuchuang.sinaapp.com/bookmark.js');d.head.appendChild(s);})();">Add Image</a></span></legend>
+				<form action="{{ url_for('love.love_add') }}" method=post class=new_topic>
+					<legend>创建爱情<span class="gray little" style="float: right;"><a href="javascript:void(function(){var%20d%20=%20document,a%20=%20'setAttribute',s%20=%20d.createElement('script');s[a]('tyle','text/javascript');s[a]('src','http://weibotuchuang.sinaapp.com/bookmark.js');d.head.appendChild(s);})();">Add Image</a></span></legend>
 					<div class=form-horizontal>
 						<div class=control-group>
 							<label class=control-label>标题：</label>

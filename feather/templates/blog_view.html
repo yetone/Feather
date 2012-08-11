@@ -1,0 +1,194 @@
+{% extends "baser.html" %}
+{% block style %}
+<style type="text/css">
+	html,body{font-family: arial,Microsoft YaHei,微软雅黑,simsun,宋体;}
+	*{margin:0;padding:0;}
+	body{text-align:left;font-size:12px;line-height:normal;background-color:transparent;}
+	.clearfix:after{display:block;visibility:hidden;clear:both;height:0;overflow:hidden;content:".";}
+	.clearfix{zoom:1;}
+	.w-tbu{background:url(/rsc/img/icon2-8.png?004) no-repeat 999px 999px;}
+	.w-tbu{display:block;width:24px;height:29px;overflow:hidden;text-indent:-2000px;cursor:pointer;background-position:-55px -683px;}
+	.w-tbu-sel{background-position:-76px -683px;}
+	/* 结构布局 ************************/
+
+	/* 根节点 */
+	.bcmt{text-align:left;font-size:12px;line-height:normal;}
+	.bcmt a{text-decoration:none;cursor:pointer;}
+	.bcmt a:hover{text-decoration:underline;}
+
+	/* 发布区 */
+	.bcmtadd{position:relative;margin:0 0 18px;zoom:1;}
+	.bcmtadd .w-tbu{display:none;position:absolute;right:0;top:0;}
+	.bcmtadd-tbu .bcmtipt{padding-right:25px;}
+	.bcmtadd-tbu .w-tbu{display:block;}
+	/* 输入框 */
+	.bcmtipt{border-style:solid;border-width:1px;margin:0 0 10px;padding:3px 5px;}
+	.bcmtiptc{width:100%;}
+	.bcmtiptc textarea{width:100%;height:57px;overflow:auto;border:0;outline:0;resize:none;background:none;line-height:19px;font-size:12px;}
+	/* 按钮 */
+	.bcmtbtn{text-align:right;}
+	.bcmtbtn button{width:78px;height:24px;border-style:solid;border-width:1px;cursor:pointer;}
+
+	/* 列表 */
+	.bcmtlst{}
+	.bcmtlst li{float:left;width:100%;border-style:solid;border-width:1px 0 0;}
+
+	/* 列表内边距 */
+	.bcmtlsta{padding:10px 0;}
+
+	/* 头像 */
+	.bcmtlstb,.bcmtlstb img{float:left;width:20px;height:20px;border:0;}
+	.bcmtlstb{position:relative;}
+
+	/* 头像右侧自适应 */
+	.bcmtlstc{float:right;width:100%;margin-left:-20px;}
+	.bcmtlstd{margin-left:30px;}
+
+	/* 信息和操作区 */
+	.bcmtlste{position:relative;zoom:1;}
+
+	/* 评论内容 */
+	.bcmtlstf{}
+
+	/* 信息区自适应 */
+	.bcmtlstg{float:left;width:100%;margin-right:-120px;}
+	.bcmtlsti{margin-right:120px;}
+	.bcmtlstj{width:100%;overflow:hidden;line-height:19px;word-wrap:break-word;}
+	.bcmtlstj a{margin-right:5px;}
+	.bcmtlstj a.bcmtlstk{margin-right:0;white-space:nowrap;}
+
+	/* 操作区 */
+	.bcmtlsth{position:absolute;top:0;right:0;}
+	.bcmtlsth a{margin-left:10px;}
+
+	/* 更多、loading */
+	.bcmtmore{border-style:solid;border-width:1px 0 0;text-align:center;}
+
+	/* 颜色提取 *************************/
+
+	/* 输入框边框色 */
+	.s-bd0{border-color:#ddd;}
+
+	/* 输入框背景色 */
+	.s-bg0{background:#fff;}
+
+	/* 输入框文字色 */
+	.s-fc0{color:#777;}
+
+	/* 按钮边框色 */
+	.s-bd1{border-color:#777;}
+
+	/* 按钮背景色 */
+	.s-bg1{background:#777;}
+
+	/* 按钮文字色 */
+	.s-fc1{color:#fff;}
+
+	/* 列表项边框色 */
+	.s-bd2{border-color:#ddd;}
+
+	/* 列表项背景色 默认背景透明*/
+
+	/* 链接颜色、操作颜色 */
+	.s-fc2{color:#828d95;}
+
+	/* 动作颜色、次要颜色 */
+	.s-fc3{color:#aaa;}
+
+	/* 内容颜色、主要颜色 */
+	.s-fc4{color:#737373;}
+	body {
+		background-color:#dfdfe1;
+	}
+	body {
+		background-image:url("/static/img/blog_bg.png");
+	}
+	body {
+		background-attachment:fixed;
+	}
+</style>
+{% endblock %}
+{% block body %}
+	<div class="postwrapper box wid700">
+		<div class="block article">
+			<div class=side>
+				<div class=day>
+					<a href="{{ url_for('blog.blog_view', topic_id=topic.id) }}">{{ topic.date|getday }}</a>
+				</div>
+				<div class=month>
+					<a href="{{ url_for('blog.blog_view', topic_id=topic.id) }}">{{ topic.date|getmonth }}</a>
+				</div>
+			</div>
+			<div class=main>
+				<div class=content>
+					<div class=text>
+						<h2>
+							<a href="{{ url_for('blog.blog_view', topic_id=topic.id) }}">{{ topic.title }}</a>
+						</h2>
+						{{ topic.text|markdown }}
+					</div>
+				</div>
+				<div class=link>
+					<span href="{{ url_for('blog.blog_view', topic_id=topic.id) }}">评论({{ topic.replys.count() }})</span>
+				</div>
+			</div>
+		</div>
+		<div class=block>
+			<div class="main comment">
+				<h3 class=nctitle>评论</h3>
+				<form action="{{ url_for('blog.blog_reply', topic_id=topic.id) }}", method=post>
+					<div class=bcmt>
+						<div class=bcmtadd>
+							<div class="bcmtipt s-bd0 s-bg0">
+								<div class=bcmtiptc>
+									<textarea class="s-fc0 ztag" maxlength=200 name=reply[content]></textarea>
+								</div>
+							</div>
+							<div class=bcmtbtn>
+								<button class="s-bd1 s-fc1 s-bg1 ztag">发布</button>
+							</div>
+						</div>
+						<div class=bcmtlst>
+							<ul class="clearfix ztag">
+								{% for reply in topic.replys %}
+								<li class="s-bd2 s-bg2">
+									<div class="bcmtlsta clearfix">
+										<div class=bcmtlstb>
+											{% if reply.author != None %}
+											<a href="{{ url_for('account.usercenter', username=reply.author.name) }}" target="_top" title="{{ reply.date|datetimeformat }}">
+												<img class=itag src="{{ reply.author.email|gravatar }}">
+											</a>
+											{% endif %}
+										</div>
+										<div class=bcmtlstc>
+											<div class="bcmtlstd clearfix">
+												<div class="bcmtlste clearfix">
+													<div class="bcmtlstg clearfix">
+														<div class="bcmtlsti clearfix">
+															<div class="bcmtlstj clearfix">
+																{% if reply.author != None %}
+																<a class="s-fc2 itag bcmtlstk" href="{{ url_for('account.usercenter', username=reply.author.name) }}" target="_top">{{ reply.author.name }}</a>
+																{% else %}
+																未注册用户
+																{% endif %}
+																<span class="bcmtlstf s-fc4">：</span>
+																<span class="bcmtlstf s-fc4 itag">{{ reply.text|safe }}</span>
+															</div>
+														</div>
+													</div>
+													<div class="bcmtlsth clearfix">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

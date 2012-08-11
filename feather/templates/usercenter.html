@@ -11,11 +11,20 @@
 		{{ user.name }}
 	{% endif %}
 {% endblock %}
-{% block sidebarin %}
+{% block sidebarin1 %}
 <section class=box>
-	<a href="{{ url_for('account.favorites') }}">主题收藏</a>
-	<a href="{{ url_for('account.times') }}">时间账单</a>
+	<header>个人统计</header>
+	<ul>
+		<li>话题数 {{ topiccount }}</li>
+		<li>回帖数 {{ replycount }}</li>
+	</ul>
 </section>
+{% if user.id == session.user_id %}
+	<section class=box>
+		<a href="{{ url_for('account.favorites') }}">主题收藏</a>
+		<a href="{{ url_for('account.times') }}">时间账单</a>
+	</section>
+{% endif %}
 {% endblock %}
 {% block bread %}{% endblock %}
 {% block body %}

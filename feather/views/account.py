@@ -5,7 +5,7 @@ from flask import Module, request, session, g, redirect, url_for, \
 from werkzeug import check_password_hash, generate_password_hash
 from feather.extensions import db, cache
 from feather import config
-from feather.databases import Bill, Bank, City, User, Topic, Notify
+from feather.databases import Bill, Bank, City, User, Topic, Notify, Reply
 
 account = Module(__name__)
 
@@ -35,11 +35,13 @@ def users():
 
 @account.route('/member/<username>', defaults={'page': 1})
 @account.route('/member/<username>/page/<int:page>')
-def usercenter(username,page):
+def usercenter(username, page):
 	user = User.query.filter_by(name=username).first()
-	page_obj = user.topics.order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
+	page_obj = user.topics.filter(Topic.report == 0).order_by(Topic.last_reply_date.desc()).paginate(page, per_page=config.PER_PAGE)
 	page_url = lambda page: url_for("account.usercenter", username=username, page=page)
-	return render_template('usercenter.html', user=user, page_obj=page_obj, page_url=page_url)
+	topiccount = user.topics.filter(Topic.report==0).count()
+	replycount = user.replys.filter(Reply.type==0).count()
+	return render_template('usercenter.html', user=user, topiccount=topiccount, replycount=replycount, page_obj=page_obj, page_url=page_url)
 
 
 @account.route('/setting/account', methods=['GET', 'POST'])
@@ -48,27 +50,23 @@ def setting():
 		return redirect(url_for('topic.tab_view'))
 	user = g.user
 	if request.method == 'POST':
-		if check_password_hash(g.user.password,request.form['user[current_password]']):
-			user.name = request.form['user[name]']
-			user.email = request.form['user[email]']
-			user.website = request.form['user[website]']
-			user.description = request.form['user[description]']
-			user.timeswitch = request.form['user[timeswitch]']
-			user.topswitch = request.form['user[topswitch]']
-			user.emailswitch = request.form['user[emailswitch]']
-			city = City.query.filter_by(name=request.form['user[city]']).first()
-			if not city:
-				city = City(name=request.form['user[city]'])
-				db.session.add(city)
-				db.session.commit()
-			city = City.query.filter_by(name=request.form['user[city]']).first()
-			user.city = city
+		user.name = request.form['user[name]']
+		user.email = request.form['user[email]']
+		user.website = request.form['user[website]']
+		user.description = request.form['user[description]']
+		user.timeswitch = request.form['user[timeswitch]']
+		user.topswitch = request.form['user[topswitch]']
+		user.emailswitch = request.form['user[emailswitch]']
+		city = City.query.filter_by(name=request.form['user[city]']).first()
+		if not city:
+			city = City(name=request.form['user[city]'])
+			db.session.add(city)
 			db.session.commit()
-			flash(u'修改成功！')
-			return redirect(url_for('account.setting'))
-		else:
-			flash(u'密码错误！')
-			return redirect(url_for('account.setting'))
+		city = City.query.filter_by(name=request.form['user[city]']).first()
+		user.city = city
+		db.session.commit()
+		flash(u'修改成功！')
+		return redirect(url_for('account.setting'))
 	return render_template('setting.html',user=g.user)
 
 

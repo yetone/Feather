@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block style %}
+<style>
+	.block {
+		border-bottom: 2px dotted #E7E7E7;
+	}
+	.main {
+		background: url();
+	}
+</style>
+{% endblock %}
+{% block body %}
+	<div class="postwrapper box" style="padding: 0px; width:700px;">
+		{% for topic in page_obj.items %}
+			{% if topic.author.id == 1 %}
+			<div class="block article wid700" style="background-color: EFFBFF; margin: 0; padding: 25px 30px 0 30px;">
+			{% else %}
+			<div class="block article wid700" style="background-color: #FFF6ED; margin: 0; padding: 25px 30px 0 30px;">
+			{% endif %}
+				<div class=side>
+					<div class=day>
+						<a href="{{ url_for('love.love_view', topic_id=topic.id) }}">{{ topic.date|getday }}</a>
+					</div>
+					<div class=month>
+						<a href="{{ url_for('love.love_view', topic_id=topic.id) }}">{{ topic.date|getmonth }}</a>
+					</div>
+				</div>
+				<div class=main>
+					<div class=content>
+						<div class=text>
+							<h2>
+								<a href="{{ url_for('love.love_view', topic_id=topic.id) }}">{{ topic.title }}</a>
+							</h2>
+							{{ topic.text|getsome|markdown }}
+						</div>
+					</div>
+					<div class=link>
+						<a href="{{ url_for('love.love_view', topic_id=topic.id) }}">全文链接</a>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		{% if page_obj.pages > 1 %}
+		<div class="page">
+			{% if page_obj.page == 1 %}
+			<div class="prev disable">
+				<span class=cap></span>
+				<span class=arrow></span>
+				<span class=title>上一页</span>
+			</div>
+			{% else %}
+			<div class="prev active">
+				<a href="{{ page_url(page_obj.page - 1) }}" style="cursor: pointer; width: 20px;">
+					<span class=cap></span>
+					<span class=arrow></span>
+					<span class=title>上一页</span>
+				</a>
+			</div>
+			{% endif %}
+			{% if page_obj.page == page_obj.pages %}
+			<div class="next active">
+					<span class=cap></span>
+					<span class=arrow></span>
+					<span class=title>下一页</span>
+			</div>
+			{% else %}
+			<div class="next active">
+				<a href="{{ page_url(page_obj.page + 1) }}" style="cursor: pointer; width: 20px;">
+					<span class=cap></span>
+					<span class=arrow></span>
+					<span class=title style="display: none;">下一页</span>
+				</a>
+			</div>
+			{% endif %}
+		</div>
+		{% endif %}
+	</div>
+{% endblock %}

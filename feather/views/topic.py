@@ -5,19 +5,20 @@ from flask import Module, request, session, g, redirect, url_for, \
 from flask_sqlalchemy import Pagination
 from feather import config
 from feather.extensions import db, cache
-from feather.helpers import mentions, mentionfilter
+from feather.helpers import mentions, mentionfilter, textformat, markdown
 from feather.databases import Bill, Bank, User, Nodeclass, Node, \
 		Topic, Reply, Notify
 
 
 topic = Module(__name__)
 
+
 @cache.cached(60 * 60, key_prefix='liketopics/%d')
 def get_liketopics(topicid):
 	topic = Topic.query.get(topicid)
 	liketopics = []
 	i = 0
-	for n in Topic.query.all():
+	for n in Topic.query.filter(Topic.report == 0).all():
 		if i == 6:
 			break
 		if liketopic(topic.title,n.title) == 0:
@@ -37,8 +38,8 @@ def get_liketopics(topicid):
 @cache.cached(60 * 15, key_prefix='sitestatus')
 def get_sitestatus():
 	usercount = User.query.count()
-	topiccount = Topic.query.count()
-	replycount = Reply.query.count()
+	topiccount = Topic.query.filter(Topic.report == 0).count()
+	replycount = Reply.query.filter(Reply.type == 0).count()
 	rv = (usercount, topiccount, replycount)
 	return rv
 
@@ -46,7 +47,7 @@ def get_sitestatus():
 def get_hottopics():
 	nowtime = int(time.time())
 	agotime = nowtime - 24*60*60
-	rv = Topic.query.filter(Topic.date <= nowtime).filter(Topic.date >= agotime).order_by(Topic.reply_count.desc()).limit(10).all()
+	rv = Topic.query.filter(Topic.report == 0).filter(Topic.date <= nowtime).filter(Topic.date >= agotime).order_by(Topic.reply_count.desc()).limit(10).all()
 	return rv
 
 def get_nodeclass(tabname):
@@ -145,7 +146,9 @@ def topic_add(nodesite):
 				text = mentionfilter(request.form['text'])
 			else:
 				text = request.form['text']
-			topic = Topic(author=g.user, title=request.form['title'], text=text, node=node, reply_count=0)
+			text = textformat(text)
+			text = markdown(text)
+			topic = Topic(author=g.user, title=request.form['title'], text=text, text_origin=request.form['text'], node=node, reply_count=0)
 			bank = Bank.query.get(1)
 			g.user.time -= 20
 			bank.time +=20
@@ -205,8 +208,15 @@ def topic_edit(topic_id):
 				render_template('topic_edit.html', topic=topic)
 			else:
 				topic = Topic.query.get(topic_id)
+				if '@' in request.form['text']:
+					text = mentionfilter(request.form['text'])
+				else:
+					text = request.form['text']
+				text = textformat(text)
+				text = markdown(text)
 				topic.title = request.form['title']
-				topic.text = request.form['text']
+				topic.text = text
+				topic.text_origin = request.form['text']
 				topic.date = int(time.time())
 				db.session.commit()
 				flash(u'修改成功！')

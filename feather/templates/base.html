@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>Love</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='style/love.css') }}" />
+		<link rel="shortcut icon" href="{{ url_for('.static', filename='favicon.ico') }}" />
+		<style>
+			a, a:hover, .day {
+				color:#589bbe;
+			}
+			.sidelist li a, .tag a, .active {
+				background-color:#589bbe;
+			}
+			.day {
+				border-color:#589bbe;
+			}
+			.text blockquote {
+				border-left-color:#589bbe;
+			}
+			body {
+				background-color:#dfdfe1;
+			}
+			body {
+				background-image:url("/static/img/love_bg.png");
+			}
+			body {
+				background-attachment:fixed;
+			}
+			.notes .action {
+				width:500px;
+			}
+			#comment_frame {
+				width:530px;
+			}
+			.video object, .video embed {
+				width:530px;
+				height:441px;
+			}
+		</style>
+		{% block style %}{% endblock %}
+	</head>
+	<body>
+		<div class=h95></div>
+		<div class="box wid700">
+			<div class=selfinfo>
+				<div class=logo>
+					<a href="{{ url_for('love.index') }}">
+						<img src="{{ g.user.email|gravatarbig }}">
+						<i></i>
+					</a>
+				</div>
+				<h1>
+					<a href="{{ url_for('love.index') }}">Love Room</a>
+				</h1>
+				<div class=text>Just for {{ g.user.name }}</div>
+			</div>
+			<div class=sch>
+				<form action="{{ url_for('love.index') }}" method="get">
+					<input value="搜索" type="text" name="q" onfocus="if(this.value=='搜索'){this.value='';}" onblur="if(this.value==''){this.value='搜索';}" class=txt>
+				</form>
+			</div>
+			<ul class=sidelist>
+				<li>
+					<a href="" class=list_1 title=RSS></a>
+				</li>
+				<li>
+					<a href="{{ url_for('love.love_add') }}" class=list_2 title=为爱情添砖加瓦></a>
+				</li>
+			</ul>
+		</div>
+		{% block body %}{% endblock %}
+		<div class=footer>
+			<span title=Copyright style="cursor:pointer;">©</span>
+			 
+			<a href="{{ url_for('love.index') }}">Love</a>
+			 | Powered by 
+			 <a href="{{ url_for('topic.index') }}">Feather</a>
+		</div>
+
+	</body>
+</html>

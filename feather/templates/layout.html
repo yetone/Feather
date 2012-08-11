@@ -26,6 +26,11 @@
 							{% endblock %}
 								<a href="{{ url_for('timesystem.bank') }}">时间规划局</a>
 							</li>
+							<li>
+								{% if session.get('user_id') == 1 or session.get('user_id') ==2 %}
+									<a href="{{ url_for('love.index') }}">Love Room</a>
+								{% endif %}
+							</li>
 						</ul>
 						<ul class="nav nav-pills pull-right">
 						{% if not session.user_id %}
@@ -84,6 +89,7 @@
 					{% block body %}{% endblock %}
 					{% block sidebar %}
 						<div id=sidebar class=span3>
+							{% block sidebarin1 %}
 							{% if session.user_id %}
 								<section class="profile box">
 									<div class=clearfix>
@@ -116,6 +122,7 @@
 									<a class="btn" href="{{ url_for('account.login') }}">登录</a>
 								</section>
 							{% endif %}
+							{% endblock %}
 							{% block sidebarin %}{% endblock %}
 							<section class=box>
 								<header>感谢</header>
@@ -144,7 +151,6 @@
 		</footer>
 		<script type="text/javascript" src="http://use.typekit.com/ezc0pjj.js"></script>
 		<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-		<script type="text/javascript" src="http://www.helloweba.com/demo/scrollto/jquery.scrollTo.js"></script>
 		<div class=wuyila>
 			<script language="javascript" type="text/javascript" src="http://js.users.51.la/14649465.js"></script>
 			<noscript><a href="http://www.51.la/?14649465" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/14649465.asp" style="border:none" /></a></noscript>

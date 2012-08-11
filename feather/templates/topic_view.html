@@ -26,6 +26,16 @@
 			</ul>
 		</div>
 	</section>
+	<section id=description class=box>
+		<header>
+		{{ topic.node.name }}
+		</header>
+		{{ topic.node.description|safe }}
+		{% if session.user_id ==1 %}
+			<hr>
+			<a class=btn href="{{ url_for('node.node_edit', nodesite=topic.node.site) }}" style="margin-top: -15px;">节点编辑</a>
+		{% endif %}
+	</section>
 {% endblock %}
 {% block body %}
 	<div id=mainbar class=span9>
@@ -66,7 +76,7 @@
 						</tbody>
 					</table>
 				</header>
-				<p>{{ topic.text|formattext|markdown|safe }}</p>
+				<p>{{ topic.text|safe }}</p>
 				<footer id=0>
 					<span class=marks_count>
 						{% if topic in g.user.favorites %}
@@ -106,10 +116,10 @@
 						<div class=full-input-wrap>
 							<textarea id=editor-input name="reply[content]" rows=10 cols=40 onkeydown="if(event.ctrlKey&&event.keyCode==13){document.getElementById('submit').click();return false};" style="height: 124px;"></textarea>
 						</div>
-						<link rel="stylesheet" type="text/css" href="http://ichord.github.com/At.js/lib/css/jquery.atwho.css"/>
-						<script type="text/javascript" src="http://ichord.github.com/At.js/lib/js/jquery.caret.js"></script>
-						<script type="text/javascript" src="http://ichord.github.com/At.js/lib/js/jquery.atwho.js"></script>
-						<script type="text/javascript" src="http://www.feather.im/static/js/at.js"></script>
+						<link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='style/jquery.atwho.css') }}"/>
+						<script type="text/javascript" src="{{ url_for('.static', filename='js/jquery.caret.js') }}"></script>
+						<script type="text/javascript" src="{{ url_for('.static', filename='js/jquery.atwho.js') }}"></script>
+						<script type="text/javascript" src="{{ url_for('.static', filename='js/at.js') }}"></script>
 					</div>
 					<div class=control-group>
 						<input id=submit class="btn primary" type=submit value=提交 name=commit>
