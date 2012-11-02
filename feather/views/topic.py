@@ -198,8 +198,6 @@ def topic_edit(topic_id):
 	topic = Topic.query.get(topic_id)
 	if session.get('user_id') == topic.author.id or session.get('user_id') == 1:
 		if request.method == 'POST':
-			if not session.get('user_id'):
-				abort(401)
 			if request.form['title'] == '':
 				g.error = u'请输入主题标题！'
 				render_template('topic_edit.html', topic=topic)
@@ -207,7 +205,6 @@ def topic_edit(topic_id):
 				g.error = u'请输入主题内容！'
 				render_template('topic_edit.html', topic=topic)
 			else:
-				topic = Topic.query.get(topic_id)
 				if '@' in request.form['text']:
 					text = mentionfilter(request.form['text'])
 				else:
@@ -284,3 +281,7 @@ def trash(page):
 def allusers():
 	users = User.query.all()
 	return jsonify(names=[x.name for x in users])
+
+@topic.route('/about')
+def about():
+	return render_template('about.html')

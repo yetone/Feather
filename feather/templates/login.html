@@ -2,31 +2,27 @@
 {% block title %}登录{% endblock %}
 {% block bread %}{% endblock %}
 {% block sidebar %}{% endblock %}
+{% block message %}{% endblock %}
 {% block body %}
-	<div class="span4 offset4">
+	<div class="span5" style="margin-left: 300px;">
+    {% for message in get_flashed_messages() %}
+      <p class="alert alert-block alert-success">{{ message }}</p>
+    {% endfor %}
+    {% if error %}<p class="alert alert-block alert-error">{{ error }}</p>{% endif %}
 		<section id="login-form" class="box">
-		{% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 			<form action="{{ url_for('account.login') }}" method=post>
-				<fieldset>
-					<legend>登录</legend>
+				<legend>登录</legend>
+				<div class=form-horizontal>
 					<div class=control-group>
-						<div class=control-label>
-							<label for=login>用户名或邮箱</label>
-						</div>
+						<label class=control-label for=login>用户名或邮箱:</label>
 						<div class=controls>
-							<div class=full-input-wrap>
-								<input id=login class=span6 type=text tabindex=1 name=username>
-							</div>
+							<input id=login size=30 type=text tabindex=1 name=username>
 						</div>
 					</div>
 					<div class=control-group>
-						<div class=control-label>
-							<label for=password>密码</label>
-						</div>
+						<label class=control-label for=passwd>密码:</label>
 						<div class=controls>
-							<div class=full-input-wrap>
-								<input id=passwd class=span6 type=password tabindex=2 name=password>
-							</div>
+							<input id=passwd size=30 type=password tabindex=2 name=password>
 						</div>
 					</div>
 					<div class=control-group>
@@ -42,7 +38,7 @@
 						或者
 						<a href="{{ url_for('account.register') }}">还未注册？</a>
 					</div>
-				</fieldset>
+				</div>
 			</form>
 		</section>
 {% endblock %}

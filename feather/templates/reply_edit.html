@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 {% block title %}编辑回复 > {{ topic.title }}{% endblock %}
+{% if topic.node.style and topic.node.style != '' and topic.node.style != 'None' %}
+	{% block style %}
+		<style type="text/css">{{ topic.node.style }}</style>
+	{% endblock %}
+{% endif %}
 {% block body %}
 	{% if session.user_id %}
 		<div id=mainbar class=span9>

@@ -1,51 +1,105 @@
 {% extends "layout.html" %}
 {% block title %}注册{% endblock %}
+{% block style %}
+<style type="text/css" media="screen">
+	.onError {
+		color: #c01f2f;
+	}
+	.onSuccess {
+		color: #468847;
+	}
+</style>
+{% endblock %}
+{% block script %}
+<script language="javascript" type="text/javascript">
+	$(function() {
+			$("form :input").blur(function() {
+				var $parent = $(this).parent();
+				$parent.find('.formtips').remove();
+				if($(this).is('#user_name')) {
+					if(this.value=="" || this.value.length < 3) {
+						var errorMsg = "请输入 3 位以上的用户名";
+						$parent.append('<span class="formtips onError">' + errorMsg + '</span>');
+					} else {
+							var okMsg = "√ 输入正确";
+							$parent.append('<span class="formtips onSuccess">' + okMsg + '</span>');
+					}
+				}
+				if($(this).is('#user_email')) {
+					if(this.value=="" || (this.value!="" && !/.+@.+\.[a-zA-Z]{2,4}$/.test(this.value))) {
+						var errorMsg = "请输入正确的 E-Mail 地址";
+						$parent.append('<span class="formtips onError">' + errorMsg + '</span>');
+					} else {
+						var okMsg = "√ 输入正确";
+						$parent.append('<span class="formtips onSuccess">' + okMsg + '</span>');
+					}
+				}
+				if($(this).is('#user_password')) {
+					if(this.value=="" || this.value.length < 6) {
+						var errorMsg = "密码至少 6 位";
+						$parent.append('<span class="formtips onError">' + errorMsg + '</span>');
+					} else {
+							var okMsg = "√ 输入正确";
+							$parent.append('<span class="formtips onSuccess">' + okMsg + '</span>');
+					}
+				}
+				if($(this).is('#user_password_confirmation')) {
+					var $password = $(this).parent().parent().prev().children('div').children('input')[0].value;
+					if(this.value!=$password) {
+						var errorMsg = "两次输入的密码不同";
+						$parent.append('<span class="formtips onError">' + errorMsg + '</span>');
+					} else {
+							var okMsg = "√ 输入正确";
+							$parent.append('<span class="formtips onSuccess">' + okMsg + '</span>');
+					}
+				}
+			}).keyup(function() {
+				$(this).triggerHandler("blur");
+			}).focus(function() {
+				$(this).triggerHandler("blur");
+			});
+			$('.btn').click(function() {
+					$("form :input").trigger('blur');
+					var numError = $('form .onError').length;
+					if(numError){
+						return false;
+					}
+			});
+		});
+
+</script>
+{% endblock %}
 {% block bread %}{% endblock %}
 {% block sidebar %}{% endblock %}
 {% block body %}
-	<div class="span4 offset4">
+	<div class="span6" style="margin-left: 240px;">
+  {% if error %}<p class="alert alert-block alert-error">{{ error }}</p>{% endif %}
 		<section id="signup-form" class=box>
 			<form id=new_user class=new_user novalidate=novalidate method=post data-validate=true action="{{ url_for('account.register', invitername=invitername) }}" accept-charset=UTF-8>
-				<fieldset>
-					<legend>注册</legend>
+				<legend>注册</legend>
+				<div class=form-horizontal>
 					<div class=control-group>
-						<div class=control-label>
-							<label for=user_name>用户名</label>
-						</div>
+						<label class=control-label for=user_name>用户名:</label>
 						<div class=controls>
-							<div class=full-input-wrap>
-								<input id=user_name type=text tabindex=1 size=30 name=username data-validate=true>
-							</div>
+							<input id=user_name type=text tabindex=1 size=30 name=username data-validate=true>
 						</div>
 					</div>
 					<div class=control-group>
-						<div class=control-label>
-							<label for=user_email>邮箱</label>
-						</div>
+						<label class=control-label for=user_email>邮箱:</label>
 						<div class=controls>
-							<div class=full-input-wrap>
-								<input id=user_email type=text tabindex=2 size=30 name=email data-validate=true>
-							</div>
+							<input id=user_email type=text tabindex=2 size=30 name=email data-validate=true>
 						</div>
 					</div>
 					<div class=control-group>
-						<div class=control-label>
-							<label for=user_password>密码</label>
-						</div>
+						<label class=control-label for=user_password>密码:</label>
 						<div class=controls>
-							<div class=full-input-wrap>
-								<input id=user_password type=password tabindex=3 size=30 name=password data-validate=true>
-							</div>
+							<input id=user_password type=password tabindex=3 size=30 name=password data-validate=true>
 						</div>
 					</div>
 					<div class=control-group>
-						<div class=control-label>
-							<label for=user_password_confirmation>密码确认</label>
-						</div>
+						<label class=control-label for=user_password_confirmation>密码确认:</label>
 						<div class=controls>
-							<div class=full-input-wrap>
-								<input id=user_password_confirmation type=password tabindex=4 size=30 name=password2 data-validate=true>
-							</div>
+							<input id=user_password_confirmation type=password tabindex=4 size=30 name=password2 data-validate=true>
 						</div>
 					</div>
 					<div class=form-actions>
@@ -53,6 +107,6 @@
 						或者
 						<a href="{{ url_for('account.login') }}">已经注册过？</a>
 					</div>
-				</fieldset>
+				</div>
 			</form>
 {% endblock %}

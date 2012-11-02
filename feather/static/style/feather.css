@@ -63,6 +63,7 @@ span.header p {
 }
 a.title {
 	color:#575D60;
+	text-shadow:0px 1px 0px white;
 }
 a.title:hover {
 	color:#333;
@@ -138,7 +139,7 @@ a.at:hover {
 }
 .thanked_area {
 	position:relative;
-	right:1px;
+	right:-1px;
 	color:#F99;
 	text-decoration:none;
 	font-size:16px;
@@ -6390,11 +6391,11 @@ pre .tex .formula {
 	opacity:0.5;
 }
 html,body {
-	background-attachment:fixed;
-	background-image:url("/static/img/bg.gif");
+	background-attachment:scroll;
+	background-image:url(/static/img/bg.png);
 	background-color:#EDECE9;
 	background-position:left 40px;
-	background-repeat:no-repeat;
+	background-repeat:repeat;
 }
 body > footer {
 	margin:20px 0;
@@ -6478,7 +6479,7 @@ table.clear-table td {
 }
 .tabs a:hover {
 	background-color:#f5f5f5;
-	color:#555;
+	color:#000;
 }
 .current a {
 	color:white;

@@ -24,7 +24,7 @@ function thankReply(replyid){
 		thankcount = Number($('#thankcount-' + replyid).html()) + 1;
 		$('#thankcount-' + replyid).html(thankcount);
 	} else {
-		$('#thankview-' + replyid).html("♥ 1")
+		$('#thankview-' + replyid).html("<span id=\"heart\" class=\"list\" style=\"font-size: 11px; font-family: 'DejaVu Sans';\">♥</span><span class=\"thankcount\">1</span>")
 	}
 	$('#thank_area_' + replyid).addClass("thanked_area").removeClass("thank_area").html("♥");
 }

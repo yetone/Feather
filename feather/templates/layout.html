@@ -4,10 +4,9 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>{% block title %}首页{% endblock %} - Feather</title>
-		<link rel=stylesheet type=text/css href="{{ url_for('.static', filename='style/feather.css') }}">
+		<link rel=stylesheet type=text/css href="{{ url_for('.static', filename='style/feather.css') }}?v=2014">
 		<link rel="shortcut icon" href="{{ url_for('.static', filename='favicon.ico') }}" />
-		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-		{% block script %}{% endblock %}
+		{% block style %}{% endblock %}
 	</head>
 	<body>
 		<div id=topbar class=navbar style="box-shadow: 0 5px 10px rgba(0,0,0,0.6);">
@@ -26,10 +25,15 @@
 							{% endblock %}
 								<a href="{{ url_for('timesystem.bank') }}">时间规划局</a>
 							</li>
-							<li>
-								{% if session.get('user_id') == 1 or session.get('user_id') ==2 %}
+							{% if session.get('user_id') == 1 or session.get('user_id') ==2 %}
+								<li>
 									<a href="{{ url_for('love.index') }}">Love Room</a>
-								{% endif %}
+								</li>
+							{% endif %}
+							{% block aboutactive %}
+							<li>
+							{% endblock %}
+								<a href="{{ url_for('topic.about') }}">关于</a>
 							</li>
 						</ul>
 						<ul class="nav nav-pills pull-right">
@@ -83,9 +87,11 @@
 				{% endblock %}
 				{% block main %}
 				<div class=row>
+          {% block message %}
 					{% for message in get_flashed_messages() %}
 						<p class="alert alert-block alert-success" style="margin-left: 30px;">{{ message }}</p>
 					{% endfor %}
+          {% endblock %}
 					{% block body %}{% endblock %}
 					{% block sidebar %}
 						<div id=sidebar class=span3>
@@ -94,16 +100,16 @@
 								<section class="profile box">
 									<div class=clearfix>
 										<div class=avatar>
-											<a href="{{ url_for('account.usercenter', username=session.user_id|getusername) }}">
-												<img src="{{ session.user_id|getuseremail|gravatar }}">
+											<a href="{{ url_for('account.usercenter', username=g.user.name) }}">
+												<img src="{{ g.user.email|gravatar }}">
 											</a>
 										</div>
 										<div class=info>
-											<h3 style="color: #666;">{{ session.user_id|getusername }}</h3>
-											<p style="color: #ccc;">{{ session.user_id|getuserdescription }}</p>
+											<h3 style="color: #666; margin: 10px;">{{ g.user.name }}</h3>
 										</div>
 									</div>
-									{% if session.user_id|getusertimeswitch == 1 %}
+									<p style="color: #ccc; margin: 10px 10px -5px 10px;">{{ g.user.description }}</p>
+									{% if g.user.timeswitch == 1 %}
 										<hr>
 										<a href="/times" class=balance_area>
 										<span style="font-size: 24px; line-height: 24px;">
@@ -149,11 +155,23 @@
 				</div>
 			</div>
 		</footer>
+		{% if False %}
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+		{% endif %}
+		<script type="text/javascript" src="http://v2ex.com/static/js/jquery.js"></script>
 		<script type="text/javascript" src="http://use.typekit.com/ezc0pjj.js"></script>
 		<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 		<div class=wuyila>
 			<script language="javascript" type="text/javascript" src="http://js.users.51.la/14649465.js"></script>
 			<noscript><a href="http://www.51.la/?14649465" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/14649465.asp" style="border:none" /></a></noscript>
 		</div>
+    <script type="text/javascript">
+      $(function(){
+          $('p.alert').click(function(){
+          $(this).fadeOut();
+          });
+        });
+    </script>
+		{% block script %}{% endblock %}
 	</body>
 </html>

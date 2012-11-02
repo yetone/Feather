@@ -25,7 +25,7 @@ def blog_add():
 	if session.get('user_id') != 1:
 		return redirect(url_for('topic.index'))
 	if request.method == 'POST':
-		topic = Topic(author=g.user, title=request.form['title'], text=request.form['text'], reply_count=0, node=node, report=3)
+		topic = Topic(author=g.user, title=request.form['title'], text=request.form['text'], text_origin=request.form['text'], reply_count=0, node=node, report=3)
 		db.session.add(topic)
 		db.session.commit()
 		return redirect(url_for('blog.blog_view', topic_id=topic.id))
@@ -36,10 +36,23 @@ def blog_view(topic_id):
 	topic = Topic.query.get(topic_id)
 	return render_template('blog_view.html', topic=topic)
 
+@blog.route('/blog/edit/<int:topic_id>', methods=['GET', 'POST'])
+def blog_edit(topic_id):
+	if session['user_id'] != 1:
+		return redirect(url_for('topic.index'))
+	topic = Topic.query.get(topic_id)
+	if request.method == 'POST':
+		topic.title = request.form['title']
+		topic.text = request.form['text']
+		db.session.commit()
+		return redirect(url_for('blog.blog_view', topic_id=topic_id))
+	return render_template('blog_edit.html', topic=topic)
+
+
 @blog.route('/blog/<int:topic_id>/reply', methods=['POST'])
 def blog_reply(topic_id):
 	topic = Topic.query.get(topic_id)
-	reply = Reply(topic=topic, author=g.user, text=request.form['reply[content]'], type=2)
+	reply = Reply(topic=topic, author=g.user, text=request.form['reply[content]'], text_origin=request.form['reply[content]'], type=2)
 	db.session.add(reply)
 	db.session.commit()
 	return redirect(url_for('blog.blog_view', topic_id=topic_id))

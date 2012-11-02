@@ -31,7 +31,7 @@
 				<tr class=item id=topic-{{ topic.id }}>
 					<td class=avatar>
 						<a href="{{ url_for('account.usercenter', username=topic.author.name) }}">
-							<img src="{{ topic.author.email|gravatar(size=48) }}">
+							<img src="{{ topic.author.email|gravatar(size=48) }}" style="height: 48px; width:48px;">
 						</a>
 					</td>
 					<td>

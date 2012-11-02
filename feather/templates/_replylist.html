@@ -4,7 +4,7 @@
 		{% for reply in page_obj.items %}
 			<tr id="reply-{{ reply.id }}" class=reply>
 				<td class=avatar>
-					<img src="{{ reply.author.email|gravatar(size=48) }}">
+					<img src="{{ reply.author.email|gravatar(size=48) }}" style="width: 48px; height: 48px;">
 				</td>
 				<td>
 					<article>
@@ -15,7 +15,7 @@
 								<span class="gray little list">{{ reply.date|datetimeformat }}</span>
 								<span class=gray id="thankview-{{ reply.id }}">
 								{% if reply.thankers.all() != [] %}
-										<span id=heart class=list>♥</span><span id="thankcount-{{ reply.id }}" class=thankcount>{{ reply.id|getreplythankerscount }}</span>
+										<span id=heart class=list style="font-size: 11px; font-family: 'DejaVu Sans';">♥</span><span id="thankcount-{{ reply.id }}" class=thankcount>{{ reply.id|getreplythankerscount }}</span>
 								{% endif %}
 								</span>
 							</div>
@@ -32,7 +32,9 @@
 								{% if session.user_id == reply.author.id or session.user_id == 1 %}
 									<a class="light little list" href="{{ url_for('reply.reply_edit', reply_id=reply.id, page=page) }}">编辑</a>
 								{% endif %}
-								<a class="at list" onclick="replyOne('{{ reply.author.name }}','{{ reply.number }}');" href="#;"><img align=absmiddle border=0 alt=Reply src="/static/img/reply.png"></a>
+								<span class="reply_icon">
+									<a class="at list" onclick="replyOne('{{ reply.author.name }}','{{ reply.number }}');" href="#;"><img align=absmiddle border=0 alt=Reply src="/static/img/reply.png"></a>
+								</span>
 							</div>
 						</header>
 						<div class=reply_content>{{ reply.text|safe }}</div>
@@ -43,19 +45,3 @@
 		</tbody>
 	</table>
 </section>
-<script type="text/javascript">
-	$(function(){
-		$('tr.reply').hover(
-			function(){
-				$(this).find('span.thank_area').fadeIn(300);
-			},
-			function(){
-				$(this).find('span.thank_area').fadeOut(300,function(){$(this).stop(true);});
-			});
-		$('tr.reply').dblclick(
-			function(){
-			$(this).children('td').children('article').children('.clearbox').children('.right').children('.at').click();
-			});
-	});
-</script>
-<script type="text/javascript" src="{{ url_for('.static', filename='js/jquery.scrollTo.js') }}"></script>

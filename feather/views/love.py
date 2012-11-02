@@ -31,7 +31,7 @@ def love_add():
 	if session.get('user_id') != 1 and session.get('user_id') != 2:
 		return redirect(url_for('topic.index'))
 	if request.method == 'POST':
-		topic = Topic(author=g.user, title=request.form['title'], text=request.form['text'], reply_count=0, node=node, report=2)
+		topic = Topic(author=g.user, title=request.form['title'], text=request.form['text'], text_origin=request.form['text'], reply_count=0, node=node, report=2)
 		db.session.add(topic)
 		db.session.commit()
 		return redirect(url_for('love.love_view', topic_id=topic.id))
@@ -42,10 +42,22 @@ def love_view(topic_id):
 	topic = Topic.query.get(topic_id)
 	return render_template('love_view.html', topic=topic)
 
+@love.route('/love/edit/<int:topic_id>', methods=['GET', 'POST'])
+def love_edit(topic_id):
+	if session['user_id'] != 1 and session['user_id'] != 2:
+		return redirect(url_for('topic.index'))
+	topic = Topic.query.get(topic_id)
+	if request.method == 'POST':
+		topic.title = request.form['title']
+		topic.text = request.form['text']
+		db.session.commit()
+		return redirect(url_for('love.love_view', topic_id=topic_id))
+	return render_template('love_edit.html', topic=topic)
+
 @love.route('/love/<int:topic_id>/reply', methods=['POST'])
 def love_reply(topic_id):
 	topic = Topic.query.get(topic_id)
-	reply = Reply(topic=topic, author=g.user, text=request.form['reply[content]'], type=1)
+	reply = Reply(topic=topic, author=g.user, text=request.form['reply[content]'], text_origin=request.form['reply[content]'], type=1)
 	db.session.add(reply)
 	db.session.commit()
 	return redirect(url_for('love.love_view', topic_id=topic_id))

@@ -96,9 +96,9 @@ def format_datetime(timestamp):
 	elif t < 60 * 60 * 24 * 3:
 		d = t / (60 * 60 * 24)
 		if d == 1:
-			str = '昨天' + rtime
+			str = '昨天 ' + rtime
 		else:
-			str = '前天' + rtime
+			str = '前天 ' + rtime
 	else:
 		str = time.strftime(FORY, time.localtime(timestamp))
 	return str
@@ -113,17 +113,17 @@ def format_datetime2(timestamp):
 
 @app.template_filter('gravatarbig')
 def gravatar_url(email):
-	return 'http://ruby-china.org/avatar/%s?d=identicon&s=%d' % \
+	return 'http://gravatar.com/avatar/%s?d=identicon&s=%d&d=http://feather.im/static/img/gravatar.png' % \
 			(md5(email.strip().lower().encode('utf-8')).hexdigest(), 128)
 
 @app.template_filter('gravatar')
 def gravatar_url(email, size=48):
-	return 'http://ruby-china.org/avatar/%s?d=identicon&s=%d' % \
+	return 'http://gravatar.com/avatar/%s?d=identicon&s=%d&d=http://feather.im/static/img/gravatar.png' % \
 			(md5(email.strip().lower().encode('utf-8')).hexdigest(), size)
 
 @app.template_filter('gravatarmini')
 def gravatarmini_url(email):
-	return 'http://ruby-china.org/avatar/%s?d=identicon&s=%d' % \
+	return 'http://gravatar.com/avatar/%s?d=identicon&s=%d&d=http://feather.im/static/img/gravatar.png' % \
 			(md5(email.strip().lower().encode('utf-8')).hexdigest(), 24)
 
 

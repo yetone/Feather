@@ -123,7 +123,7 @@
 				<div class=content>
 					<div class=text>
 						<h2>
-							<a href="{{ url_for('blog.blog_view', topic_id=topic.id) }}">{{ topic.title }}</a>
+							<a href="{{ url_for('blog.blog_edit', topic_id=topic.id) }}">{{ topic.title }}</a>
 						</h2>
 						{{ topic.text|markdown }}
 					</div>
@@ -138,6 +138,7 @@
 				<h3 class=nctitle>评论</h3>
 				<form action="{{ url_for('blog.blog_reply', topic_id=topic.id) }}", method=post>
 					<div class=bcmt>
+            {% if session.user_id %}
 						<div class=bcmtadd>
 							<div class="bcmtipt s-bd0 s-bg0">
 								<div class=bcmtiptc>
@@ -148,6 +149,9 @@
 								<button class="s-bd1 s-fc1 s-bg1 ztag">发布</button>
 							</div>
 						</div>
+            {% else %}
+            <p>未注册用户不能发表评论哦，赶紧<a href="{{ url_for('account.register') }}">注册</a>个吧</p>
+            {% endif %}
 						<div class=bcmtlst>
 							<ul class="clearfix ztag">
 								{% for reply in topic.replys %}

@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 {% block title %}节点编辑{% endblock %}
+{% if node.style and node.style != '' and node.style != 'None' %}
+	{% block style %}
+		<style type="text/css">{{ node.style }}</style>
+	{% endblock %}
+{% endif %}
 {% block breadcrumb %}
 	<li>
 		<a href="{{ url_for('node.index', nodesite=node.site) }}">{{ node.name }}</a>

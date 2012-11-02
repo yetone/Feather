@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}主题编辑 › {{ topic.node.name }}{% endblock %}
+{% block title %}爱情编辑 › {{ topic.node.name }}{% endblock %}
 {% if topic.node.style and topic.node.style != '' and topic.node.style != 'None' %}
 	{% block style %}
 		<style type="text/css">{{ topic.node.style }}</style>
@@ -24,8 +24,8 @@
 				<p class="alert alert-block alert-error">错误：{{ g.error }}</p>
 			{% endif %}
 			<section class=box>
-				<form action="{{ url_for('topic.topic_edit', topic_id=topic.id) }}" method=post class=new_topic>
-					<legend>主题编辑<span class="gray little" style="float: right;"><a href="javascript:void(function(){var%20d%20=%20document,a%20=%20'setAttribute',s%20=%20d.createElement('script');s[a]('tyle','text/javascript');s[a]('src','http://weibotuchuang.sinaapp.com/bookmark.js');d.head.appendChild(s);})();">Add Image</a></span></legend>
+				<form action="{{ url_for('love.love_edit', topic_id=topic.id) }}" method=post class=new_topic>
+					<legend>爱情编辑<span class="gray little" style="float: right;"><a href="javascript:void(function(){var%20d%20=%20document,a%20=%20'setAttribute',s%20=%20d.createElement('script');s[a]('tyle','text/javascript');s[a]('src','http://weibotuchuang.sinaapp.com/bookmark.js');d.head.appendChild(s);})();">Add Image</a></span></legend>
 					<div class=form-horizontal>
 						<div class=control-group>
 							<label class=control-label>标题：</label>
@@ -36,7 +36,7 @@
 						<div class=control-group>
 							<label class=control-label>正文：</label>
 							<div class=controls>
-								<textarea id=editor-input rows=20 name=text cols=40 style="width: 450px;">{{ topic.text_origin }}</textarea>
+								<textarea id=editor-input rows=20 name=text cols=40 style="width: 450px;">{{ topic.text }}</textarea>
 							</div>
 						</div>
 						<div class=form-actions>

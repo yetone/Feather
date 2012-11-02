@@ -123,7 +123,7 @@
 				<div class=content>
 					<div class=text>
 						<h2>
-							<a href="{{ url_for('love.love_view', topic_id=topic.id) }}">{{ topic.title }}</a>
+							<a href="{{ url_for('love.love_edit', topic_id=topic.id) }}">{{ topic.title }}</a>
 						</h2>
 						{{ topic.text|markdown }}
 					</div>

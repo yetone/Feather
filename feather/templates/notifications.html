@@ -20,13 +20,13 @@
 								{% if unread.type == 3 %}
 									<td class=avatar>
 										<a href="{{ url_for('account.usercenter', username=unread.topic.author.name) }}">
-											<img src="{{ unread.topic.author.email|gravatar(size=48) }}">
+											<img src="{{ unread.topic.author.email|gravatar(size=48) }}" style="width: 48px; height: 48px;">
 										</a>
 									</td>
 								{% else %}
 									<td class=avatar>
 										<a href="{{ url_for('account.usercenter', username=unread.reply.author.name) }}">
-											<img src="{{ unread.reply.author.email|gravatar(size=48) }}">
+											<img src="{{ unread.reply.author.email|gravatar(size=48) }}" style="width: 48px; height: 48px;">
 										</a>
 									</td>
 								{% endif %}
@@ -92,13 +92,13 @@
 								{% if readed.type == 3 %}
 									<td class=avatar>
 										<a href="{{ url_for('account.usercenter', username=readed.topic.author.name) }}">
-											<img src="{{ readed.topic.author.email|gravatar(size=48) }}">
+											<img src="{{ readed.topic.author.email|gravatar(size=48) }}" style="width: 48px; height: 48px;">
 										</a>
 									</td>
 								{% else %}
 									<td class=avatar>
 										<a href="{{ url_for('account.usercenter', username=readed.reply.author.name) }}">
-											<img src="{{ readed.reply.author.email|gravatar(size=48) }}">
+											<img src="{{ readed.reply.author.email|gravatar(size=48) }}" style="width: 48px; height: 48px;">
 										</a>
 									</td>
 								{% endif %}

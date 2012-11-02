@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% block title %}关于{% endblock %}
+{% block style %}
+<style type="text/css">
+	html,body {
+		background-attachment:scroll;
+		background-image:url(http://static.v2ex.com/tiles/grid.png);
+		background-color:#EDECE9;
+		background-position:left 40px;
+		background-repeat:repeat;
+	}
+	#guanxipeng {
+		-moz-border-radius: 0.5em;
+		-webkit-border-radius: 0.5em;
+		-webkit-background-clip: padding-box;
+		border-radius: 0.5em;
+		background-clip: padding-box;
+		display: inline-block;
+		-webkit-box-shadow: rgba(0, 0, 0, 0.292969) 1px 1px 4px 0px;
+		-moz-box-shadow: rgba(0, 0, 0, 0.292969) 1px 1px 4px 0px;
+		width: 160px;
+		height: 160px;
+		background-image: url({{ url_for('.static', filename='img/allpic.png') }});
+		background-position: -160px -160px;
+	}
+</style>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+
+			$(document).mousemove(function(e){
+				mx=e.pageX;
+				my=e.pageY;
+				//console.log('x='+mx+' y='+my);
+
+				animate_face(mx,my,'#guanxipeng');
+
+				}); 
+
+			function animate_face(mx,my,face_id) {
+			face_pos=$(face_id).offset();
+			//console.log(face_id+face_pos.top);
+
+			if(mx<face_pos.left && my<face_pos.top) $(face_id).css('background-position','0px 0px');
+			if(face_pos.left+160>mx && mx>face_pos.left && my<face_pos.top) $(face_id).css('background-position','-160px 0px');
+			if(mx>face_pos.left+160 && my<face_pos.top) $(face_id).css('background-position','-320px 0px');
+
+			if(mx<face_pos.left && my<face_pos.top+160 && my>face_pos.top) $(face_id).css('background-position','0px -160px');
+			if(face_pos.left+160>mx && mx>face_pos.left && my<face_pos.top+160 && my>face_pos.top) $(face_id).css('background-position','-160px -160px');
+			if(mx>face_pos.left+160 && my<face_pos.top+160 && my>face_pos.top) $(face_id).css('background-position','-320px -160px');
+
+			if(mx<face_pos.left && my>face_pos.top+160) $(face_id).css('background-position','0px -320px');
+			if(face_pos.left+160>mx && mx>face_pos.left && my>face_pos.top+160) $(face_id).css('background-position','-160px -320px');
+			if(mx>face_pos.left+160 && my>face_pos.top+160) $(face_id).css('background-position','-320px -320px');
+			}
+
+	})
+</script>
+{% endblock %}
+{% block aboutactive %}<li class=active>{% endblock %}
+{% block sidebar %}{% endblock %}
+{% block bread %}{% endblock %}
+{% block main %}
+<section class=box style="background-color: #fff;background-image: url({{ url_for('.static', filename='img/grid-18px-masked.png') }}); background-repeat: repeat-x;">
+<h3>关于这里</h3>
+<hr>
+<div style="margin: 38px;">一个社区。</div>
+<h3>关于我</h3>
+<hr>
+<div style="margin: 38px;">
+	一个生物。
+	<br />
+<div id="guanxipeng" style="margin-top: 38px;"></div>
+</div>
+</section>
+{% endblock %}
